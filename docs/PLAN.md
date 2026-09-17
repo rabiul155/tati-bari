@@ -64,13 +64,15 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] Admin product list with search (name/code), category / availability / archived filters and pagination
 - [x] Shared price rule `features/catalog/pricing.ts` (sale window), reused by the storefront and checkout
 
-### Phase 5 — Storefront pages (~2–2.5 h)
-- [ ] Site layout: header, footer, social links
-- [ ] Home: brand intro, featured, new arrivals, on sale, categories, trust info
-- [ ] Shop: product grid, category / price filters, sort (URL search params)
-- [ ] Product details: gallery, code, description, details, price / sale price, availability, quantity selector, Add to Cart
-- [ ] About / Contact page
-- [ ] Open Graph metadata so Facebook product links preview well
+### Phase 5 — Storefront pages (~2–2.5 h) ✅
+- [x] Site layout: header, footer, contact/social links from `lib/site.ts` (placeholders until decision 6; empty links are hidden)
+- [x] Home: brand intro, featured, categories, on sale, new arrivals, trust info
+- [x] Shop (`/shop`): product grid, category chips, price range, in-stock filter, sort, pagination (URL search params)
+- [x] Product details (`/products/[slug]`): gallery, code, description, details, price / sale price, availability, quantity selector. Add to Cart is disabled until Phase 6
+- [x] About / Contact page (`/about`, placeholder story)
+- [x] Open Graph + Product JSON-LD; Cloudinary photos are served to Facebook as 1200×630 JPEG; default share image; `sitemap.xml`, `robots.txt`
+- [x] Caching: home and product pages refresh every 5 min (sale windows) and immediately after admin edits
+- [x] Warm cream / maroon theme and serif headings (placeholder until brand colours are chosen)
 
 ### Phase 6 — Cart (~1 h)
 - [ ] Client cart persisted in localStorage (product id + quantity only)

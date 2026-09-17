@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ConfirmActionButton } from "@/components/admin/confirm-action-button";
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   deleteProduct,
@@ -50,7 +52,17 @@ export default async function EditProductPage({
         description={`Code ${product.code}`}
         back={{ href: "/admin/products", label: "Products" }}
       >
-        {archived && <Badge variant="secondary">Archived</Badge>}
+        {archived ? (
+          <Badge variant="secondary">Archived</Badge>
+        ) : (
+          <Link
+            href={`/products/${product.slug}`}
+            target="_blank"
+            className={buttonVariants({ variant: "outline" })}
+          >
+            View in shop
+          </Link>
+        )}
         <ConfirmActionButton
           variant="outline"
           confirmMessage={

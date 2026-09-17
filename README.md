@@ -20,6 +20,8 @@ npm run dev                # http://localhost:3000
 
 Set `SESSION_SECRET` in `.env` to a random string (`openssl rand -base64 32`).
 
+Store name, contact details and social links live in `lib/site.ts`.
+
 Product photos go to Cloudinary when the `CLOUDINARY_*` variables are set. Without them, photos are saved in `.uploads/` (not committed), which only works for local development.
 
 `npm run db:local` prints a `postgres://…` TCP URL. Put that in `.env` as `DATABASE_URL`. To stop it later, run `npx prisma dev stop tati-bari`.

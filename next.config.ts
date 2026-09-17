@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
+    // Only product photos may be optimized (local uploads or Cloudinary).
+    localPatterns: [{ pathname: "/uploads/**", search: "" }],
     remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
   },
 };

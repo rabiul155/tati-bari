@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { site, siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,20 +13,31 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Placeholder branding until the brand name is decided.
+// Serif for headings (`font-heading`).
+const fraunces = Fraunces({
+  variable: "--font-display",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
-    default: "Tangail Saree",
-    template: "%s | Tangail Saree",
+    default: `${site.name} | ${site.tagline}`,
+    template: `%s | ${site.name}`,
   },
-  description: "Handloom Tangail sarees, delivered across Bangladesh.",
+  description: site.description,
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    locale: "en_BD",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
