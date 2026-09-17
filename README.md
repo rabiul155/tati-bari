@@ -27,7 +27,7 @@ npm run dev                # http://localhost:3000
 | `lint` / `typecheck` | ESLint and TypeScript checks |
 | `db:migrate` | Create and apply a migration after editing `prisma/schema.prisma` |
 | `db:deploy` | Apply existing migrations (production) |
-| `db:seed` | Run `prisma/seed.ts`. It is safe to run more than once. |
+| `db:seed` | Run `prisma/seed.ts` (categories, sample products, a sample discount). It is safe to run more than once. |
 | `db:studio` | Open Prisma Studio to browse data |
 | `db:generate` | Regenerate the Prisma client |
 | `db:local` | Start the local Prisma Postgres server in the background |

@@ -1,5 +1,12 @@
 // Prisma schema — https://pris.ly/d/prisma-schema
-// Money is stored as whole taka in Int columns.
+//
+// Conventions:
+// - Money is stored as whole taka in Int columns.
+// - Orders and order items copy customer, delivery and price data at the
+//   time of purchase, so later edits to products or customers never change
+//   a past order.
+// - Products referenced by orders are archived, not deleted (enforced by
+//   the Restrict relation on OrderItem.product).
 
 generator client {
   provider = "prisma-client"
@@ -10,12 +17,246 @@ datasource db {
   provider = "postgresql"
 }
 
+// ─── Catalog ────────────────────────────────────────────────────────────────
+
 model Category {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  slug        String   @unique
+  slug        String    @unique
   description String?
-  sortOrder   Int      @default(0)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  sortOrder   Int       @default(0)
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum ProductAvailability {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  slug        String  @unique
+  // Product code / SKU shown to customers and used by the admin.
+  code        String  @unique
+  description String?
+
+  // Saree details
+  fabric           String?
+  color            String?
+  length           String? // free text, e.g. "12 haat (5.5 m)"
+  hasBlousePiece   Boolean @default(false)
+  careInstructions String?
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+
+  // Pricing (taka). The sale price applies only inside the optional
+  // sale window; an open-ended bound means "no limit on that side".
+  regularPrice Int
+  salePrice    Int?
+  saleStartsAt DateTime?
+  saleEndsAt   DateTime?
+
+  availability  ProductAvailability @default(AVAILABLE)
+  // Optional stock count; null means availability is managed by hand.
+  stockQuantity Int?
+
+  isFeatured Boolean   @default(false)
+  // Archived products are hidden from the storefront but kept for orders.
+  archivedAt DateTime?
+
+  images     ProductImage[]
+  orderItems OrderItem[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([categoryId])
+  @@index([archivedAt, createdAt])
+}
+
+// The image with the lowest sortOrder is the product's primary image.
+model ProductImage {
+  id         String   @id @default(cuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url        String
+  // Provider-side identifier (e.g. Cloudinary public_id), used for deletion.
+  storageKey String?
+  alt        String?
+  width      Int?
+  height     Int?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  @@index([productId, sortOrder])
+}
+
+// ─── Customers ──────────────────────────────────────────────────────────────
+
+// Guest customers, matched across orders by phone number.
+model Customer {
+  id        String            @id @default(cuid())
+  name      String
+  // Normalized Bangladesh mobile number, e.g. "01712345678".
+  phone     String            @unique
+  addresses CustomerAddress[]
+  orders    Order[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+}
+
+model CustomerAddress {
+  id         String   @id @default(cuid())
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  address    String
+  district   String
+  area       String
+  postalCode String?
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([customerId])
+}
+
+// ─── Orders ─────────────────────────────────────────────────────────────────
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  RETURNED
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+}
+
+model Order {
+  id     String      @id @default(cuid())
+  // Sequential number shown to people as "TS-000123"
+  // (see features/orders/order-number.ts).
+  number Int         @unique @default(autoincrement())
+  status OrderStatus @default(PENDING)
+
+  customerId String
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  // Customer and delivery snapshot at the time of the order
+  customerName       String
+  customerPhone      String
+  deliveryAddress    String
+  deliveryDistrict   String
+  deliveryArea       String
+  deliveryPostalCode String?
+  customerNote       String?
+
+  // Totals (taka): total = subtotal - discountAmount + deliveryCharge.
+  // subtotal is the sum of OrderItem.lineTotal (after product sale prices).
+  subtotal       Int
+  discountId     String?
+  discount       Discount? @relation(fields: [discountId], references: [id], onDelete: SetNull)
+  // Discount snapshot, kept even if the discount is later edited or deleted.
+  discountName   String?
+  discountAmount Int       @default(0)
+  deliveryCharge Int
+  total          Int
+
+  paymentMethod PaymentMethod @default(CASH_ON_DELIVERY)
+
+  courierName    String?
+  trackingNumber String?
+  adminNote      String?
+
+  items         OrderItem[]
+  statusHistory OrderStatusHistory[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@index([status, createdAt])
+  @@index([customerId])
+  @@index([customerPhone])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+  // Product snapshot
+  productName     String
+  productCode     String
+  productImageUrl String?
+
+  // Price snapshot (taka, per unit unless noted):
+  // finalUnitPrice = unitPrice - unitDiscount; lineTotal = finalUnitPrice * quantity.
+  quantity       Int
+  unitPrice      Int
+  unitDiscount   Int @default(0)
+  finalUnitPrice Int
+  lineTotal      Int
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderStatusHistory {
+  id          String       @id @default(cuid())
+  orderId     String
+  order       Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  // Null for the initial entry written when the order is placed.
+  fromStatus  OrderStatus?
+  toStatus    OrderStatus
+  note        String?
+  // Null when the change was made by the system (e.g. order placement).
+  changedById String?
+  changedBy   AdminUser?   @relation(fields: [changedById], references: [id], onDelete: SetNull)
+  createdAt   DateTime     @default(now())
+
+  @@index([orderId, createdAt])
+}
+
+// ─── Admin ──────────────────────────────────────────────────────────────────
+
+model AdminUser {
+  id            String               @id @default(cuid())
+  // Stored lowercase.
+  email         String               @unique
+  name          String
+  passwordHash  String
+  isActive      Boolean              @default(true)
+  lastLoginAt   DateTime?
+  statusChanges OrderStatusHistory[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+}
+
+// ─── Discounts ──────────────────────────────────────────────────────────────
+
+// Order-level discount: a fixed amount off when the order subtotal is at
+// least minOrderValue, while active and inside the optional date window.
+model Discount {
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  amount        Int
+  minOrderValue Int       @default(0)
+  startsAt      DateTime?
+  endsAt        DateTime?
+  isActive      Boolean   @default(true)
+  orders        Order[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([isActive])
 }

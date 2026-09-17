@@ -35,15 +35,16 @@ Each phase ends with something working you can review before moving on.
 - [x] Seed script (categories now; sample products added in Phase 2)
 - [x] Local Postgres via `npm run db:local`; first migration (`Category`) applied
 
-### Phase 2 — Database schema (~1 h)
-- [ ] Models: `Category` (done in Phase 1), `Product`, `ProductImage`, `Customer`, `CustomerAddress`, `Order`, `OrderItem`, `OrderStatusHistory`, `AdminUser`, `Discount`
-- [ ] Money stored as integer taka
-- [ ] `OrderItem` stores price snapshot (product name, code, unit price, discount, final unit price, line total)
-- [ ] `Order` stores customer/delivery snapshot (name, phone, address, district, area, postal code), subtotal, discount, delivery charge, total
-- [ ] `OrderStatus` enum: Pending, Confirmed, Preparing, Shipped, Delivered, Cancelled, Returned
-- [ ] Optional courier name + tracking number on `Order`
-- [ ] Human-friendly order number (e.g. `TS-000123`)
-- [ ] First migration
+### Phase 2 — Database schema (~1 h) ✅
+- [x] Models: `Category` (done in Phase 1), `Product`, `ProductImage`, `Customer`, `CustomerAddress`, `Order`, `OrderItem`, `OrderStatusHistory`, `AdminUser`, `Discount`
+- [x] Money stored as integer taka
+- [x] `OrderItem` stores price snapshot (product name, code, unit price, discount, final unit price, line total)
+- [x] `Order` stores customer/delivery snapshot (name, phone, address, district, area, postal code), subtotal, discount, delivery charge, total
+- [x] `OrderStatus` enum: Pending, Confirmed, Preparing, Shipped, Delivered, Cancelled, Returned
+- [x] Optional courier name + tracking number on `Order`
+- [x] Human-friendly order number (e.g. `TS-000123`): sequential `Order.number`, formatted in `features/orders/order-number.ts`
+- [x] Migration `catalog_orders_admin` applied, with CHECK constraints on prices and totals
+- [x] Seed: 6 sample products (no images yet) + 1 sample order discount
 
 ### Phase 3 — Admin authentication (~1–1.5 h)
 - [ ] Email + password login (hashed passwords), signed httpOnly session cookie
