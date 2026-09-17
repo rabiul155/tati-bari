@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tangail Saree Store
 
-## Getting Started
+Online store and admin dashboard for Tangail sarees. Build plan: [docs/PLAN.md](docs/PLAN.md).
 
-First, run the development server:
+Stack: Next.js 16, TypeScript, Tailwind CSS 4, shadcn/ui, React Hook Form + Zod, Prisma 7 + PostgreSQL.
+
+## Local setup
+
+Requires Node.js 20+.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install                # also generates the Prisma client
+cp .env.example .env       # then set DATABASE_URL
+npm run db:local           # optional: start a local Postgres (no Docker needed)
+npm run db:migrate         # apply migrations
+npm run db:seed            # add starter data
+npm run dev                # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`npm run db:local` prints a `postgres://…` TCP URL. Put that in `.env` as `DATABASE_URL`. To stop it later, run `npx prisma dev stop tati-bari`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script | What it does |
+|---|---|
+| `dev` / `build` / `start` | Next.js dev server, production build, production server |
+| `lint` / `typecheck` | ESLint and TypeScript checks |
+| `db:migrate` | Create and apply a migration after editing `prisma/schema.prisma` |
+| `db:deploy` | Apply existing migrations (production) |
+| `db:seed` | Run `prisma/seed.ts`. It is safe to run more than once. |
+| `db:studio` | Open Prisma Studio to browse data |
+| `db:generate` | Regenerate the Prisma client |
+| `db:local` | Start the local Prisma Postgres server in the background |
 
-## Learn More
+## Project layout
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/          routes, layouts, route handlers
+components/   shared UI (components/ui = shadcn/ui)
+features/     feature modules: products, cart, checkout, orders, customers, admin
+lib/          db client, env validation, utilities (lib/generated = Prisma client, not committed)
+prisma/       schema, migrations, seed
+types/        shared TypeScript types
+docs/         plan and project docs
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Server-only code (`lib/db.ts`, `lib/env.ts`) imports `server-only`, so importing it from a client component fails the build.
