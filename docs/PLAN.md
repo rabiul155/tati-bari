@@ -46,12 +46,14 @@ Each phase ends with something working you can review before moving on.
 - [x] Migration `catalog_orders_admin` applied, with CHECK constraints on prices and totals
 - [x] Seed: 6 sample products (no images yet) + 1 sample order discount
 
-### Phase 3 — Admin authentication (~1–1.5 h)
-- [ ] Email + password login (hashed passwords), signed httpOnly session cookie
-- [ ] `proxy.ts` protects all `/admin` routes
-- [ ] Session re-checked inside every admin server action / route handler
-- [ ] Seed command to create the first admin user
-- [ ] Logout
+### Phase 3 — Admin authentication (~1–1.5 h) ✅
+Single admin account and no customer login. The safeguards are kept small but complete.
+- [x] Email + password login: scrypt-hashed password (`lib/auth/password.ts`), HMAC-signed httpOnly cookie scoped to `/admin`, valid for 7 days
+- [x] `proxy.ts` sends visitors without a validly signed cookie to `/admin/login`
+- [x] `requireAdmin()` (`lib/auth/session.ts`) re-checks the session against the database in every admin page and action
+- [x] Login lockout: 5 failed attempts lock the account for 15 min; login errors don't reveal whether the email exists
+- [x] `npm run admin:set` creates or updates the single admin; changing the password signs out all sessions
+- [x] Logout signs out every device (bumps `AdminUser.sessionVersion`)
 
 ### Phase 4 — Product & category management (~2 h)
 - [ ] Category CRUD
@@ -83,6 +85,8 @@ Each phase ends with something working you can review before moving on.
 - [ ] Create `Order` + `OrderItem`s + initial `OrderStatusHistory` in one transaction
 - [ ] Order confirmation page: order number, summary, total, delivery info, next steps
 - [ ] Clear cart after successful order
+- [ ] Save placed orders (order number + phone) in localStorage for a "My orders" page
+- [ ] Order lookup when localStorage is lost. **Decide:** phone + order number (recommended), or phone only with a reduced view (no name/address)
 - [ ] (Optional) new-order email to admin
 
 ### Phase 8 — Admin order management (~2 h)

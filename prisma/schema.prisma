@@ -228,17 +228,25 @@ model OrderStatusHistory {
 
 // ─── Admin ──────────────────────────────────────────────────────────────────
 
+// V1 has a single admin, managed with `npm run admin:set`.
 model AdminUser {
-  id            String               @id @default(cuid())
+  id                  String               @id @default(cuid())
   // Stored lowercase.
-  email         String               @unique
-  name          String
-  passwordHash  String
-  isActive      Boolean              @default(true)
-  lastLoginAt   DateTime?
-  statusChanges OrderStatusHistory[]
-  createdAt     DateTime             @default(now())
-  updatedAt     DateTime             @updatedAt
+  email               String               @unique
+  name                String
+  passwordHash        String
+  isActive            Boolean              @default(true)
+  // Bumped on password change; session cookies carrying an older value
+  // are rejected, which signs out every existing session.
+  sessionVersion      Int                  @default(1)
+  // Login throttling: the account is locked for a while after too many
+  // failed attempts in a row.
+  failedLoginAttempts Int                  @default(0)
+  lockedUntil         DateTime?
+  lastLoginAt         DateTime?
+  statusChanges       OrderStatusHistory[]
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
 }
 
 // ─── Discounts ──────────────────────────────────────────────────────────────

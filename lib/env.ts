@@ -9,6 +9,8 @@ const envSchema = z.object({
     .default("development"),
   DATABASE_URL: z.url(),
   NEXT_PUBLIC_SITE_URL: z.url().default("http://localhost:3000"),
+  // Signs admin session cookies. Generate with: openssl rand -base64 32
+  SESSION_SECRET: z.string().min(32),
 });
 
 const parsed = envSchema.safeParse(process.env);

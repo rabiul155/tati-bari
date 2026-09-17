@@ -14,7 +14,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "db:local": "prisma dev --name tati-bari --detach"
+    "db:local": "prisma dev --name tati-bari --detach",
+    "admin:set": "tsx prisma/set-admin.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
