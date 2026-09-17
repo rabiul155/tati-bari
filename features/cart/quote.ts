@@ -13,7 +13,7 @@ import {
   type QuotedLine,
 } from "@/features/cart/cart-schema";
 
-export type ServerCartQuote = CartQuote & { discount: AppliedDiscount | null };
+export type ServerCartQuote = Omit<CartQuote, "nextDiscount"> & { discount: AppliedDiscount | null };
 
 // Pass a transaction client to read prices inside a transaction.
 export async function quoteCart(

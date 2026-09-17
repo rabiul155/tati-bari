@@ -246,6 +246,15 @@ export function CheckoutView() {
           </div>
         </dl>
 
+        {quoteIsCurrent && quote.nextDiscount && (
+          <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
+            Add {formatTaka(quote.nextDiscount.remaining)} more to your{" "}
+            <Link href="/cart" className="underline underline-offset-4">
+              cart
+            </Link>{" "}
+            to get <strong>{formatTaka(quote.nextDiscount.amount)} off</strong>.
+          </p>
+        )}
         <Button type="submit" size="lg" disabled={pending || !canOrder}>
           {pending ? "Placing order…" : total === null ? "Place order" : `Place order · ${formatTaka(total)}`}
         </Button>

@@ -33,3 +33,20 @@ export const ORDER_STATUS: Record<OrderStatus, { label: string; customerText: st
 
 // The normal path of an order, used to draw progress for customers.
 export const ORDER_PROGRESS: OrderStatus[] = ["PENDING", "CONFIRMED", "PREPARING", "SHIPPED", "DELIVERED"];
+
+// Usual next steps, offered as main actions in the admin. Admins can still
+// pick any other status to correct mistakes.
+export const NEXT_STATUSES: Record<OrderStatus, OrderStatus[]> = {
+  PENDING: ["CONFIRMED", "CANCELLED"],
+  CONFIRMED: ["PREPARING", "CANCELLED"],
+  PREPARING: ["SHIPPED", "CANCELLED"],
+  SHIPPED: ["DELIVERED", "RETURNED"],
+  DELIVERED: ["RETURNED"],
+  CANCELLED: [],
+  RETURNED: [],
+};
+
+// Orders that don't count as sales.
+export const NON_SALE_STATUSES: OrderStatus[] = ["CANCELLED", "RETURNED"];
+
+export const ALL_STATUSES = Object.keys(ORDER_STATUS) as OrderStatus[];

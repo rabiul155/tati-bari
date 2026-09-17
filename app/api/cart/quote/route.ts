@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { cartItemsSchema, type CartQuote } from "@/features/cart/cart-schema";
 import { quoteCart } from "@/features/cart/quote";
+import { findNextDiscount } from "@/features/discounts/best-discount";
 
 const bodySchema = z.object({ items: cartItemsSchema });
 
@@ -12,9 +13,11 @@ export async function POST(request: Request) {
     return Response.json({ error: "Invalid cart" }, { status: 400 });
   }
 
-  const quote = await quoteCart(parsed.data.items);
+  const now = new Date();
+  const quote = await quoteCart(parsed.data.items, now);
   const result: CartQuote = {
     ...quote,
+    nextDiscount: await findNextDiscount(quote.subtotal, quote.discount?.amount ?? 0, now),
     // Internal ids stay on the server.
     discount: quote.discount && { name: quote.discount.name, amount: quote.discount.amount },
   };

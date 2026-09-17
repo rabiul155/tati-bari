@@ -37,3 +37,13 @@ export function fromDhakaDateTimeInput(value: string): Date | null {
   const date = new Date(`${value}:00${DHAKA_OFFSET}`);
   return Number.isNaN(date.getTime()) ? null : date;
 }
+
+// Midnight (Bangladesh time) at the start of `date`'s day, as a Date.
+export function startOfDhakaDay(date: Date): Date {
+  return fromDhakaDateTimeInput(`${toDhakaDateTimeInput(date).slice(0, 10)}T00:00`)!;
+}
+
+// Midnight (Bangladesh time) on the first day of `date`'s month.
+export function startOfDhakaMonth(date: Date): Date {
+  return fromDhakaDateTimeInput(`${toDhakaDateTimeInput(date).slice(0, 7)}-01T00:00`)!;
+}

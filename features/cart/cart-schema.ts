@@ -43,4 +43,6 @@ export type CartQuote = {
   hasUnavailable: boolean;
   // Order-level discount the subtotal currently qualifies for.
   discount: { name: string; amount: number } | null;
+  // A bigger discount the customer could reach by adding `remaining` taka.
+  nextDiscount: { name: string; amount: number; remaining: number } | null;
 };

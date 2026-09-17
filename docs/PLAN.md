@@ -95,18 +95,20 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] Abuse protection: rate limits (checkout 10/10 min per IP, 5/hour per phone; lookup 10/15 min per IP, 10/hour per phone) and a honeypot field
 - [ ] (Optional) new-order email to admin (waiting on decision 7)
 
-### Phase 8 — Admin order management (~2 h)
-- [ ] Dashboard: pending / confirmed counts, sales summary, recent orders
-- [ ] Order list with status filter and search (order number, phone)
-- [ ] Order detail: customer, items, pricing, discount, delivery, current status, history
-- [ ] Status update with optional note → writes `OrderStatusHistory` with timestamp
-- [ ] Courier name / tracking number fields
-- [ ] Customers list and customer detail with previous orders
+### Phase 8 — Admin order management (~2 h) ✅
+- [x] Dashboard: orders to handle (pending / confirmed / preparing / shipped), sales today / last 7 days / this month (Bangladesh time, excluding cancelled and returned), recent orders, out-of-stock count
+- [x] Order list (`/admin/orders`) with status tabs + counts and search (order number, full or partial phone, name)
+- [x] Order detail (`/admin/orders/TS-000123`): items with price snapshots, pricing, discount, delivery, customer (call / WhatsApp), customer note, history with who changed what
+- [x] Status update with optional note → `OrderStatusHistory`; suggested next steps plus "set another status" for corrections; stale updates (double click, two tabs) are rejected
+- [x] Cancelling gives tracked stock back; reopening a cancelled order takes it again (refused if not enough)
+- [x] Courier name / tracking number (shown to the customer) and internal admin note
+- [x] Copy / WhatsApp the private order link for the customer
+- [x] Customers list (search name / phone, orders, spent, last order) and customer detail with addresses and previous orders
 
-### Phase 9 — Discounts (~0.5–1 h)
-- [ ] Admin CRUD for order-level discount (fixed amount above minimum order value, active dates, on/off)
-- [ ] Applied server-side at checkout; shown in cart/checkout
-- [ ] Applied discount saved on the order
+### Phase 9 — Discounts (~0.5–1 h) ✅
+- [x] Admin CRUD (`/admin/discounts`): fixed amount above a minimum order value (minimum must be higher than the amount), optional start / end dates (Bangladesh time), on/off, status (active / scheduled / ended / off), usage (orders and taka given)
+- [x] Applied server-side at checkout (largest qualifying discount); shown in cart and checkout, plus an "add ৳X more to get ৳Y off" hint
+- [x] Applied discount saved on the order (name + amount snapshot); deleting a discount keeps past orders intact
 
 ### Phase 10 — Testing, security, deployment (~1.5–2 h)
 - [ ] Unit tests for pricing logic (sale windows, order discount, delivery charge, totals)

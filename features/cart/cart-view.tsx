@@ -135,6 +135,12 @@ export function CartView() {
             </dd>
           </div>
         </dl>
+        {!loading && quote.nextDiscount && (
+          <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
+            Add {formatTaka(quote.nextDiscount.remaining)} more to get{" "}
+            <strong>{formatTaka(quote.nextDiscount.amount)} off</strong>.
+          </p>
+        )}
         <p className="text-xs text-muted-foreground">
           Pay with cash when your order arrives. The delivery charge is set by your district at
           checkout.

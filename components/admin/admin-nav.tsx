@@ -6,15 +6,18 @@ import { cn } from "@/lib/utils";
 
 const LINKS = [
   { href: "/admin", label: "Dashboard", exact: true },
+  { href: "/admin/orders", label: "Orders" },
+  { href: "/admin/customers", label: "Customers" },
   { href: "/admin/products", label: "Products" },
   { href: "/admin/categories", label: "Categories" },
+  { href: "/admin/discounts", label: "Discounts" },
 ];
 
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Admin" className="flex gap-4 text-sm">
+    <nav aria-label="Admin" className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
       {LINKS.map(({ href, label, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         return (
