@@ -1,7 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  experimental: {
+    serverActions: {
+      // Product photos are resized in the browser and uploaded one per
+      // request. Stays under Vercel's 4.5 MB request limit.
+      bodySizeLimit: "4mb",
+    },
+  },
+  images: {
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+  },
 };
 
 export default nextConfig;

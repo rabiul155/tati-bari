@@ -16,7 +16,7 @@ Stack: Next.js 16.3 (App Router) + React 19 + TypeScript, Tailwind CSS 4, shadcn
 | # | Question | Recommendation | Answer |
 |---|---|---|---|
 | 1 | Database host | Neon (free Postgres) | |
-| 2 | Image storage | Cloudinary (automatic resizing) | |
+| 2 | Image storage | Cloudinary (automatic resizing) | Cloudinary assumed; code supports it, account still needed |
 | 3 | Delivery charge | Flat, or inside/outside Dhaka (e.g. ৳70 / ৳130) | |
 | 4 | Payment | Cash on delivery only for V1 | |
 | 5 | Site language | English, Bangla, or both (+1–2 h) | |
@@ -55,12 +55,14 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] `npm run admin:set` creates or updates the single admin; changing the password signs out all sessions
 - [x] Logout signs out every device (bumps `AdminUser.sessionVersion`)
 
-### Phase 4 — Product & category management (~2 h)
-- [ ] Category CRUD
-- [ ] Product create / edit / archive (no hard delete if referenced by orders)
-- [ ] Fields: name, slug, product code/SKU, description, saree details, category, regular price, sale price, sale start/end, availability
-- [ ] Multiple image upload with ordering and a primary image
-- [ ] Admin product list with search and filters
+### Phase 4 — Product & category management (~2 h) ✅
+- [x] Category CRUD (`/admin/categories`); only empty categories can be deleted
+- [x] Product create / edit / archive / restore; delete only when the product is not in any order
+- [x] Fields: name, slug, product code/SKU, description, saree details (fabric, colour, length, blouse piece, care), category, regular price, sale price, sale start/end (Bangladesh time), availability, optional stock, featured
+- [x] Multiple image upload with ordering; the first photo is the main one. Photos are resized in the browser, then re-encoded server-side to WebP (max 2000 px, metadata incl. GPS removed)
+- [x] Image storage: Cloudinary when `CLOUDINARY_*` is set, local `.uploads/` folder otherwise (development only)
+- [x] Admin product list with search (name/code), category / availability / archived filters and pagination
+- [x] Shared price rule `features/catalog/pricing.ts` (sale window), reused by the storefront and checkout
 
 ### Phase 5 — Storefront pages (~2–2.5 h)
 - [ ] Site layout: header, footer, social links
