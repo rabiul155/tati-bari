@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { cartItemsSchema } from "@/features/cart/cart-schema";
+import { cartItemsSchema, type CartQuote } from "@/features/cart/cart-schema";
 import { quoteCart } from "@/features/cart/quote";
 
 const bodySchema = z.object({ items: cartItemsSchema });
@@ -13,5 +13,10 @@ export async function POST(request: Request) {
   }
 
   const quote = await quoteCart(parsed.data.items);
-  return Response.json(quote, { headers: { "Cache-Control": "no-store" } });
+  const result: CartQuote = {
+    ...quote,
+    // Internal ids stay on the server.
+    discount: quote.discount && { name: quote.discount.name, amount: quote.discount.amount },
+  };
+  return Response.json(result, { headers: { "Cache-Control": "no-store" } });
 }

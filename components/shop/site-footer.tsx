@@ -19,6 +19,11 @@ export function SiteFooter() {
               </Link>
             </li>
             <li>
+              <Link href="/orders" className="underline-offset-4 hover:underline">
+                My orders
+              </Link>
+            </li>
+            <li>
               <Link href="/about" className="underline-offset-4 hover:underline">
                 About us
               </Link>

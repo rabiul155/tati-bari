@@ -140,11 +140,14 @@ enum PaymentMethod {
 }
 
 model Order {
-  id     String      @id @default(cuid())
+  id        String      @id @default(cuid())
   // Sequential number shown to people as "TS-000123"
   // (see features/orders/order-number.ts).
-  number Int         @unique @default(autoincrement())
-  status OrderStatus @default(PENDING)
+  number    Int         @unique @default(autoincrement())
+  status    OrderStatus @default(PENDING)
+  // Random secret in the customer's order link (/orders/TS-000123?key=…),
+  // so orders can't be viewed by guessing sequential numbers.
+  accessKey String      @unique
 
   customerId String
   customer   Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
@@ -267,4 +270,16 @@ model Discount {
   updatedAt     DateTime  @updatedAt
 
   @@index([isActive])
+}
+
+// ─── Abuse protection ───────────────────────────────────────────────────────
+
+// Fixed-window request counters for public actions (checkout, order
+// lookup), keyed by e.g. "lookup:ip:1.2.3.4". See lib/rate-limit.ts.
+model RateLimit {
+  key     String   @id
+  count   Int
+  resetAt DateTime
+
+  @@index([resetAt])
 }

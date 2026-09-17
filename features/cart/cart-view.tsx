@@ -55,6 +55,8 @@ export function CartView() {
   const savings = counted.reduce((sum, row) => sum + row.unitDiscount * row.quantity, 0);
   const itemCount = counted.reduce((sum, row) => sum + row.quantity, 0);
   const unavailable = rows.filter((row) => !row.available);
+  // The discount is only shown once the server quote matches the cart.
+  const discount = loading ? 0 : (quote.discount?.amount ?? 0);
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
@@ -62,8 +64,9 @@ export function CartView() {
         {unavailable.length > 0 && (
           <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
             <span>
-              {unavailable.length === 1 ? "One saree is" : `${unavailable.length} sarees are`} no longer
-              available. Remove {unavailable.length === 1 ? "it" : "them"} to continue.
+              {unavailable.length === 1 ? "One saree is" : `${unavailable.length} sarees are`} not
+              available in the quantity you chose. Update or remove{" "}
+              {unavailable.length === 1 ? "it" : "them"} to continue.
             </span>
             <Button
               type="button"
@@ -108,6 +111,12 @@ export function CartView() {
               <dd className="tabular-nums">−{formatTaka(savings)}</dd>
             </div>
           )}
+          {discount > 0 && quote.discount && (
+            <div className="flex justify-between gap-4 text-primary">
+              <dt>{quote.discount.name}</dt>
+              <dd className="tabular-nums">−{formatTaka(discount)}</dd>
+            </div>
+          )}
           <div className="flex justify-between gap-4">
             <dt>Delivery</dt>
             <dd className="text-right tabular-nums">
@@ -119,9 +128,9 @@ export function CartView() {
           <div className="mt-2 flex justify-between gap-4 border-t pt-3 text-base">
             <dt className="font-semibold">Total</dt>
             <dd className="text-right font-semibold tabular-nums">
-              {formatTaka(subtotal + DELIVERY_CHARGES.insideDhaka)}
+              {formatTaka(subtotal - discount + DELIVERY_CHARGES.insideDhaka)}
               <span className="block text-xs font-normal text-muted-foreground">
-                {formatTaka(subtotal + DELIVERY_CHARGES.outsideDhaka)} outside Dhaka
+                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideDhaka)} outside Dhaka
               </span>
             </dd>
           </div>
@@ -130,9 +139,15 @@ export function CartView() {
           Pay with cash when your order arrives. The delivery charge is set by your district at
           checkout.
         </p>
-        <Button type="button" size="lg" disabled>
-          Checkout opens soon
-        </Button>
+        {unavailable.length > 0 || loading ? (
+          <Button type="button" size="lg" disabled>
+            Checkout
+          </Button>
+        ) : (
+          <Link href="/checkout" className={buttonVariants({ size: "lg" })}>
+            Checkout
+          </Link>
+        )}
       </aside>
     </div>
   );
@@ -188,6 +203,20 @@ function CartRow({ line }: { line: QuotedLine }) {
               />
             </div>
             <p className="font-semibold tabular-nums">{formatTaka(line.lineTotal)}</p>
+          </div>
+        ) : line.stockLeft !== null && line.stockLeft > 0 && line.stockLeft < line.quantity ? (
+          <div className="flex flex-wrap items-center gap-3 text-sm">
+            <p className="font-medium text-destructive">
+              Only {line.stockLeft} left (you have {line.quantity})
+            </p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => cart.setQuantity(line.productId, line.stockLeft!)}
+            >
+              Change to {line.stockLeft}
+            </Button>
           </div>
         ) : (
           <p className="text-sm font-medium text-destructive">No longer available</p>

@@ -82,18 +82,18 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] Out-of-stock / archived items are flagged and must be removed; deleted products drop out automatically
 - [x] Delivery charges in `features/checkout/delivery.ts` (placeholder ৳70 / ৳130 until decision 3)
 
-### Phase 7 — Guest checkout & order creation (~1.5–2 h)
-- [ ] Checkout form: name, phone (Bangladesh format), address, district, area, optional postal code
-- [ ] Zod validation on client and server
-- [ ] Server recalculates all prices, sale windows, order discount, delivery charge
-- [ ] Reject unavailable/archived products
-- [ ] Upsert `Customer` by phone; save `CustomerAddress`
-- [ ] Create `Order` + `OrderItem`s + initial `OrderStatusHistory` in one transaction
-- [ ] Order confirmation page: order number, summary, total, delivery info, next steps
-- [ ] Clear cart after successful order
-- [ ] Save placed orders (order number + phone) in localStorage for a "My orders" page
-- [ ] Order lookup when localStorage is lost. **Decide:** phone + order number (recommended), or phone only with a reduced view (no name/address)
-- [ ] (Optional) new-order email to admin
+### Phase 7 — Guest checkout & order creation (~1.5–2 h) ✅
+- [x] Checkout form (`/checkout`): name, phone (Bangladesh format, +880 and Bangla digits accepted), district (64), area, address, optional postal code, optional note
+- [x] Zod validation on client and server (`features/checkout/schema.ts`)
+- [x] Server recalculates prices, sale windows, order discount and delivery charge; if the total differs from what the customer saw, the order is not placed and the new total is shown
+- [x] Reject unavailable / archived / deleted products and quantities above stock; stock counts are decremented, products at 0 become unavailable
+- [x] Upsert `Customer` by phone; save `CustomerAddress` (no duplicates, latest is default)
+- [x] `Order` + `OrderItem`s + initial `OrderStatusHistory` in one transaction
+- [x] Order page (`/orders/TS-000123?key=…`): order number, status progress, items, totals, delivery info, next steps; private link with a random key, not indexed, no referrer
+- [x] Cart cleared after a successful order; details remembered on the device (opt-out checkbox)
+- [x] "My orders" (`/orders`): orders saved on this device + lookup by **phone + order number** (decided 2026-09-17)
+- [x] Abuse protection: rate limits (checkout 10/10 min per IP, 5/hour per phone; lookup 10/15 min per IP, 10/hour per phone) and a honeypot field
+- [ ] (Optional) new-order email to admin (waiting on decision 7)
 
 ### Phase 8 — Admin order management (~2 h)
 - [ ] Dashboard: pending / confirmed counts, sales summary, recent orders

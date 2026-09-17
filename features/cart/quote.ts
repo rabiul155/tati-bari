@@ -3,7 +3,9 @@
 // function when it creates the order.
 import "server-only";
 import { db } from "@/lib/db";
+import type { Prisma } from "@/lib/generated/prisma/client";
 import { getUnitPrice } from "@/features/catalog/pricing";
+import { findBestDiscount, type AppliedDiscount } from "@/features/discounts/best-discount";
 import {
   MAX_QUANTITY_PER_ITEM,
   type CartItem,
@@ -11,7 +13,14 @@ import {
   type QuotedLine,
 } from "@/features/cart/cart-schema";
 
-export async function quoteCart(items: CartItem[], now: Date = new Date()): Promise<CartQuote> {
+export type ServerCartQuote = CartQuote & { discount: AppliedDiscount | null };
+
+// Pass a transaction client to read prices inside a transaction.
+export async function quoteCart(
+  items: CartItem[],
+  now: Date = new Date(),
+  client: Prisma.TransactionClient = db,
+): Promise<ServerCartQuote> {
   // Merge duplicate lines (e.g. from a hand-edited localStorage value).
   const quantities = new Map<string, number>();
   for (const { productId, quantity } of items) {
@@ -21,7 +30,7 @@ export async function quoteCart(items: CartItem[], now: Date = new Date()): Prom
     );
   }
 
-  const products = await db.product.findMany({
+  const products = await client.product.findMany({
     where: { id: { in: [...quantities.keys()] } },
     select: {
       id: true,
@@ -34,6 +43,7 @@ export async function quoteCart(items: CartItem[], now: Date = new Date()): Prom
       saleEndsAt: true,
       availability: true,
       archivedAt: true,
+      stockQuantity: true,
       images: {
         orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
         take: 1,
@@ -61,17 +71,24 @@ export async function quoteCart(items: CartItem[], now: Date = new Date()): Prom
       quantity,
       ...price,
       lineTotal: price.finalUnitPrice * quantity,
-      available: product.availability === "AVAILABLE" && product.archivedAt === null,
+      available:
+        product.availability === "AVAILABLE" &&
+        product.archivedAt === null &&
+        (product.stockQuantity === null || product.stockQuantity >= quantity),
+      stockLeft: product.stockQuantity,
     });
   }
 
   const counted = lines.filter((line) => line.available);
+  const subtotal = counted.reduce((sum, line) => sum + line.lineTotal, 0);
+  const discount = await findBestDiscount(subtotal, now, client);
   return {
     lines,
     removedProductIds,
     itemCount: counted.reduce((sum, line) => sum + line.quantity, 0),
-    subtotal: counted.reduce((sum, line) => sum + line.lineTotal, 0),
+    subtotal,
     savings: counted.reduce((sum, line) => sum + line.unitDiscount * line.quantity, 0),
     hasUnavailable: lines.some((line) => !line.available),
+    discount,
   };
 }

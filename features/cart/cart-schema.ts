@@ -24,9 +24,13 @@ export type QuotedLine = {
   unitDiscount: number;
   finalUnitPrice: number;
   lineTotal: number;
-  // False when the product is out of stock or archived; such lines are
+  // False when the product is out of stock (or has fewer left than the
+  // quantity) or archived; such lines are
   // not counted in the subtotal and block checkout.
   available: boolean;
+  // For products with a stock count: how many are left. When it is above 0
+  // but below the quantity, the customer can lower the quantity.
+  stockLeft: number | null;
 };
 
 export type CartQuote = {
@@ -37,4 +41,6 @@ export type CartQuote = {
   subtotal: number;
   savings: number;
   hasUnavailable: boolean;
+  // Order-level discount the subtotal currently qualifies for.
+  discount: { name: string; amount: number } | null;
 };
