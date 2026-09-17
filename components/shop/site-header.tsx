@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShopNav } from "@/components/shop/shop-nav";
+import { CartLink } from "@/features/cart/cart-link";
 import { site } from "@/lib/site";
 
 export function SiteHeader() {
@@ -9,7 +10,10 @@ export function SiteHeader() {
         <Link href="/" className="font-heading text-xl font-semibold tracking-tight">
           {site.name}
         </Link>
-        <ShopNav />
+        <div className="flex items-center gap-4">
+          <ShopNav />
+          <CartLink />
+        </div>
       </div>
     </header>
   );
