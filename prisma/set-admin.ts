@@ -6,6 +6,7 @@
 // ADMIN_EMAIL, ADMIN_NAME and ADMIN_PASSWORD in the environment instead.
 import "dotenv/config";
 import { createInterface } from "node:readline/promises";
+import { Writable } from "node:stream";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { z } from "zod";
 import { hashPassword } from "../lib/auth/password";
@@ -28,17 +29,26 @@ const adminSchema = z.object({
 });
 
 async function prompt() {
-  const rl = createInterface({ input: process.stdin, output: process.stdout });
+  // Readline echoes through this stream, so muting it hides the password.
+  let muted = false;
+  const output = new Writable({
+    write(chunk, encoding, callback) {
+      if (!muted) process.stdout.write(chunk, encoding);
+      callback();
+    },
+  });
+  const rl = createInterface({
+    input: process.stdin,
+    output,
+    terminal: process.stdin.isTTY,
+  });
   try {
     const email = await rl.question("Admin email: ");
     const name = await rl.question("Admin name: ");
-    // Hide the password while it is typed.
-    const output = rl as unknown as { _writeToOutput: (text: string) => void };
-    const write = output._writeToOutput.bind(rl);
-    const question = `Password (at least ${MIN_PASSWORD_LENGTH} characters): `;
-    output._writeToOutput = (text) => write(text.startsWith(question) ? question : "");
-    const password = await rl.question(question);
-    output._writeToOutput = write;
+    process.stdout.write(`Password (at least ${MIN_PASSWORD_LENGTH} characters): `);
+    muted = true;
+    const password = await rl.question("");
+    muted = false;
     process.stdout.write("\n");
     return { email, name, password };
   } finally {
