@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AdminDrawer } from "@/components/admin/admin-drawer";
 import { AdminBottomNav } from "@/components/admin/admin-bottom-nav";
@@ -24,13 +25,15 @@ export default async function AdminDashboardLayout({
             </Link>
             <AdminNav />
           </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground md:inline">
-              {admin.name}
-            </span>
-            {/* Below md, sign out lives in the drawer. */}
-            <form action={logout} className="hidden md:block">
-              <Button type="submit" variant="outline" size="sm">
+          <div className="flex items-center gap-1">
+            <div className="hidden md:flex items-center gap-2 px-2 text-sm text-muted-foreground">
+              <span className="flex size-7 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <User className="size-4" aria-hidden />
+              </span>
+              <span className="max-md:sr-only">{admin.name}</span>
+            </div>
+            <form action={logout}>
+              <Button type="submit" variant="outline" size="xs">
                 সাইন আউট
               </Button>
             </form>

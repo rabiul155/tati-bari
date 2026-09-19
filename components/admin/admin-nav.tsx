@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import { ADMIN_LINKS, isAdminLinkActive } from "@/components/admin/admin-links";
 import { cn } from "@/lib/utils";
 
@@ -28,6 +29,14 @@ export function AdminNav() {
           </Link>
         );
       })}
+      <Link
+        href="/"
+        target="_blank"
+        className="inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ExternalLink className="size-4" aria-hidden />
+        শপ দেখুন
+      </Link>
     </nav>
   );
 }

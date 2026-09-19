@@ -26,7 +26,10 @@ export function AdminDrawer({
   const open = openOn === pathname;
 
   return (
-    <Dialog.Root open={open} onOpenChange={(next) => setOpenOn(next ? pathname : null)}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => setOpenOn(next ? pathname : null)}
+    >
       <Dialog.Trigger
         aria-label="নেভিগেশন মেনু খুলুন"
         className="inline-flex size-10 items-center justify-center rounded-lg transition-colors outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50 md:hidden"
@@ -39,7 +42,9 @@ export function AdminDrawer({
           <div className="flex h-14 items-center justify-between gap-2 border-b px-4">
             <div className="min-w-0">
               <Dialog.Title className="font-semibold">অ্যাডমিন</Dialog.Title>
-              <p className="truncate text-xs text-muted-foreground">{adminName}</p>
+              <p className="truncate text-xs text-muted-foreground">
+                {adminName}
+              </p>
             </div>
             <Dialog.Close
               aria-label="মেনু বন্ধ করুন"
@@ -49,7 +54,10 @@ export function AdminDrawer({
             </Dialog.Close>
           </div>
 
-          <nav aria-label="অ্যাডমিন মেনু" className="flex-1 overflow-y-auto p-2">
+          <nav
+            aria-label="অ্যাডমিন মেনু"
+            className="flex-1 overflow-y-auto p-2"
+          >
             <ul className="flex flex-col gap-1">
               {ADMIN_LINKS.map((link) => {
                 const active = isAdminLinkActive(pathname, link);
@@ -59,7 +67,10 @@ export function AdminDrawer({
                     <Link
                       href={link.href}
                       aria-current={active ? "page" : undefined}
-                      className={cn(rowClass, active && "bg-primary/10 font-medium text-primary")}
+                      className={cn(
+                        rowClass,
+                        active && "bg-primary/10 font-medium text-primary",
+                      )}
                     >
                       <Icon className="size-5" aria-hidden />
                       {link.label}
@@ -76,7 +87,13 @@ export function AdminDrawer({
               শপ দেখুন
             </Link>
             <form action={logoutAction}>
-              <button type="submit" className={cn(rowClass, "text-destructive hover:bg-destructive/10")}>
+              <button
+                type="submit"
+                className={cn(
+                  rowClass,
+                  "text-destructive hover:bg-destructive/10",
+                )}
+              >
                 <LogOut className="size-5" aria-hidden />
                 সাইন আউট
               </button>
