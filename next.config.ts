@@ -9,9 +9,14 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    // Only product photos may be optimized (local uploads, Cloudinary, or the
-    // Wikimedia Commons photos used by the seed data).
-    localPatterns: [{ pathname: "/uploads/**", search: "" }],
+    // Only product photos and the two brand logos may be optimized (local
+    // uploads, Cloudinary, or the Wikimedia Commons photos used by the seed
+    // data).
+    localPatterns: [
+      { pathname: "/uploads/**", search: "" },
+      { pathname: "/logo.png", search: "" },
+      { pathname: "/logo-wordmark.png", search: "" },
+    ],
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
       {

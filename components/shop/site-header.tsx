@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ShopNav } from "@/components/shop/shop-nav";
 import { CartLink } from "@/features/cart/cart-link";
 import { site } from "@/lib/site";
@@ -7,8 +8,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-14 w-full max-w-6xl md:h-16 items-center justify-between gap-4 px-4">
-        <Link href="/" className="font-heading text-lg font-semibold tracking-tight whitespace-nowrap sm:text-xl">
-          {site.name}
+        <Link href="/" className="shrink-0">
+          <Image
+            src="/logo-wordmark.png"
+            alt={site.name}
+            width={520}
+            height={167}
+            preload
+            className="h-9 w-auto md:h-10"
+          />
         </Link>
         <div className="flex items-center gap-4">
           {/* Below md the bottom navigation replaces the text links. */}

@@ -1,7 +1,8 @@
-// Store details shown across the site. Placeholder values until the brand
-// is decided (docs/PLAN.md, decision 6). Empty contact fields are hidden.
+// Store details shown across the site. Brand name and logo are final; the
+// contact details are still placeholders (docs/PLAN.md, decision 6). Empty
+// contact fields are hidden.
 export const site = {
-  name: "Tangail Saree",
+  name: "তাঁতীবাড়ি",
   tagline: "টাঙ্গাইলের হ্যান্ডলুম শাড়ি",
   description:
     "তাঁতিদের কাছ থেকে সরাসরি সংগ্রহ করা হাতে বোনা টাঙ্গাইল শাড়ি, ক্যাশ অন ডেলিভারিতে সারা বাংলাদেশে পৌঁছে দেওয়া হয়।",
