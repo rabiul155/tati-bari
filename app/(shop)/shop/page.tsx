@@ -5,7 +5,10 @@ import { ProductGrid } from "@/components/shop/product-card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@/components/ui/native-select";
 import {
   getShopCategories,
   searchProducts,
@@ -38,7 +41,9 @@ function parseFilters(params: SearchParams) {
   };
 }
 
-export async function generateMetadata({ searchParams }: PageProps<"/shop">): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: PageProps<"/shop">): Promise<Metadata> {
   const { categorySlug } = parseFilters(await searchParams);
   const category = categorySlug
     ? (await getShopCategories()).find((c) => c.slug === categorySlug)
@@ -46,7 +51,9 @@ export async function generateMetadata({ searchParams }: PageProps<"/shop">): Pr
   return {
     title: category ? `${category.name} শাড়ি` : "শাড়ি কিনুন",
     description: category?.description ?? "হাতে বোনা টাঙ্গাইল শাড়ি দেখুন।",
-    alternates: { canonical: category ? `/shop?category=${category.slug}` : "/shop" },
+    alternates: {
+      canonical: category ? `/shop?category=${category.slug}` : "/shop",
+    },
   };
 }
 
@@ -71,23 +78,31 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
     return `/shop${query ? `?${query}` : ""}`;
   };
   const hasFilters =
-    filters.minPrice !== undefined || filters.maxPrice !== undefined || filters.inStockOnly;
+    filters.minPrice !== undefined ||
+    filters.maxPrice !== undefined ||
+    filters.inStockOnly;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 md:py-8">
       {category && (
         <Breadcrumb
-          items={[{ label: "হোম", href: "/" }, { label: "শপ", href: "/shop" }, { label: category.name }]}
+          items={[
+            { label: "হোম", href: "/" },
+            { label: "শপ", href: "/shop" },
+            { label: category.name },
+          ]}
         />
       )}
       <div className="flex flex-col gap-1">
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
           {category ? category.name : "সব শাড়ি"}
         </h1>
-        {category?.description && <p className="text-muted-foreground">{category.description}</p>}
+        {category?.description && (
+          <p className="text-muted-foreground">{category.description}</p>
+        )}
       </div>
 
-      <nav aria-label="ক্যাটাগরি" className="-mx-4 overflow-x-auto px-4">
+      <nav aria-label="ক্যাটাগরি" className="-mx-4 overflow-x-auto px-4 pb-2">
         <ul className="flex w-max gap-2">
           {[{ slug: undefined, name: "সব" }, ...categories].map((c) => {
             const active = c.slug === filters.categorySlug;
@@ -97,7 +112,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
                   href={href({ categorySlug: c.slug })}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex h-9 items-center rounded-full md:h-8 border px-3 text-sm transition-colors",
+                    "inline-flex h-7 items-center rounded-full md:h-8 border px-3 text-sm transition-colors",
                     active
                       ? "border-primary bg-primary text-primary-foreground"
                       : "bg-background hover:bg-muted",
@@ -111,15 +126,36 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
         </ul>
       </nav>
 
-      <form method="get" className="grid grid-cols-2 gap-3 rounded-lg border bg-card p-3 sm:flex sm:flex-wrap sm:items-end">
-        {filters.categorySlug && <input type="hidden" name="category" value={filters.categorySlug} />}
+      <form
+        method="get"
+        className="grid grid-cols-2 gap-3 rounded-lg border bg-card p-3 sm:flex sm:flex-wrap sm:items-end"
+      >
+        {filters.categorySlug && (
+          <input type="hidden" name="category" value={filters.categorySlug} />
+        )}
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="min">সর্বনিম্ন দাম (৳)</Label>
-          <Input id="min" name="min" type="number" min={0} inputMode="numeric" defaultValue={filters.minPrice} className="sm:w-28" />
+          <Input
+            id="min"
+            name="min"
+            type="number"
+            min={0}
+            inputMode="numeric"
+            defaultValue={filters.minPrice}
+            className="sm:w-28"
+          />
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="max">সর্বোচ্চ দাম (৳)</Label>
-          <Input id="max" name="max" type="number" min={0} inputMode="numeric" defaultValue={filters.maxPrice} className="sm:w-28" />
+          <Input
+            id="max"
+            name="max"
+            type="number"
+            min={0}
+            inputMode="numeric"
+            defaultValue={filters.maxPrice}
+            className="sm:w-28"
+          />
         </div>
         <div className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
           <Label htmlFor="sort">সাজান</Label>
@@ -132,16 +168,34 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
           </NativeSelect>
         </div>
         <label className="col-span-2 flex h-10 items-center gap-2 text-sm sm:col-span-1 md:h-8">
-          <input type="checkbox" name="instock" value="1" defaultChecked={filters.inStockOnly} className="size-4 accent-primary" />
+          <input
+            type="checkbox"
+            name="instock"
+            value="1"
+            defaultChecked={filters.inStockOnly}
+            className="size-4 accent-primary"
+          />
           শুধু স্টকে আছে
         </label>
-        <Button type="submit" variant="secondary" className="col-span-2 sm:col-span-1">
+        <Button
+          type="submit"
+          variant="secondary"
+          className="col-span-2 sm:col-span-1"
+        >
           প্রয়োগ করুন
         </Button>
         {(hasFilters || filters.sort !== "newest") && (
           <Link
-            href={href({ minPrice: undefined, maxPrice: undefined, inStockOnly: false, sort: "newest" })}
-            className={cn(buttonVariants({ variant: "ghost" }), "col-span-2 sm:col-span-1")}
+            href={href({
+              minPrice: undefined,
+              maxPrice: undefined,
+              inStockOnly: false,
+              sort: "newest",
+            })}
+            className={cn(
+              buttonVariants({ variant: "ghost" }),
+              "col-span-2 sm:col-span-1",
+            )}
           >
             ফিল্টার মুছুন
           </Link>
@@ -164,19 +218,29 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
       )}
 
       {result.pageCount > 1 && (
-        <nav className="flex items-center justify-between gap-2" aria-label="পেজিনেশন">
+        <nav
+          className="flex items-center justify-between gap-2"
+          aria-label="পেজিনেশন"
+        >
           {filters.page > 1 ? (
-            <Link href={href({ page: filters.page - 1 })} className={buttonVariants({ variant: "outline" })}>
+            <Link
+              href={href({ page: filters.page - 1 })}
+              className={buttonVariants({ variant: "outline" })}
+            >
               আগের
             </Link>
           ) : (
             <span />
           )}
           <span className="text-sm text-muted-foreground">
-            পৃষ্ঠা {Math.min(filters.page, result.pageCount)} / {result.pageCount}
+            পৃষ্ঠা {Math.min(filters.page, result.pageCount)} /{" "}
+            {result.pageCount}
           </span>
           {filters.page < result.pageCount ? (
-            <Link href={href({ page: filters.page + 1 })} className={buttonVariants({ variant: "outline" })}>
+            <Link
+              href={href({ page: filters.page + 1 })}
+              className={buttonVariants({ variant: "outline" })}
+            >
               পরের
             </Link>
           ) : (
