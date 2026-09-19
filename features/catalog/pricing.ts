@@ -23,6 +23,11 @@ export function isSaleActive(product: PricedProduct, now: Date = new Date()): bo
   return true;
 }
 
+// Whole-number percentage off the regular price; 0 when there is no sale.
+export function getPercentOff({ unitPrice, unitDiscount }: UnitPrice): number {
+  return Math.round((unitDiscount / unitPrice) * 100);
+}
+
 export function getUnitPrice(product: PricedProduct, now: Date = new Date()): UnitPrice {
   const finalUnitPrice = isSaleActive(product, now) ? product.salePrice! : product.regularPrice;
   return {

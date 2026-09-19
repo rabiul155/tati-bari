@@ -1,4 +1,4 @@
-import { getUnitPrice, type PricedProduct } from "@/features/catalog/pricing";
+import { getPercentOff, getUnitPrice, type PricedProduct } from "@/features/catalog/pricing";
 import { formatTaka } from "@/lib/format";
 import { cn } from "@/lib/utils";
 
@@ -12,8 +12,9 @@ export function Price({
   size?: "default" | "lg";
   className?: string;
 }) {
-  const { unitPrice, unitDiscount, finalUnitPrice } = getUnitPrice(product);
-  const percentOff = Math.round((unitDiscount / unitPrice) * 100);
+  const price = getUnitPrice(product);
+  const { unitPrice, unitDiscount, finalUnitPrice } = price;
+  const percentOff = getPercentOff(price);
 
   return (
     <p className={cn("flex flex-wrap items-baseline gap-x-2", className)}>

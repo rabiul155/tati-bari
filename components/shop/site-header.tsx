@@ -10,9 +10,11 @@ export function SiteHeader() {
         <Link href="/" className="font-heading text-lg font-semibold tracking-tight whitespace-nowrap sm:text-xl">
           {site.name}
         </Link>
-        {/* Below md the bottom navigation replaces these. */}
-        <div className="hidden items-center gap-4 md:flex">
-          <ShopNav />
+        <div className="flex items-center gap-4">
+          {/* Below md the bottom navigation replaces the text links. */}
+          <div className="hidden md:block">
+            <ShopNav />
+          </div>
           <CartLink />
         </div>
       </div>

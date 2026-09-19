@@ -1,17 +1,28 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Price } from "@/components/shop/price";
-import { isSaleActive } from "@/features/catalog/pricing";
+import { getPercentOff, getUnitPrice, isSaleActive } from "@/features/catalog/pricing";
 import type { ProductCardData } from "@/features/catalog/queries";
 
-export const PRODUCT_CARD_SIZES = "(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw";
+export const PRODUCT_CARD_SIZES =
+  "(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw";
 
-export function ProductCard({ product, priority }: { product: ProductCardData; priority?: boolean }) {
+export function ProductCard({
+  product,
+  priority,
+}: {
+  product: ProductCardData;
+  priority?: boolean;
+}) {
   const image = product.images[0];
   const unavailable = product.availability === "UNAVAILABLE";
+  const percentOff = getPercentOff(getUnitPrice(product));
 
   return (
-    <Link href={`/products/${product.slug}`} className="group flex flex-col gap-3">
+    <Link
+      href={`/products/${product.slug}`}
+      className="group flex flex-col gap-3"
+    >
       <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-muted">
         {image ? (
           <Image
@@ -27,7 +38,7 @@ export function ProductCard({ product, priority }: { product: ProductCardData; p
             ছবি শীঘ্রই আসছে
           </div>
         )}
-        <div className="absolute top-2 left-2 flex flex-col items-start gap-1">
+        <div className="absolute top-2 right-1 flex flex-col items-start gap-1">
           {unavailable ? (
             <span className="rounded-full bg-background/90 px-2 py-0.5 text-xs font-medium">
               স্টকে নেই
@@ -35,7 +46,7 @@ export function ProductCard({ product, priority }: { product: ProductCardData; p
           ) : (
             isSaleActive(product) && (
               <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
-                ছাড়
+                {percentOff > 0 ? `${percentOff}% ছাড়` : "ছাড়"}
               </span>
             )
           )}
