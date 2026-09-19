@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/lib/site";
 
-// Default social preview for pages without their own image.
+// Default social preview for pages without their own image. Shows only the
+// Latin brand name: ImageResponse has no Bengali font unless one is bundled.
 export const alt = site.name;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -25,8 +26,6 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ fontSize: 96, fontWeight: 700 }}>{site.name}</div>
-        <div style={{ fontSize: 40, color: "#4a3b33" }}>{site.tagline}</div>
-        <div style={{ fontSize: 28, color: "#6b5a50" }}>Cash on delivery across Bangladesh</div>
       </div>
     ),
     size,

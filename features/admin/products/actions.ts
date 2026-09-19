@@ -32,14 +32,14 @@ export async function saveProduct(
     db.category.findUnique({ where: { id: data.categoryId }, select: { id: true } }),
   ]);
   const fieldErrors: Record<string, string[]> = {};
-  if (slugTaken) fieldErrors.slug = ["Another product already uses this slug."];
-  if (codeTaken) fieldErrors.code = ["Another product already uses this code."];
-  if (!category) fieldErrors.categoryId = ["Choose a category."];
+  if (slugTaken) fieldErrors.slug = ["অন্য একটি পণ্য ইতিমধ্যে এই slug ব্যবহার করছে।"];
+  if (codeTaken) fieldErrors.code = ["অন্য একটি পণ্য ইতিমধ্যে এই কোড ব্যবহার করছে।"];
+  if (!category) fieldErrors.categoryId = ["একটি ক্যাটাগরি নির্বাচন করুন।"];
   if (Object.keys(fieldErrors).length > 0) return { ok: false, fieldErrors };
 
   if (id) {
     const { count } = await db.product.updateMany({ where: { id }, data });
-    if (count === 0) return { ok: false, error: "This product no longer exists." };
+    if (count === 0) return { ok: false, error: "এই পণ্যটি আর নেই।" };
     revalidateCatalog();
     return { ok: true };
   }
@@ -65,7 +65,7 @@ export async function deleteProduct(id: string): Promise<ActionResult> {
   await requireAdmin();
   const orderCount = await db.orderItem.count({ where: { productId: id } });
   if (orderCount > 0) {
-    return { ok: false, error: "This product is in past orders. Archive it instead." };
+    return { ok: false, error: "এই পণ্যটি আগের অর্ডারে আছে। এর পরিবর্তে আর্কাইভ করুন।" };
   }
 
   const images = await db.productImage.findMany({ where: { productId: id } });
@@ -86,19 +86,19 @@ export async function uploadProductImage(
   await requireAdmin();
   const file = formData.get("file");
   if (!(file instanceof File) || file.size === 0) {
-    return { ok: false, error: "Choose an image to upload." };
+    return { ok: false, error: "আপলোড করার জন্য একটি ছবি বেছে নিন।" };
   }
   if (file.size > MAX_UPLOAD_BYTES) {
-    return { ok: false, error: "This image is too large (maximum 4 MB)." };
+    return { ok: false, error: "এই ছবিটি অনেক বড় (সর্বোচ্চ ৪ MB)।" };
   }
 
   const product = await db.product.findUnique({
     where: { id: productId },
     select: { slug: true, _count: { select: { images: true } } },
   });
-  if (!product) return { ok: false, error: "This product no longer exists." };
+  if (!product) return { ok: false, error: "এই পণ্যটি আর নেই।" };
   if (product._count.images >= MAX_IMAGES_PER_PRODUCT) {
-    return { ok: false, error: `A product can have at most ${MAX_IMAGES_PER_PRODUCT} photos.` };
+    return { ok: false, error: `একটি পণ্যে সর্বোচ্চ ${MAX_IMAGES_PER_PRODUCT}টি ছবি রাখা যায়।` };
   }
 
   let processed;
@@ -151,7 +151,7 @@ export async function reorderProductImages(
     new Set(imageIds).size !== imageIds.length ||
     !imageIds.every((id) => currentIds.has(id))
   ) {
-    return { ok: false, error: "The photos changed in the meantime. Reload the page." };
+    return { ok: false, error: "ইতিমধ্যে ছবিগুলো পরিবর্তন হয়েছে। পেজটি রিলোড করুন।" };
   }
 
   await db.$transaction(

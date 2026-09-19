@@ -16,7 +16,7 @@ import { ProductForm } from "@/features/admin/products/product-form";
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 
-export const metadata: Metadata = { title: "Edit product" };
+export const metadata: Metadata = { title: "পণ্য সম্পাদনা" };
 
 export default async function EditProductPage({
   params,
@@ -49,18 +49,18 @@ export default async function EditProductPage({
     <div className="flex flex-col gap-6">
       <PageHeader
         title={product.name}
-        description={`Code ${product.code}`}
-        back={{ href: "/admin/products", label: "Products" }}
+        description={`কোড ${product.code}`}
+        back={{ href: "/admin/products", label: "পণ্য" }}
       >
         {archived ? (
-          <Badge variant="secondary">Archived</Badge>
+          <Badge variant="secondary">আর্কাইভ করা</Badge>
         ) : (
           <Link
             href={`/products/${product.slug}`}
             target="_blank"
             className={buttonVariants({ variant: "outline" })}
           >
-            View in shop
+            শপে দেখুন
           </Link>
         )}
         <ConfirmActionButton
@@ -68,32 +68,32 @@ export default async function EditProductPage({
           confirmMessage={
             archived
               ? undefined
-              : "Archive this product? It will be hidden from the shop but kept for past orders."
+              : "এই পণ্যটি আর্কাইভ করবেন? এটি শপ থেকে লুকানো থাকবে, কিন্তু আগের অর্ডারের জন্য সংরক্ষিত থাকবে।"
           }
           action={setProductArchived.bind(null, product.id, !archived)}
         >
-          {archived ? "Restore to shop" : "Archive"}
+          {archived ? "শপে ফিরিয়ে আনুন" : "আর্কাইভ করুন"}
         </ConfirmActionButton>
         {!inOrders && (
           <ConfirmActionButton
             variant="destructive"
-            confirmMessage={`Permanently delete "${product.name}" and its photos?`}
+            confirmMessage={`"${product.name}" এবং এর ছবিগুলো স্থায়ীভাবে মুছে ফেলবেন?`}
             action={deleteProduct.bind(null, product.id)}
           >
-            Delete
+            মুছুন
           </ConfirmActionButton>
         )}
       </PageHeader>
 
       {created && (
         <p role="status" className="rounded-lg bg-muted px-3 py-2 text-sm">
-          Product created. Now add some photos.
+          পণ্য তৈরি হয়েছে। এখন কিছু ছবি যোগ করুন।
         </p>
       )}
 
       <Card>
         <CardHeader>
-          <CardTitle>Photos</CardTitle>
+          <CardTitle>ছবি</CardTitle>
         </CardHeader>
         <CardContent>
           <ImageManager

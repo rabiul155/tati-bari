@@ -92,9 +92,9 @@ export async function getShopCategories() {
 }
 
 export const SHOP_SORTS = {
-  newest: "Newest",
-  "price-asc": "Price: low to high",
-  "price-desc": "Price: high to low",
+  newest: "নতুন",
+  "price-asc": "দাম: কম থেকে বেশি",
+  "price-desc": "দাম: বেশি থেকে কম",
 } as const;
 export type ShopSort = keyof typeof SHOP_SORTS;
 

@@ -53,7 +53,7 @@ export function ProductForm({
         reset(values);
         setSavedAt(new Date().toLocaleTimeString());
       } else {
-        setFormError(result.error ?? "Please fix the highlighted fields.");
+        setFormError(result.error ?? "অনুগ্রহ করে চিহ্নিত ঘরগুলো ঠিক করুন।");
         applyServerErrors(result.fieldErrors);
       }
     });
@@ -63,8 +63,8 @@ export function ProductForm({
     <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
       <FormError message={formError} />
 
-      <Section title="Basic information">
-        <FormField id="name" label="Name" error={error("name")} className="sm:col-span-2">
+      <Section title="প্রাথমিক তথ্য">
+        <FormField id="name" label="নাম" error={error("name")} className="sm:col-span-2">
           <Input
             {...field("name")}
             {...register("name", {
@@ -79,15 +79,15 @@ export function ProductForm({
         </FormField>
         <FormField
           id="code"
-          label="Product code"
-          hint="Shown to customers, e.g. HS-003."
+          label="পণ্য কোড"
+          hint="গ্রাহকদের দেখানো হয়, যেমন: HS-003।"
           error={error("code")}
         >
           <Input {...field("code")} className="uppercase" {...register("code")} />
         </FormField>
-        <FormField id="categoryId" label="Category" error={error("categoryId")}>
+        <FormField id="categoryId" label="ক্যাটাগরি" error={error("categoryId")}>
           <NativeSelect {...field("categoryId")} className="w-full" {...register("categoryId")}>
-            <NativeSelectOption value="">Choose…</NativeSelectOption>
+            <NativeSelectOption value="">নির্বাচন করুন…</NativeSelectOption>
             {categories.map((category) => (
               <NativeSelectOption key={category.id} value={category.id}>
                 {category.name}
@@ -98,7 +98,7 @@ export function ProductForm({
         <FormField
           id="slug"
           label="URL slug"
-          hint="Used in the product link. Changing it breaks links already shared on Facebook."
+          hint="পণ্যের লিংকে ব্যবহার হয়। এটি পরিবর্তন করলে Facebook-এ আগে শেয়ার করা লিংক কাজ করবে না।"
           error={error("slug")}
           className="sm:col-span-2"
         >
@@ -106,7 +106,7 @@ export function ProductForm({
         </FormField>
         <FormField
           id="description"
-          label="Description"
+          label="বিবরণ"
           error={error("description")}
           className="sm:col-span-2"
         >
@@ -114,22 +114,22 @@ export function ProductForm({
         </FormField>
       </Section>
 
-      <Section title="Saree details">
-        <FormField id="fabric" label="Fabric" hint="e.g. Cotton, Half silk" error={error("fabric")}>
+      <Section title="শাড়ির বিবরণ">
+        <FormField id="fabric" label="ফেব্রিক" hint="যেমন: সুতি, হাফ সিল্ক" error={error("fabric")}>
           <Input {...field("fabric")} {...register("fabric")} />
         </FormField>
-        <FormField id="color" label="Colour" hint="e.g. Red, Off-white" error={error("color")}>
+        <FormField id="color" label="রঙ" hint="যেমন: লাল, অফ-হোয়াইট" error={error("color")}>
           <Input {...field("color")} {...register("color")} />
         </FormField>
-        <FormField id="length" label="Length" hint="e.g. 12 haat (5.5 m)" error={error("length")}>
+        <FormField id="length" label="দৈর্ঘ্য" hint="যেমন: ১২ হাত (৫.৫ মিটার)" error={error("length")}>
           <Input {...field("length")} {...register("length")} />
         </FormField>
-        <CheckboxField id="hasBlousePiece" label="Includes a blouse piece">
+        <CheckboxField id="hasBlousePiece" label="ব্লাউজ পিস আছে">
           <input type="checkbox" id="hasBlousePiece" className="size-4 accent-primary" {...register("hasBlousePiece")} />
         </CheckboxField>
         <FormField
           id="careInstructions"
-          label="Care instructions"
+          label="যত্নের নির্দেশনা"
           error={error("careInstructions")}
           className="sm:col-span-2"
         >
@@ -138,55 +138,55 @@ export function ProductForm({
       </Section>
 
       <Section
-        title="Price"
-        description="Whole taka, without commas. Sale dates are Bangladesh time and optional: leave them empty to run the sale until you remove the sale price."
+        title="দাম"
+        description="কমা ছাড়া পূর্ণ টাকায় দিন। ছাড়ের তারিখ বাংলাদেশ সময়ে এবং ঐচ্ছিক: খালি রাখলে বিশেষ দাম মুছে না ফেলা পর্যন্ত ছাড় চলবে।"
       >
-        <FormField id="regularPrice" label="Regular price (৳)" error={error("regularPrice")}>
+        <FormField id="regularPrice" label="নিয়মিত দাম (৳)" error={error("regularPrice")}>
           <Input {...field("regularPrice")} type="number" min={1} inputMode="numeric" {...register("regularPrice")} />
         </FormField>
-        <FormField id="salePrice" label="Sale price (৳, optional)" error={error("salePrice")}>
+        <FormField id="salePrice" label="বিশেষ দাম (৳, ঐচ্ছিক)" error={error("salePrice")}>
           <Input {...field("salePrice")} type="number" min={1} inputMode="numeric" {...register("salePrice")} />
         </FormField>
-        <FormField id="saleStartsAt" label="Sale starts" error={error("saleStartsAt")}>
+        <FormField id="saleStartsAt" label="ছাড় শুরু" error={error("saleStartsAt")}>
           <Input {...field("saleStartsAt")} type="datetime-local" {...register("saleStartsAt")} />
         </FormField>
-        <FormField id="saleEndsAt" label="Sale ends" error={error("saleEndsAt")}>
+        <FormField id="saleEndsAt" label="ছাড় শেষ" error={error("saleEndsAt")}>
           <Input {...field("saleEndsAt")} type="datetime-local" {...register("saleEndsAt")} />
         </FormField>
       </Section>
 
-      <Section title="Availability">
-        <FormField id="availability" label="Availability" error={error("availability")}>
+      <Section title="প্রাপ্যতা">
+        <FormField id="availability" label="প্রাপ্যতা" error={error("availability")}>
           <NativeSelect {...field("availability")} className="w-full" {...register("availability")}>
-            <NativeSelectOption value="AVAILABLE">Available</NativeSelectOption>
-            <NativeSelectOption value="UNAVAILABLE">Unavailable (out of stock)</NativeSelectOption>
+            <NativeSelectOption value="AVAILABLE">পাওয়া যাচ্ছে</NativeSelectOption>
+            <NativeSelectOption value="UNAVAILABLE">পাওয়া যাচ্ছে না (স্টকে নেই)</NativeSelectOption>
           </NativeSelect>
         </FormField>
         <FormField
           id="stockQuantity"
-          label="Stock quantity (optional)"
-          hint="Leave empty if you source sarees on demand."
+          label="স্টকের পরিমাণ (ঐচ্ছিক)"
+          hint="চাহিদা অনুযায়ী শাড়ি সংগ্রহ করলে খালি রাখুন।"
           error={error("stockQuantity")}
         >
           <Input {...field("stockQuantity")} type="number" min={0} inputMode="numeric" {...register("stockQuantity")} />
         </FormField>
-        <CheckboxField id="isFeatured" label="Feature on the home page">
+        <CheckboxField id="isFeatured" label="হোম পেজে বিশেষভাবে দেখান">
           <input type="checkbox" id="isFeatured" className="size-4 accent-primary" {...register("isFeatured")} />
         </CheckboxField>
       </Section>
 
       <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-3 border-t bg-background/95 px-4 py-3 backdrop-blur">
         <Button type="submit" disabled={pending}>
-          {pending ? "Saving…" : productId ? "Save changes" : "Create product"}
+          {pending ? "সংরক্ষণ হচ্ছে…" : productId ? "পরিবর্তন সংরক্ষণ করুন" : "পণ্য তৈরি করুন"}
         </Button>
         <Link href="/admin/products" className={buttonVariants({ variant: "outline" })}>
-          {productId ? "Back to products" : "Cancel"}
+          {productId ? "পণ্যের তালিকায় ফিরুন" : "বাতিল"}
         </Link>
         <span role="status" className="text-sm text-muted-foreground">
           {savedAt && !formState.isDirty
-            ? `Saved at ${savedAt}.`
+            ? `${savedAt}-এ সংরক্ষিত হয়েছে।`
             : formState.isDirty && productId
-              ? "You have unsaved changes."
+              ? "আপনার অসংরক্ষিত পরিবর্তন আছে।"
               : ""}
         </span>
       </div>

@@ -22,12 +22,12 @@ export async function saveCategory(
     select: { id: true },
   });
   if (slugTaken) {
-    return { ok: false, fieldErrors: { slug: ["Another category already uses this slug."] } };
+    return { ok: false, fieldErrors: { slug: ["অন্য একটি ক্যাটাগরি ইতিমধ্যে এই slug ব্যবহার করছে।"] } };
   }
 
   if (id) {
     const { count } = await db.category.updateMany({ where: { id }, data });
-    if (count === 0) return { ok: false, error: "This category no longer exists." };
+    if (count === 0) return { ok: false, error: "এই ক্যাটাগরিটি আর নেই।" };
   } else {
     await db.category.create({ data });
   }
@@ -42,7 +42,7 @@ export async function deleteCategory(id: string): Promise<ActionResult> {
   if (productCount > 0) {
     return {
       ok: false,
-      error: `Move or delete its ${productCount} product(s) first, including archived ones.`,
+      error: `আগে এর ${productCount}টি পণ্য (আর্কাইভ করা পণ্যসহ) সরান অথবা মুছে ফেলুন।`,
     };
   }
   await db.category.deleteMany({ where: { id } });

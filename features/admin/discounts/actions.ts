@@ -16,7 +16,7 @@ export async function saveDiscount(id: string | null, values: DiscountFormValues
 
   if (id) {
     const { count } = await db.discount.updateMany({ where: { id }, data: parsed.data });
-    if (count === 0) return { ok: false, error: "This discount no longer exists." };
+    if (count === 0) return { ok: false, error: "এই ছাড়টি আর নেই।" };
   } else {
     await db.discount.create({ data: parsed.data });
   }

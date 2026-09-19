@@ -6,7 +6,7 @@ import { useCartCount } from "@/features/cart/cart-store";
 
 export function CartLink() {
   const count = useCartCount();
-  const label = count ? `Cart, ${count} item${count === 1 ? "" : "s"}` : "Cart";
+  const label = count ? `কার্ট, ${count}টি পণ্য` : "কার্ট";
 
   return (
     <Link

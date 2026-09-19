@@ -24,9 +24,9 @@ export function CartView() {
     return (
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed px-4 py-16 text-center">
         <ShoppingBag className="size-10 text-muted-foreground" aria-hidden />
-        <p className="text-lg font-medium">Your cart is empty</p>
+        <p className="text-lg font-medium">আপনার কার্ট খালি</p>
         <Link href="/shop" className={buttonVariants({ size: "lg", className: "px-5" })}>
-          Browse sarees
+          শাড়ি দেখুন
         </Link>
       </div>
     );
@@ -35,9 +35,9 @@ export function CartView() {
   if (!quote) {
     return (
       <div role="alert" className="flex flex-col items-start gap-3 rounded-lg border p-6">
-        <p>We couldn&apos;t load the latest prices. Check your connection and try again.</p>
+        <p>সর্বশেষ দাম লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</p>
         <Button type="button" variant="outline" onClick={retry}>
-          <RefreshCw /> Try again
+          <RefreshCw /> আবার চেষ্টা করুন
         </Button>
       </div>
     );
@@ -60,13 +60,12 @@ export function CartView() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
-      <section aria-label="Cart items" className={cn("flex flex-col gap-4", loading && "opacity-70")}>
+      <section aria-label="কার্টের পণ্য" className={cn("flex flex-col gap-4", loading && "opacity-70")}>
         {unavailable.length > 0 && (
           <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
             <span>
-              {unavailable.length === 1 ? "One saree is" : `${unavailable.length} sarees are`} not
-              available in the quantity you chose. Update or remove{" "}
-              {unavailable.length === 1 ? "it" : "them"} to continue.
+              {unavailable.length === 1 ? "একটি শাড়ি" : `${unavailable.length}টি শাড়ি`} আপনার
+              নির্বাচিত পরিমাণে পাওয়া যাচ্ছে না। চালিয়ে যেতে পরিমাণ পরিবর্তন করুন বা সরিয়ে দিন।
             </span>
             <Button
               type="button"
@@ -74,7 +73,7 @@ export function CartView() {
               size="sm"
               onClick={() => cart.removeMany(unavailable.map((row) => row.productId))}
             >
-              Remove unavailable
+              অনুপলব্ধ পণ্য সরান
             </Button>
           </div>
         )}
@@ -85,29 +84,27 @@ export function CartView() {
         </ul>
         {failed && (
           <p role="alert" className="flex items-center gap-2 text-sm text-destructive">
-            Prices may be out of date.
+            দাম পুরনো হতে পারে।
             <Button type="button" variant="link" size="sm" className="h-auto px-0" onClick={retry}>
-              Refresh
+              রিফ্রেশ করুন
             </Button>
           </p>
         )}
         <Link href="/shop" className="w-fit text-sm text-primary underline-offset-4 hover:underline">
-          ← Continue shopping
+          ← কেনাকাটা চালিয়ে যান
         </Link>
       </section>
 
-      <aside aria-label="Order summary" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
-        <h2 className="font-heading text-xl font-semibold">Order summary</h2>
+      <aside aria-label="অর্ডার সারাংশ" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
+        <h2 className="font-heading text-xl font-semibold">অর্ডার সারাংশ</h2>
         <dl className="flex flex-col gap-2 text-sm">
           <div className="flex justify-between gap-4">
-            <dt>
-              Subtotal ({itemCount} item{itemCount === 1 ? "" : "s"})
-            </dt>
+            <dt>সাবটোটাল ({itemCount}টি পণ্য)</dt>
             <dd className="font-medium tabular-nums">{formatTaka(subtotal)}</dd>
           </div>
           {savings > 0 && (
             <div className="flex justify-between gap-4 text-primary">
-              <dt>Sale savings</dt>
+              <dt>ছাড়ে সাশ্রয়</dt>
               <dd className="tabular-nums">−{formatTaka(savings)}</dd>
             </div>
           )}
@@ -118,40 +115,40 @@ export function CartView() {
             </div>
           )}
           <div className="flex justify-between gap-4">
-            <dt>Delivery</dt>
+            <dt>ডেলিভারি</dt>
             <dd className="text-right tabular-nums">
-              {formatTaka(DELIVERY_CHARGES.insideDhaka)} inside Dhaka
+              {formatTaka(DELIVERY_CHARGES.insideDhaka)} ঢাকার ভিতরে
               <br />
-              {formatTaka(DELIVERY_CHARGES.outsideDhaka)} outside Dhaka
+              {formatTaka(DELIVERY_CHARGES.outsideDhaka)} ঢাকার বাইরে
             </dd>
           </div>
           <div className="mt-2 flex justify-between gap-4 border-t pt-3 text-base">
-            <dt className="font-semibold">Total</dt>
+            <dt className="font-semibold">সর্বমোট</dt>
             <dd className="text-right font-semibold tabular-nums">
               {formatTaka(subtotal - discount + DELIVERY_CHARGES.insideDhaka)}
               <span className="block text-xs font-normal text-muted-foreground">
-                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideDhaka)} outside Dhaka
+                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideDhaka)} ঢাকার বাইরে
               </span>
             </dd>
           </div>
         </dl>
         {!loading && quote.nextDiscount && (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
-            Add {formatTaka(quote.nextDiscount.remaining)} more to get{" "}
-            <strong>{formatTaka(quote.nextDiscount.amount)} off</strong>.
+            আরও {formatTaka(quote.nextDiscount.remaining)} যোগ করে পান{" "}
+            <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
           </p>
         )}
         <p className="text-xs text-muted-foreground">
-          Pay with cash when your order arrives. The delivery charge is set by your district at
-          checkout.
+          অর্ডার হাতে পেয়ে ক্যাশে দাম পরিশোধ করুন। ডেলিভারি চার্জ চেকআউটে আপনার জেলা অনুযায়ী নির্ধারিত
+          হবে।
         </p>
         {unavailable.length > 0 || loading ? (
           <Button type="button" size="lg" disabled>
-            Checkout
+            চেকআউট
           </Button>
         ) : (
           <Link href="/checkout" className={buttonVariants({ size: "lg" })}>
-            Checkout
+            চেকআউট
           </Link>
         )}
       </aside>
@@ -176,13 +173,13 @@ function CartRow({ line }: { line: QuotedLine }) {
             <Link href={`/products/${line.slug}`} className="font-medium underline-offset-4 hover:underline">
               {line.name}
             </Link>
-            <p className="text-xs text-muted-foreground">Code: {line.code}</p>
+            <p className="text-xs text-muted-foreground">কোড: {line.code}</p>
           </div>
           <Button
             type="button"
             variant="ghost"
             size="icon-sm"
-            aria-label={`Remove ${line.name}`}
+            aria-label={`${line.name} সরান`}
             onClick={() => cart.remove(line.productId)}
           >
             <Trash2 />
@@ -199,11 +196,11 @@ function CartRow({ line }: { line: QuotedLine }) {
                     {formatTaka(line.unitPrice)}
                   </span>
                 )}
-                <span className="text-muted-foreground"> each</span>
+                <span className="text-muted-foreground"> প্রতি পিস</span>
               </p>
               <QuantityStepper
                 size="sm"
-                label={`Quantity of ${line.name}`}
+                label={`${line.name}-এর পরিমাণ`}
                 value={line.quantity}
                 onChange={(value) => cart.setQuantity(line.productId, value)}
               />
@@ -213,7 +210,7 @@ function CartRow({ line }: { line: QuotedLine }) {
         ) : line.stockLeft !== null && line.stockLeft > 0 && line.stockLeft < line.quantity ? (
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <p className="font-medium text-destructive">
-              Only {line.stockLeft} left (you have {line.quantity})
+              মাত্র {line.stockLeft}টি বাকি আছে (আপনার কাছে {line.quantity}টি আছে)
             </p>
             <Button
               type="button"
@@ -221,11 +218,11 @@ function CartRow({ line }: { line: QuotedLine }) {
               size="sm"
               onClick={() => cart.setQuantity(line.productId, line.stockLeft!)}
             >
-              Change to {line.stockLeft}
+              {line.stockLeft}-এ পরিবর্তন করুন
             </Button>
           </div>
         ) : (
-          <p className="text-sm font-medium text-destructive">No longer available</p>
+          <p className="text-sm font-medium text-destructive">আর পাওয়া যাচ্ছে না</p>
         )}
       </div>
     </li>
@@ -234,7 +231,7 @@ function CartRow({ line }: { line: QuotedLine }) {
 
 function CartSkeleton() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_22rem]" aria-busy="true" aria-label="Loading cart">
+    <div className="grid gap-8 lg:grid-cols-[1fr_22rem]" aria-busy="true" aria-label="কার্ট লোড হচ্ছে">
       <div className="flex flex-col gap-4 rounded-2xl border p-4">
         {[0, 1].map((i) => (
           <div key={i} className="flex gap-4">

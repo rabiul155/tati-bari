@@ -11,38 +11,38 @@ export function SiteFooter() {
           <p className="text-muted-foreground">{site.description}</p>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="font-medium">Shop</p>
+          <p className="font-medium">শপ</p>
           <ul className="flex flex-col gap-1 text-muted-foreground">
             <li>
               <Link href="/shop" className="underline-offset-4 hover:underline">
-                All sarees
+                সব শাড়ি
               </Link>
             </li>
             <li>
               <Link href="/orders" className="underline-offset-4 hover:underline">
-                My orders
+                আমার অর্ডার
               </Link>
             </li>
             <li>
               <Link href="/about" className="underline-offset-4 hover:underline">
-                About us
+                আমাদের সম্পর্কে
               </Link>
             </li>
             <li>
               <Link href="/about#contact" className="underline-offset-4 hover:underline">
-                Contact
+                যোগাযোগ
               </Link>
             </li>
           </ul>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="font-medium">Get in touch</p>
+          <p className="font-medium">যোগাযোগ করুন</p>
           <ContactLinks className="flex flex-col gap-1 text-muted-foreground" />
           <p className="text-muted-foreground">{site.address}</p>
         </div>
       </div>
       <p className="border-t px-4 py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} {site.name}. Cash on delivery across Bangladesh.
+        © {new Date().getFullYear()} {site.name}। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।
       </p>
     </footer>
   );

@@ -5,27 +5,27 @@ const taka = (label: string) =>
   z
     .string()
     .trim()
-    .regex(/^\d{1,7}$/, `Enter the ${label} in whole taka, without commas.`)
+    .regex(/^\d{1,7}$/, `${label} কমা ছাড়া পূর্ণ টাকায় দিন।`)
     .transform(Number);
 
 const optionalDateTime = z
   .string()
   .trim()
-  .refine((value) => value === "" || fromDhakaDateTimeInput(value) !== null, "Enter a valid date and time.")
+  .refine((value) => value === "" || fromDhakaDateTimeInput(value) !== null, "সঠিক তারিখ ও সময় দিন।")
   .transform((value) => fromDhakaDateTimeInput(value));
 
 // Form values are strings (booleans for checkboxes); shared by the admin
 // form and the server action.
 export const discountSchema = z
   .object({
-    name: z.string().trim().min(1, "Enter a name customers will see.").max(80),
+    name: z.string().trim().min(1, "গ্রাহকরা দেখতে পাবেন এমন একটি নাম দিন।").max(80),
     description: z
       .string()
       .trim()
       .max(300)
       .transform((value) => value || null),
-    amount: taka("discount").refine((value) => value > 0, "The discount must be more than 0."),
-    minOrderValue: taka("minimum order value"),
+    amount: taka("ছাড়ের পরিমাণ").refine((value) => value > 0, "ছাড় ০-এর বেশি হতে হবে।"),
+    minOrderValue: taka("সর্বনিম্ন অর্ডার মূল্য"),
     startsAt: optionalDateTime,
     endsAt: optionalDateTime,
     isActive: z.boolean(),
@@ -41,11 +41,11 @@ export const discountSchema = z
       ctx.addIssue({
         code: "custom",
         path: ["minOrderValue"],
-        message: "The minimum order value must be higher than the discount.",
+        message: "সর্বনিম্ন অর্ডার মূল্য ছাড়ের চেয়ে বেশি হতে হবে।",
       });
     }
     if (discount.startsAt && discount.endsAt && discount.startsAt >= discount.endsAt) {
-      ctx.addIssue({ code: "custom", path: ["endsAt"], message: "The end must be after the start." });
+      ctx.addIssue({ code: "custom", path: ["endsAt"], message: "শেষের সময় শুরুর সময়ের পরে হতে হবে।" });
     }
   });
 

@@ -15,7 +15,7 @@ import { deleteCategory } from "@/features/admin/categories/actions";
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 
-export const metadata: Metadata = { title: "Categories" };
+export const metadata: Metadata = { title: "ক্যাটাগরি" };
 
 export default async function CategoriesPage() {
   await requireAdmin();
@@ -26,23 +26,23 @@ export default async function CategoriesPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Categories">
+      <PageHeader title="ক্যাটাগরি">
         <Link href="/admin/categories/new" className={buttonVariants()}>
-          New category
+          নতুন ক্যাটাগরি
         </Link>
       </PageHeader>
 
       {categories.length === 0 ? (
-        <p className="text-muted-foreground">No categories yet.</p>
+        <p className="text-muted-foreground">এখনও কোনো ক্যাটাগরি নেই।</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>নাম</TableHead>
               <TableHead>Slug</TableHead>
-              <TableHead className="text-right">Products</TableHead>
-              <TableHead className="text-right">Sort</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-right">পণ্য</TableHead>
+              <TableHead className="text-right">ক্রম</TableHead>
+              <TableHead className="text-right">অ্যাকশন</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -65,7 +65,7 @@ export default async function CategoriesPage() {
                       href={`/admin/categories/${category.id}/edit`}
                       className={buttonVariants({ variant: "outline", size: "sm" })}
                     >
-                      Edit
+                      সম্পাদনা
                     </Link>
                     <ConfirmActionButton
                       variant="destructive"
@@ -73,13 +73,13 @@ export default async function CategoriesPage() {
                       disabled={category._count.products > 0}
                       title={
                         category._count.products > 0
-                          ? "Only empty categories can be deleted"
+                          ? "শুধু খালি ক্যাটাগরি মুছে ফেলা যায়"
                           : undefined
                       }
-                      confirmMessage={`Delete the category "${category.name}"?`}
+                      confirmMessage={`"${category.name}" ক্যাটাগরিটি মুছে ফেলবেন?`}
                       action={deleteCategory.bind(null, category.id)}
                     >
-                      Delete
+                      মুছুন
                     </ConfirmActionButton>
                   </div>
                 </TableCell>

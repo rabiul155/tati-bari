@@ -6,7 +6,7 @@ export function getContactLinks() {
   const whatsapp: string = site.whatsapp;
   const email: string = site.email;
   const links: { label: string; href: string; value: string }[] = [
-    { value: phone, label: `Call ${phone}`, href: `tel:${phone}` },
+    { value: phone, label: `কল করুন ${phone}`, href: `tel:${phone}` },
     { value: whatsapp, label: "WhatsApp", href: `https://wa.me/${whatsapp}` },
     { value: email, label: email, href: `mailto:${email}` },
     { value: site.facebookUrl, label: "Facebook", href: site.facebookUrl },

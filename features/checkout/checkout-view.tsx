@@ -62,17 +62,17 @@ export function CheckoutView() {
   const district = useWatch({ control, name: "district" });
 
   if (redirecting) {
-    return <p role="status" className="py-16 text-center text-lg">Order placed! Opening your order…</p>;
+    return <p role="status" className="py-16 text-center text-lg">অর্ডার সম্পন্ন হয়েছে! আপনার অর্ডার খোলা হচ্ছে…</p>;
   }
   if (items === null || (items.length > 0 && !quote && !failed)) {
-    return <p role="status" className="py-16 text-center text-muted-foreground">Loading your cart…</p>;
+    return <p role="status" className="py-16 text-center text-muted-foreground">আপনার কার্ট লোড হচ্ছে…</p>;
   }
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed px-4 py-16 text-center">
-        <p className="text-lg font-medium">Your cart is empty</p>
+        <p className="text-lg font-medium">আপনার কার্ট খালি</p>
         <Link href="/shop" className={buttonVariants({ size: "lg", className: "px-5" })}>
-          Browse sarees
+          শাড়ি দেখুন
         </Link>
       </div>
     );
@@ -80,9 +80,9 @@ export function CheckoutView() {
   if (!quote) {
     return (
       <div role="alert" className="flex flex-col items-start gap-3 rounded-lg border p-6">
-        <p>We couldn&apos;t load your cart. Check your connection and try again.</p>
+        <p>আপনার কার্ট লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</p>
         <Button type="button" variant="outline" onClick={retry}>
-          Try again
+          আবার চেষ্টা করুন
         </Button>
       </div>
     );
@@ -124,23 +124,23 @@ export function CheckoutView() {
         <FormError message={formError} />
 
         <fieldset className="flex flex-col gap-5 rounded-2xl border bg-card p-5">
-          <legend className="px-1 font-heading text-xl font-semibold">Your details</legend>
+          <legend className="px-1 font-heading text-xl font-semibold">আপনার তথ্য</legend>
           <div className="grid gap-5 sm:grid-cols-2">
-            <FormField id="name" label="Full name" error={error("name")}>
+            <FormField id="name" label="পুরো নাম" error={error("name")}>
               <Input {...field("name")} autoComplete="name" {...register("name")} />
             </FormField>
-            <FormField id="phone" label="Mobile number" hint="We will call this number to confirm your order." error={error("phone")}>
+            <FormField id="phone" label="মোবাইল নম্বর" hint="অর্ডার নিশ্চিত করতে আমরা এই নম্বরে কল করব।" error={error("phone")}>
               <Input {...field("phone")} type="tel" inputMode="tel" autoComplete="tel" placeholder="01XXXXXXXXX" {...register("phone")} />
             </FormField>
           </div>
         </fieldset>
 
         <fieldset className="flex flex-col gap-5 rounded-2xl border bg-card p-5">
-          <legend className="px-1 font-heading text-xl font-semibold">Delivery address</legend>
+          <legend className="px-1 font-heading text-xl font-semibold">ডেলিভারির ঠিকানা</legend>
           <div className="grid gap-5 sm:grid-cols-2">
-            <FormField id="district" label="District" error={error("district")}>
+            <FormField id="district" label="জেলা" error={error("district")}>
               <NativeSelect {...field("district")} className="w-full" autoComplete="address-level1" {...register("district")}>
-                <NativeSelectOption value="">Choose your district…</NativeSelectOption>
+                <NativeSelectOption value="">আপনার জেলা নির্বাচন করুন…</NativeSelectOption>
                 {DISTRICTS.map((name) => (
                   <NativeSelectOption key={name} value={name}>
                     {name}
@@ -148,16 +148,16 @@ export function CheckoutView() {
                 ))}
               </NativeSelect>
             </FormField>
-            <FormField id="area" label="Area / thana" error={error("area")}>
-              <Input {...field("area")} autoComplete="address-level2" placeholder="e.g. Mirpur" {...register("area")} />
+            <FormField id="area" label="এলাকা / থানা" error={error("area")}>
+              <Input {...field("area")} autoComplete="address-level2" placeholder="যেমন: মিরপুর" {...register("area")} />
             </FormField>
-            <FormField id="address" label="Full address" hint="House, road, village or a landmark the courier can find." error={error("address")} className="sm:col-span-2">
+            <FormField id="address" label="পূর্ণ ঠিকানা" hint="বাড়ি, রোড, গ্রাম বা কুরিয়ার খুঁজে পাবে এমন কোনো ল্যান্ডমার্ক।" error={error("address")} className="sm:col-span-2">
               <Textarea {...field("address")} rows={3} autoComplete="street-address" {...register("address")} />
             </FormField>
-            <FormField id="postalCode" label="Postal code (optional)" error={error("postalCode")}>
+            <FormField id="postalCode" label="পোস্টাল কোড (ঐচ্ছিক)" error={error("postalCode")}>
               <Input {...field("postalCode")} inputMode="numeric" autoComplete="postal-code" maxLength={4} {...register("postalCode")} />
             </FormField>
-            <FormField id="note" label="Note for us (optional)" hint="e.g. best time to call" error={error("note")} className="sm:col-span-2">
+            <FormField id="note" label="আমাদের জন্য নোট (ঐচ্ছিক)" hint="যেমন: কল করার সবচেয়ে ভালো সময়" error={error("note")} className="sm:col-span-2">
               <Textarea {...field("note")} rows={2} {...register("note")} />
             </FormField>
           </div>
@@ -173,35 +173,35 @@ export function CheckoutView() {
               onChange={(event) => setRemember(event.target.checked)}
               className="size-4 accent-primary"
             />
-            Remember my details on this device for next time
+            পরবর্তী সময়ের জন্য এই ডিভাইসে আমার তথ্য মনে রাখুন
           </label>
         </fieldset>
 
         <section className="flex flex-col gap-1 rounded-2xl border bg-card p-5">
-          <h2 className="font-heading text-xl font-semibold">Payment</h2>
-          <p className="font-medium">Cash on delivery</p>
+          <h2 className="font-heading text-xl font-semibold">পেমেন্ট</h2>
+          <p className="font-medium">ক্যাশ অন ডেলিভারি</p>
           <p className="text-sm text-muted-foreground">
-            Pay the courier when your order arrives. We will call you to confirm the order before
-            sending it.
+            অর্ডার হাতে পেয়ে কুরিয়ারকে দাম পরিশোধ করুন। পাঠানোর আগে আমরা আপনাকে কল করে অর্ডার
+            নিশ্চিত করব।
           </p>
         </section>
       </div>
 
-      <aside aria-label="Order summary" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
+      <aside aria-label="অর্ডার সারাংশ" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
         <div className="flex items-center justify-between gap-2">
-          <h2 className="font-heading text-xl font-semibold">Your order</h2>
+          <h2 className="font-heading text-xl font-semibold">আপনার অর্ডার</h2>
           <Link href="/cart" className="text-sm text-primary underline-offset-4 hover:underline">
-            Edit cart
+            কার্ট পরিবর্তন করুন
           </Link>
         </div>
 
         {quote.hasUnavailable && (
           <p role="alert" className="rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">
-            Some sarees are no longer available.{" "}
+            কিছু শাড়ি আর পাওয়া যাচ্ছে না।{" "}
             <Link href="/cart" className="font-medium underline">
-              Update your cart
+              কার্ট আপডেট করুন
             </Link>{" "}
-            to continue.
+            চালিয়ে যেতে।
           </p>
         )}
 
@@ -216,7 +216,7 @@ export function CheckoutView() {
                 <p className="text-muted-foreground">
                   {line.quantity} × {formatTaka(line.finalUnitPrice)}
                 </p>
-                {!line.available && <p className="text-destructive">Not available</p>}
+                {!line.available && <p className="text-destructive">পাওয়া যাচ্ছে না</p>}
               </div>
               <p className="text-sm font-medium tabular-nums">{formatTaka(line.lineTotal)}</p>
             </li>
@@ -225,7 +225,7 @@ export function CheckoutView() {
 
         <dl className="flex flex-col gap-2 border-t pt-3 text-sm">
           <div className="flex justify-between gap-4">
-            <dt>Subtotal</dt>
+            <dt>সাবটোটাল</dt>
             <dd className="tabular-nums">{formatTaka(quote.subtotal)}</dd>
           </div>
           {quote.discount && (
@@ -235,31 +235,32 @@ export function CheckoutView() {
             </div>
           )}
           <div className="flex justify-between gap-4">
-            <dt>Delivery{district ? ` (${district})` : ""}</dt>
+            <dt>ডেলিভারি{district ? ` (${district})` : ""}</dt>
             <dd className="tabular-nums">
-              {deliveryCharge === null ? <span className="text-muted-foreground">Choose district</span> : formatTaka(deliveryCharge)}
+              {deliveryCharge === null ? <span className="text-muted-foreground">জেলা নির্বাচন করুন</span> : formatTaka(deliveryCharge)}
             </dd>
           </div>
           <div className="mt-1 flex justify-between gap-4 border-t pt-3 text-base font-semibold">
-            <dt>Total</dt>
+            <dt>সর্বমোট</dt>
             <dd className="tabular-nums">{total === null ? "—" : formatTaka(total)}</dd>
           </div>
         </dl>
 
         {quoteIsCurrent && quote.nextDiscount && (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
-            Add {formatTaka(quote.nextDiscount.remaining)} more to your{" "}
+            আপনার{" "}
             <Link href="/cart" className="underline underline-offset-4">
-              cart
+              কার্টে
             </Link>{" "}
-            to get <strong>{formatTaka(quote.nextDiscount.amount)} off</strong>.
+            আরও {formatTaka(quote.nextDiscount.remaining)} যোগ করে পান{" "}
+            <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
           </p>
         )}
         <Button type="submit" size="lg" disabled={pending || !canOrder}>
-          {pending ? "Placing order…" : total === null ? "Place order" : `Place order · ${formatTaka(total)}`}
+          {pending ? "অর্ডার করা হচ্ছে…" : total === null ? "অর্ডার করুন" : `অর্ডার করুন · ${formatTaka(total)}`}
         </Button>
         <p className="text-xs text-muted-foreground">
-          By placing the order you agree to receive a confirmation call on your mobile number.
+          অর্ডার করার মাধ্যমে আপনি আপনার মোবাইল নম্বরে একটি নিশ্চিতকরণ কল পেতে সম্মত হচ্ছেন।
         </p>
       </aside>
     </form>

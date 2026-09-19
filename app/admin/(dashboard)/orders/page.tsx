@@ -11,7 +11,7 @@ import { requireAdmin } from "@/lib/auth/session";
 import type { OrderStatus } from "@/lib/generated/prisma/enums";
 import { cn } from "@/lib/utils";
 
-export const metadata: Metadata = { title: "Orders" };
+export const metadata: Metadata = { title: "অর্ডার" };
 
 export default async function OrdersPage({ searchParams }: PageProps<"/admin/orders">) {
   await requireAdmin();
@@ -35,7 +35,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
   };
 
   const tabs: { value: OrderStatus | null; label: string; count: number }[] = [
-    { value: null, label: "All", count: allCount },
+    { value: null, label: "সব", count: allCount },
     ...ALL_STATUSES.map((value) => ({
       value,
       label: ORDER_STATUS[value].label,
@@ -45,9 +45,9 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Orders" description={`${total} order${total === 1 ? "" : "s"}`} />
+      <PageHeader title="অর্ডার" description={`${total}টি অর্ডার`} />
 
-      <nav aria-label="Filter by status" className="-mx-4 overflow-x-auto px-4">
+      <nav aria-label="অবস্থা অনুযায়ী ফিল্টার" className="-mx-4 overflow-x-auto px-4">
         <ul className="flex w-max gap-2">
           {tabs.map((tab) => {
             const active = (tab.value ?? undefined) === status;
@@ -78,26 +78,26 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
           name="q"
           type="search"
           defaultValue={query}
-          placeholder="Order number, phone or name"
-          aria-label="Search orders"
+          placeholder="অর্ডার নম্বর, ফোন নম্বর বা নাম"
+          aria-label="অর্ডার খুঁজুন"
           className="w-full sm:w-72"
         />
         <Button type="submit" variant="secondary">
-          Search
+          খুঁজুন
         </Button>
         {query && (
           <Link
             href={status ? `/admin/orders?status=${status}` : "/admin/orders"}
             className={buttonVariants({ variant: "ghost" })}
           >
-            Clear
+            মুছুন
           </Link>
         )}
       </form>
 
       {orders.length === 0 ? (
         <p className="text-muted-foreground">
-          {query || status ? "No orders match." : "No orders yet. They will appear here when customers check out."}
+          {query || status ? "কোনো অর্ডার মেলেনি।" : "এখনও কোনো অর্ডার নেই। গ্রাহক চেকআউট করলে এখানে দেখা যাবে।"}
         </p>
       ) : (
         <OrdersTable orders={orders} />

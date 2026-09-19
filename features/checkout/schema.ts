@@ -5,11 +5,11 @@ import { normalizeBdPhone } from "@/lib/phone";
 export const phoneSchema = z
   .string()
   .trim()
-  .min(1, "Enter your mobile number.")
+  .min(1, "আপনার মোবাইল নম্বর দিন।")
   .transform((value, ctx) => {
     const phone = normalizeBdPhone(value);
     if (!phone) {
-      ctx.addIssue({ code: "custom", message: "Enter a valid Bangladesh mobile number, e.g. 01712345678." });
+      ctx.addIssue({ code: "custom", message: "সঠিক বাংলাদেশি মোবাইল নম্বর দিন, যেমন 01712345678।" });
       return z.NEVER;
     }
     return phone;
@@ -19,24 +19,24 @@ const optionalText = (max: number) =>
   z
     .string()
     .trim()
-    .max(max, `Use at most ${max} characters.`)
+    .max(max, `সর্বোচ্চ ${max} অক্ষর ব্যবহার করুন।`)
     .transform((value) => value || null);
 
 // Customer details on the checkout form (shared by client and server).
 export const checkoutDetailsSchema = z.object({
-  name: z.string().trim().min(2, "Enter your full name.").max(80),
+  name: z.string().trim().min(2, "আপনার পুরো নাম দিন।").max(80),
   phone: phoneSchema,
-  district: z.enum(DISTRICTS, { error: "Choose your district." }),
-  area: z.string().trim().min(2, "Enter your area or thana.").max(80),
+  district: z.enum(DISTRICTS, { error: "আপনার জেলা নির্বাচন করুন।" }),
+  area: z.string().trim().min(2, "আপনার এলাকা বা থানার নাম দিন।").max(80),
   address: z
     .string()
     .trim()
-    .min(8, "Enter your full address: house, road, village or landmark.")
+    .min(8, "পূর্ণ ঠিকানা দিন: বাড়ি, রোড, গ্রাম বা ল্যান্ডমার্ক।")
     .max(300),
   postalCode: z
     .string()
     .trim()
-    .regex(/^(\d{4})?$/, "Postal codes have 4 digits.")
+    .regex(/^(\d{4})?$/, "পোস্টাল কোড ৪ সংখ্যার হয়।")
     .transform((value) => value || null),
   note: optionalText(500),
   // Honeypot: hidden from people, filled in by some bots.
@@ -47,7 +47,7 @@ export type CheckoutFormValues = z.input<typeof checkoutDetailsSchema>;
 
 export const orderLookupSchema = z.object({
   phone: phoneSchema,
-  orderNumber: z.string().trim().min(1, "Enter your order number.").max(20),
+  orderNumber: z.string().trim().min(1, "আপনার অর্ডার নম্বর দিন।").max(20),
 });
 
 export type OrderLookupValues = z.input<typeof orderLookupSchema>;

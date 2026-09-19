@@ -11,12 +11,12 @@ export default function NotFound() {
       <SiteHeader />
       <main className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-16 text-center">
         <p className="text-sm font-medium text-primary">404</p>
-        <h1 className="font-heading text-3xl font-semibold tracking-tight">Page not found</h1>
+        <h1 className="font-heading text-3xl font-semibold tracking-tight">পেজটি পাওয়া যায়নি</h1>
         <p className="max-w-md text-muted-foreground">
-          This page doesn&apos;t exist, or the saree is no longer available.
+          এই পেজটি নেই, অথবা শাড়িটি আর পাওয়া যাচ্ছে না।
         </p>
         <Link href="/shop" className={buttonVariants({ size: "lg", className: "px-5" })}>
-          Browse sarees
+          শাড়ি দেখুন
         </Link>
       </main>
       <SiteFooter />

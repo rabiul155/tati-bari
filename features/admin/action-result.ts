@@ -9,7 +9,7 @@ export type ActionResult =
 export function validationFailed(error: z.ZodError): ActionResult {
   return {
     ok: false,
-    error: "Please fix the highlighted fields.",
+    error: "অনুগ্রহ করে চিহ্নিত ঘরগুলো ঠিক করুন।",
     fieldErrors: z.flattenError(error).fieldErrors as Record<string, string[] | undefined>,
   };
 }

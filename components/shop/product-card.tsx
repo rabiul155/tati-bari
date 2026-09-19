@@ -24,18 +24,18 @@ export function ProductCard({ product, priority }: { product: ProductCardData; p
           />
         ) : (
           <div className="flex h-full items-center justify-center px-4 text-center text-sm text-muted-foreground">
-            Photo coming soon
+            ছবি শীঘ্রই আসছে
           </div>
         )}
         <div className="absolute top-2 left-2 flex flex-col items-start gap-1">
           {unavailable ? (
             <span className="rounded-full bg-background/90 px-2 py-0.5 text-xs font-medium">
-              Out of stock
+              স্টকে নেই
             </span>
           ) : (
             isSaleActive(product) && (
               <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
-                Sale
+                ছাড়
               </span>
             )
           )}

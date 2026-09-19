@@ -17,12 +17,12 @@ export function OrdersTable({ orders, showCustomer = true }: { orders: OrderRow[
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Order</TableHead>
-          <TableHead>Placed</TableHead>
-          {showCustomer && <TableHead>Customer</TableHead>}
-          <TableHead>District</TableHead>
-          <TableHead className="text-right">Total</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>অর্ডার</TableHead>
+          <TableHead>অর্ডার করা হয়েছে</TableHead>
+          {showCustomer && <TableHead>গ্রাহক</TableHead>}
+          <TableHead>জেলা</TableHead>
+          <TableHead className="text-right">সর্বমোট</TableHead>
+          <TableHead>অবস্থা</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -34,9 +34,7 @@ export function OrdersTable({ orders, showCustomer = true }: { orders: OrderRow[
                 <Link href={`/admin/orders/${number}`} className="font-medium underline-offset-4 hover:underline">
                   {number}
                 </Link>
-                <div className="text-xs text-muted-foreground">
-                  {order._count.items} item{order._count.items === 1 ? "" : "s"}
-                </div>
+                <div className="text-xs text-muted-foreground">{order._count.items}টি পণ্য</div>
               </TableCell>
               <TableCell className="whitespace-nowrap">{formatDateTime(order.createdAt)}</TableCell>
               {showCustomer && (

@@ -18,13 +18,13 @@ import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { formatDateTime, formatTaka } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Discounts" };
+export const metadata: Metadata = { title: "ছাড়" };
 
 const STATE_LABEL: Record<DiscountState, { label: string; variant: "default" | "secondary" | "outline" }> = {
-  active: { label: "Active", variant: "default" },
-  scheduled: { label: "Scheduled", variant: "outline" },
-  expired: { label: "Ended", variant: "secondary" },
-  off: { label: "Off", variant: "secondary" },
+  active: { label: "চালু", variant: "default" },
+  scheduled: { label: "নির্ধারিত", variant: "outline" },
+  expired: { label: "শেষ হয়েছে", variant: "secondary" },
+  off: { label: "বন্ধ", variant: "secondary" },
 };
 
 export default async function DiscountsPage() {
@@ -44,27 +44,27 @@ export default async function DiscountsPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Discounts"
-        description="A fixed amount off when the order subtotal reaches a minimum. If several apply, the customer gets the largest one."
+        title="ছাড়"
+        description="অর্ডারের সাবটোটাল নির্দিষ্ট সর্বনিম্ন পরিমাণে পৌঁছালে নির্দিষ্ট টাকা ছাড়। একাধিক প্রযোজ্য হলে গ্রাহক সবচেয়ে বড় ছাড়টি পাবেন।"
       >
         <Link href="/admin/discounts/new" className={buttonVariants()}>
-          New discount
+          নতুন ছাড়
         </Link>
       </PageHeader>
 
       {discounts.length === 0 ? (
-        <p className="text-muted-foreground">No discounts yet.</p>
+        <p className="text-muted-foreground">এখনও কোনো ছাড় নেই।</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Discount</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead className="text-right">Minimum order</TableHead>
-              <TableHead>Dates</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Used</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>ছাড়</TableHead>
+              <TableHead className="text-right">পরিমাণ</TableHead>
+              <TableHead className="text-right">সর্বনিম্ন অর্ডার</TableHead>
+              <TableHead>তারিখ</TableHead>
+              <TableHead>অবস্থা</TableHead>
+              <TableHead className="text-right">ব্যবহৃত</TableHead>
+              <TableHead className="text-right">অ্যাকশন</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -89,11 +89,11 @@ export default async function DiscountsPage() {
                   <TableCell className="text-xs whitespace-nowrap">
                     {discount.startsAt || discount.endsAt ? (
                       <>
-                        <div>From {discount.startsAt ? formatDateTime(discount.startsAt) : "now"}</div>
-                        <div>Until {discount.endsAt ? formatDateTime(discount.endsAt) : "turned off"}</div>
+                        <div>শুরু: {discount.startsAt ? formatDateTime(discount.startsAt) : "এখনই"}</div>
+                        <div>শেষ: {discount.endsAt ? formatDateTime(discount.endsAt) : "বন্ধ না করা পর্যন্ত"}</div>
                       </>
                     ) : (
-                      <span className="text-muted-foreground">No end date</span>
+                      <span className="text-muted-foreground">শেষের তারিখ নেই</span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -102,13 +102,11 @@ export default async function DiscountsPage() {
                   <TableCell className="text-right text-xs whitespace-nowrap">
                     {used ? (
                       <>
-                        <div>
-                          {used._count._all} order{used._count._all === 1 ? "" : "s"}
-                        </div>
-                        <div className="text-muted-foreground">{formatTaka(used._sum.discountAmount ?? 0)} given</div>
+                        <div>{used._count._all}টি অর্ডার</div>
+                        <div className="text-muted-foreground">{formatTaka(used._sum.discountAmount ?? 0)} ছাড় দেওয়া হয়েছে</div>
                       </>
                     ) : (
-                      <span className="text-muted-foreground">Not yet</span>
+                      <span className="text-muted-foreground">এখনও নয়</span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -118,15 +116,15 @@ export default async function DiscountsPage() {
                         size="sm"
                         action={setDiscountActive.bind(null, discount.id, !discount.isActive)}
                       >
-                        {discount.isActive ? "Turn off" : "Turn on"}
+                        {discount.isActive ? "বন্ধ করুন" : "চালু করুন"}
                       </ConfirmActionButton>
                       <ConfirmActionButton
                         variant="destructive"
                         size="sm"
-                        confirmMessage={`Delete "${discount.name}"? Past orders keep their discount.`}
+                        confirmMessage={`"${discount.name}" মুছে ফেলবেন? আগের অর্ডারগুলোতে ছাড় অপরিবর্তিত থাকবে।`}
                         action={deleteDiscount.bind(null, discount.id)}
                       >
-                        Delete
+                        মুছুন
                       </ConfirmActionButton>
                     </div>
                   </TableCell>

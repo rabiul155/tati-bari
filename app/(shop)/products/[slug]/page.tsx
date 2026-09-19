@@ -28,13 +28,13 @@ function summary(product: NonNullable<Awaited<ReturnType<typeof getProduct>>>) {
   const firstLine = product.description?.split("\n")[0]?.trim();
   return (
     firstLine ||
-    [product.fabric, product.color, "handloom saree from Tangail"].filter(Boolean).join(" · ")
-  ).slice(0, 150) + ` Price ${formatTaka(finalUnitPrice)}. Cash on delivery.`;
+    [product.fabric, product.color, "টাঙ্গাইলের হ্যান্ডলুম শাড়ি"].filter(Boolean).join(" · ")
+  ).slice(0, 150) + ` দাম ${formatTaka(finalUnitPrice)}। ক্যাশ অন ডেলিভারি।`;
 }
 
 export async function generateMetadata({ params }: PageProps<"/products/[slug]">): Promise<Metadata> {
   const product = await getProduct((await params).slug);
-  if (!product) return { title: "Saree not found" };
+  if (!product) return { title: "শাড়ি পাওয়া যায়নি" };
 
   const description = summary(product);
   const image = product.images[0];
@@ -63,12 +63,12 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
   const { finalUnitPrice } = getUnitPrice(product);
 
   const details = [
-    ["Product code", product.code],
-    ["Fabric", product.fabric],
-    ["Colour", product.color],
-    ["Length", product.length],
-    ["Blouse piece", product.hasBlousePiece ? "Included" : "Not included"],
-    ["Care", product.careInstructions],
+    ["পণ্য কোড", product.code],
+    ["ফেব্রিক", product.fabric],
+    ["রঙ", product.color],
+    ["দৈর্ঘ্য", product.length],
+    ["ব্লাউজ পিস", product.hasBlousePiece ? "আছে" : "নেই"],
+    ["যত্ন", product.careInstructions],
   ].filter((row): row is [string, string] => Boolean(row[1]));
 
   const jsonLd = {
@@ -96,11 +96,11 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6">
-        <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
+        <nav aria-label="ব্রেডক্রাম্ব" className="text-sm text-muted-foreground">
           <ol className="flex flex-wrap gap-1.5">
             <li>
               <Link href="/shop" className="underline-offset-4 hover:underline">
-                Shop
+                শপ
               </Link>
             </li>
             <li aria-hidden>/</li>
@@ -120,25 +120,25 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
               <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
                 {product.name}
               </h1>
-              <p className="text-sm text-muted-foreground">Code: {product.code}</p>
+              <p className="text-sm text-muted-foreground">কোড: {product.code}</p>
             </div>
 
             <div className="flex flex-col gap-1">
               <Price product={product} size="lg" />
               <p className={available ? "text-sm text-green-700" : "text-sm text-destructive"}>
-                {available ? "In stock" : "Out of stock"}
+                {available ? "স্টকে আছে" : "স্টকে নেই"}
               </p>
             </div>
 
             <AddToCart productId={product.id} available={available} />
 
             <p className="text-sm text-muted-foreground">
-              Cash on delivery across Bangladesh. Delivery charge is shown at checkout.
+              সারা বাংলাদেশে ক্যাশ অন ডেলিভারি। ডেলিভারি চার্জ চেকআউটে দেখানো হবে।
             </p>
 
             {product.description && (
               <section className="flex flex-col gap-2">
-                <h2 className="font-medium">Description</h2>
+                <h2 className="font-medium">বিবরণ</h2>
                 <div className="flex flex-col gap-3 leading-relaxed text-muted-foreground">
                   {product.description
                     .split(/\n{2,}/)
@@ -152,7 +152,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
             )}
 
             <section className="flex flex-col gap-2">
-              <h2 className="font-medium">Saree details</h2>
+              <h2 className="font-medium">শাড়ির বিবরণ</h2>
               <dl className="divide-y rounded-lg border text-sm">
                 {details.map(([label, value]) => (
                   <div key={label} className="grid grid-cols-3 gap-2 px-3 py-2">
@@ -168,8 +168,8 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
 
       {related.length > 0 && (
         <Section
-          title="You may also like"
-          link={{ href: `/shop?category=${product.category.slug}`, label: `More ${product.category.name}` }}
+          title="আপনার পছন্দ হতে পারে"
+          link={{ href: `/shop?category=${product.category.slug}`, label: `আরও ${product.category.name}` }}
         >
           <ProductGrid products={related} />
         </Section>

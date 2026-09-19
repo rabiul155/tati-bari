@@ -55,7 +55,7 @@ export function ImageManager({
   }
 
   function remove(image: ProductImage) {
-    if (!window.confirm("Delete this photo?")) return;
+    if (!window.confirm("এই ছবিটি মুছে ফেলবেন?")) return;
     setError(undefined);
     startTransition(async () => {
       const result = await deleteProductImage(image.id);
@@ -71,11 +71,11 @@ export function ImageManager({
     startTransition(async () => {
       const failures: string[] = [];
       for (const [index, file] of batch.entries()) {
-        setStatus(`Uploading ${index + 1} of ${batch.length}…`);
+        setStatus(`আপলোড হচ্ছে ${index + 1}/${batch.length}…`);
         try {
           const resized = await resizeImageForUpload(file);
           if (resized.size > MAX_UPLOAD_BYTES) {
-            failures.push(`${file.name}: too large (maximum 4 MB).`);
+            failures.push(`${file.name}: অনেক বড় (সর্বোচ্চ ৪ MB)।`);
             continue;
           }
           const formData = new FormData();
@@ -83,12 +83,12 @@ export function ImageManager({
           const result = await uploadProductImage(productId, formData);
           if (!result.ok) failures.push(`${file.name}: ${result.error}`);
         } catch {
-          failures.push(`${file.name}: could not be uploaded.`);
+          failures.push(`${file.name}: আপলোড করা যায়নি।`);
         }
       }
       setStatus(undefined);
       if (skipped > 0) {
-        failures.push(`${skipped} photo(s) skipped: the limit is ${MAX_IMAGES_PER_PRODUCT}.`);
+        failures.push(`${skipped}টি ছবি বাদ দেওয়া হয়েছে: সীমা ${MAX_IMAGES_PER_PRODUCT}টি।`);
       }
       if (failures.length > 0) setError(failures.join(" "));
     });
@@ -98,7 +98,7 @@ export function ImageManager({
     <div className="flex flex-col gap-4">
       {images.length === 0 ? (
         <p className="text-sm text-muted-foreground">
-          No photos yet. Products without photos look unfinished in the shop.
+          এখনও কোনো ছবি নেই। ছবি ছাড়া পণ্য শপে অসম্পূর্ণ দেখায়।
         </p>
       ) : (
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -107,12 +107,12 @@ export function ImageManager({
               <div className="relative aspect-3/4 overflow-hidden rounded-md bg-muted">
                 <Image
                   src={image.url}
-                  alt={`${productName}, photo ${index + 1}`}
+                  alt={`${productName}, ছবি ${index + 1}`}
                   fill
                   unoptimized
                   className="object-cover"
                 />
-                {index === 0 && <Badge className="absolute top-2 left-2">Main photo</Badge>}
+                {index === 0 && <Badge className="absolute top-2 left-2">প্রধান ছবি</Badge>}
               </div>
               <div className="flex items-center justify-between gap-1">
                 <div className="flex gap-1">
@@ -120,7 +120,7 @@ export function ImageManager({
                     type="button"
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Move left"
+                    aria-label="বামে সরান"
                     disabled={pending || index === 0}
                     onClick={() => move(index, index - 1)}
                   >
@@ -130,7 +130,7 @@ export function ImageManager({
                     type="button"
                     variant="outline"
                     size="icon-sm"
-                    aria-label="Move right"
+                    aria-label="ডানে সরান"
                     disabled={pending || index === images.length - 1}
                     onClick={() => move(index, index + 1)}
                   >
@@ -141,8 +141,8 @@ export function ImageManager({
                       type="button"
                       variant="outline"
                       size="icon-sm"
-                      aria-label="Make main photo"
-                      title="Make main photo"
+                      aria-label="প্রধান ছবি করুন"
+                      title="প্রধান ছবি করুন"
                       disabled={pending}
                       onClick={() => move(index, 0)}
                     >
@@ -154,7 +154,7 @@ export function ImageManager({
                   type="button"
                   variant="destructive"
                   size="icon-sm"
-                  aria-label="Delete photo"
+                  aria-label="ছবি মুছুন"
                   disabled={pending}
                   onClick={() => remove(image)}
                 >
@@ -185,13 +185,13 @@ export function ImageManager({
           disabled={pending || remaining <= 0}
           onClick={() => fileInput.current?.click()}
         >
-          Add photos
+          ছবি যোগ করুন
         </Button>
         <span role="status" className="text-sm text-muted-foreground">
           {status ??
             (remaining <= 0
-              ? `Photo limit reached (${MAX_IMAGES_PER_PRODUCT}).`
-              : "The first photo is the main one. Tall (portrait) photos look best.")}
+              ? `ছবির সীমা পূর্ণ হয়েছে (${MAX_IMAGES_PER_PRODUCT}টি)।`
+              : "প্রথম ছবিটি প্রধান ছবি। লম্বা (পোর্ট্রেট) ছবি সবচেয়ে ভালো দেখায়।")}
         </span>
       </div>
       {error && (

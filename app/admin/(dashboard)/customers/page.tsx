@@ -16,7 +16,7 @@ import { listCustomers } from "@/features/admin/orders/queries";
 import { requireAdmin } from "@/lib/auth/session";
 import { formatDateTime, formatTaka } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Customers" };
+export const metadata: Metadata = { title: "গ্রাহক" };
 
 export default async function CustomersPage({ searchParams }: PageProps<"/admin/customers">) {
   await requireAdmin();
@@ -35,38 +35,38 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Customers" description={`${total} customer${total === 1 ? "" : "s"}`} />
+      <PageHeader title="গ্রাহক" description={`${total} জন গ্রাহক`} />
 
       <form method="get" role="search" className="flex flex-wrap gap-2">
         <Input
           name="q"
           type="search"
           defaultValue={query}
-          placeholder="Name or phone"
-          aria-label="Search customers"
+          placeholder="নাম বা ফোন নম্বর"
+          aria-label="গ্রাহক খুঁজুন"
           className="w-full sm:w-72"
         />
         <Button type="submit" variant="secondary">
-          Search
+          খুঁজুন
         </Button>
         {query && (
           <Link href="/admin/customers" className={buttonVariants({ variant: "ghost" })}>
-            Clear
+            মুছুন
           </Link>
         )}
       </form>
 
       {customers.length === 0 ? (
-        <p className="text-muted-foreground">{query ? "No customers match." : "No customers yet."}</p>
+        <p className="text-muted-foreground">{query ? "কোনো গ্রাহক মেলেনি।" : "এখনও কোনো গ্রাহক নেই।"}</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Customer</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead className="text-right">Orders</TableHead>
-              <TableHead className="text-right">Spent</TableHead>
-              <TableHead>Last order</TableHead>
+              <TableHead>গ্রাহক</TableHead>
+              <TableHead>এলাকা</TableHead>
+              <TableHead className="text-right">অর্ডার</TableHead>
+              <TableHead className="text-right">মোট ব্যয়</TableHead>
+              <TableHead>সর্বশেষ অর্ডার</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

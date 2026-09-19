@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
 import { site, siteUrl } from "@/lib/site";
 import "./globals.css";
 
@@ -19,6 +19,18 @@ const fraunces = Fraunces({
   subsets: ["latin"],
 });
 
+// The Latin fonts above have no Bengali glyphs; these are the fallbacks
+// listed after them in globals.css.
+const notoSansBengali = Noto_Sans_Bengali({
+  variable: "--font-bengali",
+  subsets: ["bengali"],
+});
+
+const notoSerifBengali = Noto_Serif_Bengali({
+  variable: "--font-bengali-display",
+  subsets: ["bengali"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
@@ -29,15 +41,15 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: site.name,
-    locale: "en_BD",
+    locale: "bn_BD",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      lang="bn"
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} ${notoSansBengali.variable} ${notoSerifBengali.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

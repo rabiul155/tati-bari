@@ -16,7 +16,7 @@ const loginSchema = z.object({
 
 export type LoginState = { error: string; email: string } | undefined;
 
-const INVALID = "Incorrect email or password.";
+const INVALID = "ইমেইল অথবা পাসওয়ার্ড ভুল।";
 
 export async function login(_state: LoginState, formData: FormData): Promise<LoginState> {
   const parsed = loginSchema.safeParse({
@@ -34,7 +34,7 @@ export async function login(_state: LoginState, formData: FormData): Promise<Log
 
   if (admin.lockedUntil && admin.lockedUntil > new Date()) {
     return {
-      error: `Too many failed attempts. Try again after ${admin.lockedUntil.toLocaleTimeString("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit" })}.`,
+      error: `অনেকবার ভুল চেষ্টা করা হয়েছে। ${admin.lockedUntil.toLocaleTimeString("en-GB", { timeZone: "Asia/Dhaka", hour: "2-digit", minute: "2-digit" })}-এর পরে আবার চেষ্টা করুন।`,
       email,
     };
   }

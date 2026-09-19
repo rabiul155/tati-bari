@@ -8,7 +8,7 @@ import { getAdminCustomer } from "@/features/admin/orders/queries";
 import { requireAdmin } from "@/lib/auth/session";
 import { formatDateTime, formatTaka } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Customer" };
+export const metadata: Metadata = { title: "গ্রাহক" };
 
 export default async function CustomerPage({ params }: PageProps<"/admin/customers/[id]">) {
   await requireAdmin();
@@ -19,14 +19,14 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
     <div className="flex flex-col gap-6">
       <PageHeader
         title={customer.name}
-        description={`Customer since ${formatDateTime(customer.createdAt)}`}
-        back={{ href: "/admin/customers", label: "Customers" }}
+        description={`গ্রাহক হয়েছেন ${formatDateTime(customer.createdAt)}`}
+        back={{ href: "/admin/customers", label: "গ্রাহক" }}
       />
 
       <div className="grid gap-6 md:grid-cols-3">
         <Card>
           <CardHeader>
-            <CardTitle>Contact</CardTitle>
+            <CardTitle>যোগাযোগ</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-2 text-sm">
             <a href={`tel:${customer.phone}`} className="font-medium text-primary underline-offset-4 hover:underline">
@@ -44,18 +44,18 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Orders</CardTitle>
+            <CardTitle>অর্ডার</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-1 text-sm">
             <p className="text-2xl font-semibold tabular-nums">{customer.orders.length}</p>
             <p className="text-muted-foreground">
-              {formatTaka(customer.totalSpent)} spent (excluding cancelled and returned)
+              মোট ব্যয় {formatTaka(customer.totalSpent)} (বাতিল ও ফেরত দেওয়া অর্ডার বাদে)
             </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Addresses</CardTitle>
+            <CardTitle>ঠিকানা</CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="flex flex-col gap-3 text-sm">
@@ -63,7 +63,7 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
                 <li key={address.id}>
                   {address.isDefault && (
                     <Badge variant="secondary" className="mb-1">
-                      Latest
+                      সর্বশেষ
                     </Badge>
                   )}
                   <p className="whitespace-pre-line">{address.address}</p>
@@ -79,9 +79,9 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
       </div>
 
       <section className="flex flex-col gap-3">
-        <h2 className="text-lg font-semibold">Order history</h2>
+        <h2 className="text-lg font-semibold">অর্ডারের ইতিহাস</h2>
         {customer.orders.length === 0 ? (
-          <p className="text-muted-foreground">No orders.</p>
+          <p className="text-muted-foreground">কোনো অর্ডার নেই।</p>
         ) : (
           <OrdersTable orders={customer.orders} showCustomer={false} />
         )}

@@ -18,12 +18,12 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
           setCopied(true);
           setTimeout(() => setCopied(false), 2000);
         } catch {
-          window.prompt("Copy this:", value);
+          window.prompt("এটি কপি করুন:", value);
         }
       }}
     >
       {copied ? <Check /> : <Copy />}
-      {copied ? "Copied" : label}
+      {copied ? "কপি হয়েছে" : label}
     </Button>
   );
 }

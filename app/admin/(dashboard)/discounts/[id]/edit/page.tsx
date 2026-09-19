@@ -6,7 +6,7 @@ import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 import { toDhakaDateTimeInput } from "@/lib/format";
 
-export const metadata: Metadata = { title: "Edit discount" };
+export const metadata: Metadata = { title: "ছাড় সম্পাদনা" };
 
 export default async function EditDiscountPage({ params }: PageProps<"/admin/discounts/[id]/edit">) {
   await requireAdmin();
@@ -16,9 +16,9 @@ export default async function EditDiscountPage({ params }: PageProps<"/admin/dis
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title={`Edit ${discount.name}`}
-        description="Changes apply to new orders only."
-        back={{ href: "/admin/discounts", label: "Discounts" }}
+        title={`${discount.name} সম্পাদনা`}
+        description="পরিবর্তন শুধু নতুন অর্ডারে প্রযোজ্য হবে।"
+        back={{ href: "/admin/discounts", label: "ছাড়" }}
       />
       <DiscountForm
         discountId={discount.id}

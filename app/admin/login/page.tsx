@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { LoginForm } from "@/features/admin/auth/login-form";
 import { getAdminSession } from "@/lib/auth/session";
 
-export const metadata: Metadata = { title: "Sign in" };
+export const metadata: Metadata = { title: "সাইন ইন" };
 
 export default async function AdminLoginPage() {
   if (await getAdminSession()) redirect("/admin");
@@ -13,8 +13,8 @@ export default async function AdminLoginPage() {
     <main className="flex flex-1 items-center justify-center px-4 py-12">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Admin sign in</CardTitle>
-          <CardDescription>Sign in to manage products and orders.</CardDescription>
+          <CardTitle>অ্যাডমিন সাইন ইন</CardTitle>
+          <CardDescription>পণ্য ও অর্ডার পরিচালনা করতে সাইন ইন করুন।</CardDescription>
         </CardHeader>
         <CardContent>
           <LoginForm />

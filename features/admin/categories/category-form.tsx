@@ -44,7 +44,7 @@ export function CategoryForm({
   return (
     <form onSubmit={onSubmit} className="flex max-w-xl flex-col gap-5" noValidate>
       <FormError message={formError} />
-      <FormField id="name" label="Name" error={error("name")}>
+      <FormField id="name" label="নাম" error={error("name")}>
         <Input
           id="name"
           aria-invalid={!!error("name")}
@@ -61,18 +61,18 @@ export function CategoryForm({
       <FormField
         id="slug"
         label="URL slug"
-        hint="Used in the shop URL. Changing it breaks old links."
+        hint="শপের URL-এ ব্যবহার হয়। এটি পরিবর্তন করলে পুরনো লিংক কাজ করবে না।"
         error={error("slug")}
       >
         <Input id="slug" aria-invalid={!!error("slug")} {...register("slug")} />
       </FormField>
-      <FormField id="description" label="Description (optional)" error={error("description")}>
+      <FormField id="description" label="বিবরণ (ঐচ্ছিক)" error={error("description")}>
         <Textarea id="description" rows={3} {...register("description")} />
       </FormField>
       <FormField
         id="sortOrder"
-        label="Sort order"
-        hint="Lower numbers are shown first."
+        label="ক্রম"
+        hint="ছোট সংখ্যা আগে দেখানো হবে।"
         error={error("sortOrder")}
       >
         <Input
@@ -87,10 +87,10 @@ export function CategoryForm({
       </FormField>
       <div className="flex gap-2">
         <Button type="submit" disabled={pending}>
-          {pending ? "Saving…" : "Save category"}
+          {pending ? "সংরক্ষণ হচ্ছে…" : "ক্যাটাগরি সংরক্ষণ করুন"}
         </Button>
         <Link href="/admin/categories" className={buttonVariants({ variant: "outline" })}>
-          Cancel
+          বাতিল
         </Link>
       </div>
     </form>

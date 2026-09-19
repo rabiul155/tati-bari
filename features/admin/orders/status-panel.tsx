@@ -12,7 +12,7 @@ import type { OrderStatus } from "@/lib/generated/prisma/enums";
 const DANGEROUS: OrderStatus[] = ["CANCELLED", "RETURNED"];
 
 function actionLabel(status: OrderStatus) {
-  return status === "CANCELLED" ? "Cancel order" : `Mark as ${ORDER_STATUS[status].label.toLowerCase()}`;
+  return status === "CANCELLED" ? "অর্ডার বাতিল করুন" : `${ORDER_STATUS[status].label} হিসেবে চিহ্নিত করুন`;
 }
 
 export function StatusPanel({ orderId, status }: { orderId: string; status: OrderStatus }) {
@@ -26,13 +26,13 @@ export function StatusPanel({ orderId, status }: { orderId: string; status: Orde
     const label = ORDER_STATUS[toStatus].label;
     const stockNote =
       toStatus === "CANCELLED"
-        ? " Stock for tracked products will be given back."
+        ? " স্টক ট্র্যাক করা পণ্যের স্টক ফিরিয়ে দেওয়া হবে।"
         : status === "CANCELLED"
-          ? " Stock for tracked products will be taken again."
+          ? " স্টক ট্র্যাক করা পণ্যের স্টক আবার কেটে নেওয়া হবে।"
           : "";
     if (
       (DANGEROUS.includes(toStatus) || !next.includes(toStatus)) &&
-      !window.confirm(`Change the status to ${label}?${stockNote}`)
+      !window.confirm(`অবস্থা পরিবর্তন করে "${label}" করবেন?${stockNote}`)
     ) {
       return;
     }
@@ -51,16 +51,16 @@ export function StatusPanel({ orderId, status }: { orderId: string; status: Orde
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="status-note">Note (optional)</Label>
+        <Label htmlFor="status-note">নোট (ঐচ্ছিক)</Label>
         <Textarea
           id="status-note"
           rows={2}
           maxLength={500}
           value={note}
           onChange={(event) => setNote(event.target.value)}
-          placeholder="e.g. Confirmed by phone, cancellation reason, return details"
+          placeholder="যেমন: ফোনে নিশ্চিত করা হয়েছে, বাতিলের কারণ, ফেরতের বিবরণ"
         />
-        <p className="text-xs text-muted-foreground">Saved in the history. Customers don&apos;t see notes.</p>
+        <p className="text-xs text-muted-foreground">ইতিহাসে সংরক্ষিত হবে। গ্রাহকরা নোট দেখতে পান না।</p>
       </div>
 
       {next.length > 0 && (
@@ -82,10 +82,10 @@ export function StatusPanel({ orderId, status }: { orderId: string; status: Orde
       <div className="flex flex-wrap items-end gap-2 border-t pt-4">
         <div className="flex flex-col gap-2">
           <Label htmlFor="other-status" className="text-muted-foreground">
-            Set another status
+            অন্য অবস্থা নির্ধারণ করুন
           </Label>
           <NativeSelect id="other-status" value={other} onChange={(event) => setOther(event.target.value)}>
-            <NativeSelectOption value="">Choose…</NativeSelectOption>
+            <NativeSelectOption value="">নির্বাচন করুন…</NativeSelectOption>
             {ALL_STATUSES.filter((value) => value !== status).map((value) => (
               <NativeSelectOption key={value} value={value}>
                 {ORDER_STATUS[value].label}
@@ -99,7 +99,7 @@ export function StatusPanel({ orderId, status }: { orderId: string; status: Orde
           disabled={pending || !other}
           onClick={() => change(other as OrderStatus)}
         >
-          Update
+          আপডেট
         </Button>
       </div>
 

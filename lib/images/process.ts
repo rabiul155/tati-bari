@@ -14,10 +14,10 @@ export async function processProductImage(input: Buffer) {
   try {
     ({ format } = await sharp(input).metadata());
   } catch {
-    throw new InvalidImageError("This file is not a supported image.");
+    throw new InvalidImageError("এই ফাইলটি সমর্থিত কোনো ছবি নয়।");
   }
   if (!format || !ACCEPTED_FORMATS.has(format)) {
-    throw new InvalidImageError("Use a JPEG, PNG or WebP image.");
+    throw new InvalidImageError("JPEG, PNG বা WebP ছবি ব্যবহার করুন।");
   }
 
   const { data, info } = await sharp(input, { limitInputPixels: 50_000_000 })

@@ -12,7 +12,7 @@ export function LoginForm() {
   return (
     <form action={action} className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">ইমেইল</Label>
         <Input
           id="email"
           name="email"
@@ -24,7 +24,7 @@ export function LoginForm() {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">পাসওয়ার্ড</Label>
         <Input
           id="password"
           name="password"
@@ -40,7 +40,7 @@ export function LoginForm() {
         </p>
       )}
       <Button type="submit" disabled={pending}>
-        {pending ? "Signing in…" : "Sign in"}
+        {pending ? "সাইন ইন হচ্ছে…" : "সাইন ইন"}
       </Button>
     </form>
   );

@@ -11,13 +11,15 @@ export function formatTaka(amount: number): string {
   return `৳${takaFormatter.format(amount)}`;
 }
 
-const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
+// Bengali month names with Latin digits, matching the digits used for prices.
+const dateTimeFormatter = new Intl.DateTimeFormat("bn-BD-u-nu-latn", {
   timeZone: BUSINESS_TIME_ZONE,
   day: "numeric",
   month: "short",
   year: "numeric",
   hour: "2-digit",
   minute: "2-digit",
+  hourCycle: "h23",
 });
 
 export function formatDateTime(date: Date): string {

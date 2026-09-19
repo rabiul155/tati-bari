@@ -18,7 +18,7 @@ import { formatDateTime, formatTaka } from "@/lib/format";
 import { siteUrl } from "@/lib/site";
 
 export async function generateMetadata({ params }: PageProps<"/admin/orders/[number]">): Promise<Metadata> {
-  return { title: `Order ${decodeURIComponent((await params).number)}` };
+  return { title: `অর্ডার ${decodeURIComponent((await params).number)}` };
 }
 
 export default async function AdminOrderPage({ params }: PageProps<"/admin/orders/[number]">) {
@@ -35,9 +35,9 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title={`Order ${displayNumber}`}
-        description={`Placed ${formatDateTime(order.createdAt)} · Cash on delivery`}
-        back={{ href: "/admin/orders", label: "Orders" }}
+        title={`অর্ডার ${displayNumber}`}
+        description={`অর্ডার করা হয়েছে ${formatDateTime(order.createdAt)} · ক্যাশ অন ডেলিভারি`}
+        back={{ href: "/admin/orders", label: "অর্ডার" }}
       >
         <OrderStatusBadge status={order.status} />
       </PageHeader>
@@ -47,7 +47,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
           <Card>
             <CardHeader>
               <CardTitle>
-                Items ({itemCount})
+                পণ্যসমূহ ({itemCount})
               </CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
@@ -67,16 +67,16 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                         {item.productName}
                       </Link>
                       <p className="text-muted-foreground">
-                        Code {item.productCode}
-                        {item.product.archivedAt && " · archived"}
-                        {item.product.stockQuantity !== null && ` · ${item.product.stockQuantity} in stock now`}
+                        কোড {item.productCode}
+                        {item.product.archivedAt && " · আর্কাইভ করা"}
+                        {item.product.stockQuantity !== null && ` · এখন স্টকে ${item.product.stockQuantity}টি`}
                       </p>
                       <p>
                         {item.quantity} × {formatTaka(item.finalUnitPrice)}
                         {item.unitDiscount > 0 && (
                           <span className="text-muted-foreground">
                             {" "}
-                            (regular {formatTaka(item.unitPrice)}, −{formatTaka(item.unitDiscount)} each)
+                            (নিয়মিত {formatTaka(item.unitPrice)}, প্রতিটিতে −{formatTaka(item.unitDiscount)})
                           </span>
                         )}
                       </p>
@@ -87,21 +87,21 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
               </ul>
               <dl className="ml-auto flex w-full max-w-xs flex-col gap-1.5 border-t pt-3 text-sm">
                 <div className="flex justify-between gap-4">
-                  <dt>Subtotal</dt>
+                  <dt>সাবটোটাল</dt>
                   <dd className="tabular-nums">{formatTaka(order.subtotal)}</dd>
                 </div>
                 {order.discountAmount > 0 && (
                   <div className="flex justify-between gap-4">
-                    <dt>Discount{order.discountName && ` (${order.discountName})`}</dt>
+                    <dt>ছাড়{order.discountName && ` (${order.discountName})`}</dt>
                     <dd className="tabular-nums">−{formatTaka(order.discountAmount)}</dd>
                   </div>
                 )}
                 <div className="flex justify-between gap-4">
-                  <dt>Delivery ({order.deliveryDistrict})</dt>
+                  <dt>ডেলিভারি ({order.deliveryDistrict})</dt>
                   <dd className="tabular-nums">{formatTaka(order.deliveryCharge)}</dd>
                 </div>
                 <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
-                  <dt>Collect on delivery</dt>
+                  <dt>ডেলিভারিতে আদায় করতে হবে</dt>
                   <dd className="tabular-nums">{formatTaka(order.total)}</dd>
                 </div>
               </dl>
@@ -110,7 +110,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
 
           <Card>
             <CardHeader>
-              <CardTitle>Shipping &amp; notes</CardTitle>
+              <CardTitle>শিপিং ও নোট</CardTitle>
             </CardHeader>
             <CardContent>
               <ShippingForm
@@ -126,7 +126,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
 
           <Card>
             <CardHeader>
-              <CardTitle>History</CardTitle>
+              <CardTitle>ইতিহাস</CardTitle>
             </CardHeader>
             <CardContent>
               <ol className="flex flex-col gap-4">
@@ -142,7 +142,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                       <OrderStatusBadge status={entry.toStatus} />
                     </div>
                     <p className="text-xs text-muted-foreground">
-                      {formatDateTime(entry.createdAt)} · {entry.changedBy?.name ?? "System"}
+                      {formatDateTime(entry.createdAt)} · {entry.changedBy?.name ?? "সিস্টেম"}
                     </p>
                     {entry.note && <p className="whitespace-pre-line">{entry.note}</p>}
                   </li>
@@ -155,7 +155,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
-              <CardTitle>Update status</CardTitle>
+              <CardTitle>অবস্থা আপডেট করুন</CardTitle>
             </CardHeader>
             <CardContent>
               <StatusPanel orderId={order.id} status={order.status} />
@@ -164,7 +164,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
 
           <Card>
             <CardHeader>
-              <CardTitle>Customer</CardTitle>
+              <CardTitle>গ্রাহক</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-3 text-sm">
               <div>
@@ -176,11 +176,11 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                 </Link>
                 {order.customer._count.orders > 1 ? (
                   <Badge variant="secondary" className="ml-2">
-                    {order.customer._count.orders} orders
+                    {order.customer._count.orders}টি অর্ডার
                   </Badge>
                 ) : (
                   <Badge variant="outline" className="ml-2">
-                    First order
+                    প্রথম অর্ডার
                   </Badge>
                 )}
               </div>
@@ -198,7 +198,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                 </a>
               </div>
               <div>
-                <p className="font-medium">Delivery address</p>
+                <p className="font-medium">ডেলিভারির ঠিকানা</p>
                 <p className="whitespace-pre-line">{order.deliveryAddress}</p>
                 <p>
                   {order.deliveryArea}, {order.deliveryDistrict}
@@ -207,23 +207,23 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
               </div>
               {order.customerNote && (
                 <div className="rounded-md bg-muted px-3 py-2">
-                  <p className="font-medium">Customer note</p>
+                  <p className="font-medium">গ্রাহকের নোট</p>
                   <p className="whitespace-pre-line">{order.customerNote}</p>
                 </div>
               )}
               <div className="flex flex-col gap-1 border-t pt-3">
-                <p className="text-muted-foreground">Customer&apos;s order page (private link)</p>
+                <p className="text-muted-foreground">গ্রাহকের অর্ডার পেজ (ব্যক্তিগত লিংক)</p>
                 <div className="flex flex-wrap gap-2">
-                  <CopyButton value={customerLink} label="Copy link" />
+                  <CopyButton value={customerLink} label="লিংক কপি করুন" />
                   <a
                     href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-                      `Your order ${displayNumber}: ${customerLink}`,
+                      `আপনার অর্ডার ${displayNumber}: ${customerLink}`,
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex h-7 items-center rounded-lg border px-2.5 text-[0.8rem] font-medium hover:bg-muted"
                   >
-                    Send on WhatsApp
+                    WhatsApp-এ পাঠান
                   </a>
                 </div>
               </div>

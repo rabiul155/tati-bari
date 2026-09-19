@@ -50,20 +50,20 @@ export async function placeOrder(input: {
   if (!parsed.success) {
     const detailErrors = parsed.error.issues.filter((issue) => issue.path[0] === "details");
     if (detailErrors.length === 0) {
-      return { ok: false, reason: "cart", message: "Your cart could not be read. Please review it and try again." };
+      return { ok: false, reason: "cart", message: "আপনার কার্ট পড়া যায়নি। অনুগ্রহ করে দেখে আবার চেষ্টা করুন।" };
     }
     const fieldErrors: Record<string, string[]> = {};
     for (const issue of detailErrors) {
       const field = String(issue.path[1]);
       (fieldErrors[field] ??= []).push(issue.message);
     }
-    return { ok: false, reason: "invalid", message: "Please check the highlighted fields.", fieldErrors };
+    return { ok: false, reason: "invalid", message: "অনুগ্রহ করে চিহ্নিত ঘরগুলো পরীক্ষা করুন।", fieldErrors };
   }
   const { details, items, expectedTotal } = parsed.data;
 
   // Only bots fill in the hidden honeypot field.
   if (details.website) {
-    return { ok: false, reason: "error", message: "Something went wrong. Please try again." };
+    return { ok: false, reason: "error", message: "কিছু একটা সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।" };
   }
 
   const ip = await getClientIp();
@@ -74,7 +74,7 @@ export async function placeOrder(input: {
     return {
       ok: false,
       reason: "rate-limited",
-      message: "Too many orders in a short time. Please wait a while, or contact us to order.",
+      message: "অল্প সময়ে অনেক বেশি অর্ডার হয়েছে। কিছুক্ষণ অপেক্ষা করুন, অথবা অর্ডার করতে আমাদের সাথে যোগাযোগ করুন।",
     };
   }
 
@@ -88,8 +88,8 @@ export async function placeOrder(input: {
         );
         throw new CartChangedError(
           short
-            ? `Only ${short.stockLeft} left of ${short.name}. Please update your cart.`
-            : "Some sarees in your cart are no longer available. Please update your cart.",
+            ? `${short.name}-এর মাত্র ${short.stockLeft}টি বাকি আছে। অনুগ্রহ করে আপনার কার্ট আপডেট করুন।`
+            : "আপনার কার্টের কিছু শাড়ি আর পাওয়া যাচ্ছে না। অনুগ্রহ করে আপনার কার্ট আপডেট করুন।",
         );
       }
 
@@ -97,7 +97,7 @@ export async function placeOrder(input: {
       const deliveryCharge = getDeliveryCharge(details.district);
       const total = quote.subtotal - discountAmount + deliveryCharge;
       if (total !== expectedTotal) {
-        throw new CartChangedError("Prices have changed since you opened this page. Please check the new total.");
+        throw new CartChangedError("এই পেজ খোলার পর দাম পরিবর্তন হয়েছে। অনুগ্রহ করে নতুন সর্বমোট দেখুন।");
       }
 
       // Reserve stock for products that track it.
@@ -112,7 +112,7 @@ export async function placeOrder(input: {
             select: { stockQuantity: true },
           });
           if (product?.stockQuantity !== null) {
-            throw new CartChangedError(`Only ${product?.stockQuantity ?? 0} left of ${line.name}.`);
+            throw new CartChangedError(`${line.name}-এর মাত্র ${product?.stockQuantity ?? 0}টি বাকি আছে।`);
           }
         }
       }
@@ -176,7 +176,7 @@ export async function placeOrder(input: {
               lineTotal: line.lineTotal,
             })),
           },
-          statusHistory: { create: { toStatus: "PENDING", note: "Order placed on the website" } },
+          statusHistory: { create: { toStatus: "PENDING", note: "ওয়েবসাইটে অর্ডার করা হয়েছে" } },
         },
         select: { number: true, accessKey: true, total: true, createdAt: true },
       });
@@ -202,7 +202,7 @@ export async function placeOrder(input: {
     return {
       ok: false,
       reason: "error",
-      message: "We couldn't place your order. Please try again, or contact us to order.",
+      message: "আপনার অর্ডার করা যায়নি। অনুগ্রহ করে আবার চেষ্টা করুন, অথবা অর্ডার করতে আমাদের সাথে যোগাযোগ করুন।",
     };
   }
 }
@@ -229,7 +229,7 @@ export async function lookupOrder(_state: LookupState, formData: FormData): Prom
     (await rateLimit(`lookup:ip:${ip}`, 10, 15 * 60)) &&
     (await rateLimit(`lookup:phone:${parsed.data.phone}`, 10, 60 * 60));
   if (!allowed) {
-    return { error: "Too many attempts. Please wait 15 minutes and try again.", values };
+    return { error: "অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে ১৫ মিনিট অপেক্ষা করে আবার চেষ্টা করুন।", values };
   }
 
   const number = parseOrderNumber(parsed.data.orderNumber);
@@ -242,7 +242,7 @@ export async function lookupOrder(_state: LookupState, formData: FormData): Prom
         });
   if (!order) {
     return {
-      error: "We couldn't find an order with that phone number and order number.",
+      error: "এই ফোন নম্বর ও অর্ডার নম্বর দিয়ে কোনো অর্ডার খুঁজে পাওয়া যায়নি।",
       values,
     };
   }

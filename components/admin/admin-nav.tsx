@@ -5,19 +5,19 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "/admin", label: "Dashboard", exact: true },
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/customers", label: "Customers" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/categories", label: "Categories" },
-  { href: "/admin/discounts", label: "Discounts" },
+  { href: "/admin", label: "ড্যাশবোর্ড", exact: true },
+  { href: "/admin/orders", label: "অর্ডার" },
+  { href: "/admin/customers", label: "গ্রাহক" },
+  { href: "/admin/products", label: "পণ্য" },
+  { href: "/admin/categories", label: "ক্যাটাগরি" },
+  { href: "/admin/discounts", label: "ছাড়" },
 ];
 
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="Admin" className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+    <nav aria-label="অ্যাডমিন মেনু" className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
       {LINKS.map(({ href, label, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         return (

@@ -29,7 +29,7 @@ export function ConfirmActionButton({
           setError(undefined);
           startTransition(async () => {
             const result = await action();
-            if (result && !result.ok) setError(result.error ?? "Something went wrong.");
+            if (result && !result.ok) setError(result.error ?? "কিছু একটা সমস্যা হয়েছে।");
           });
         }}
       >

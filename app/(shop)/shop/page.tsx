@@ -43,8 +43,8 @@ export async function generateMetadata({ searchParams }: PageProps<"/shop">): Pr
     ? (await getShopCategories()).find((c) => c.slug === categorySlug)
     : undefined;
   return {
-    title: category ? `${category.name} sarees` : "Shop sarees",
-    description: category?.description ?? "Browse handwoven Tangail sarees.",
+    title: category ? `${category.name} শাড়ি` : "শাড়ি কিনুন",
+    description: category?.description ?? "হাতে বোনা টাঙ্গাইল শাড়ি দেখুন।",
     alternates: { canonical: category ? `/shop?category=${category.slug}` : "/shop" },
   };
 }
@@ -76,14 +76,14 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8">
       <div className="flex flex-col gap-1">
         <h1 className="font-heading text-3xl font-semibold tracking-tight">
-          {category ? category.name : "All sarees"}
+          {category ? category.name : "সব শাড়ি"}
         </h1>
         {category?.description && <p className="text-muted-foreground">{category.description}</p>}
       </div>
 
-      <nav aria-label="Categories" className="-mx-4 overflow-x-auto px-4">
+      <nav aria-label="ক্যাটাগরি" className="-mx-4 overflow-x-auto px-4">
         <ul className="flex w-max gap-2">
-          {[{ slug: undefined, name: "All" }, ...categories].map((c) => {
+          {[{ slug: undefined, name: "সব" }, ...categories].map((c) => {
             const active = c.slug === filters.categorySlug;
             return (
               <li key={c.slug ?? "all"}>
@@ -108,15 +108,15 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
       <form method="get" className="flex flex-wrap items-end gap-3 rounded-lg border bg-card p-3">
         {filters.categorySlug && <input type="hidden" name="category" value={filters.categorySlug} />}
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="min">Min price (৳)</Label>
+          <Label htmlFor="min">সর্বনিম্ন দাম (৳)</Label>
           <Input id="min" name="min" type="number" min={0} inputMode="numeric" defaultValue={filters.minPrice} className="w-28" />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="max">Max price (৳)</Label>
+          <Label htmlFor="max">সর্বোচ্চ দাম (৳)</Label>
           <Input id="max" name="max" type="number" min={0} inputMode="numeric" defaultValue={filters.maxPrice} className="w-28" />
         </div>
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="sort">Sort by</Label>
+          <Label htmlFor="sort">সাজান</Label>
           <NativeSelect id="sort" name="sort" defaultValue={filters.sort}>
             {Object.entries(SHOP_SORTS).map(([value, label]) => (
               <NativeSelectOption key={value} value={value}>
@@ -127,51 +127,51 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
         </div>
         <label className="flex h-8 items-center gap-2 text-sm">
           <input type="checkbox" name="instock" value="1" defaultChecked={filters.inStockOnly} className="size-4 accent-primary" />
-          In stock only
+          শুধু স্টকে আছে
         </label>
         <Button type="submit" variant="secondary">
-          Apply
+          প্রয়োগ করুন
         </Button>
         {(hasFilters || filters.sort !== "newest") && (
           <Link
             href={href({ minPrice: undefined, maxPrice: undefined, inStockOnly: false, sort: "newest" })}
             className={buttonVariants({ variant: "ghost" })}
           >
-            Clear filters
+            ফিল্টার মুছুন
           </Link>
         )}
       </form>
 
       <p className="text-sm text-muted-foreground" role="status">
-        {result.total} saree{result.total === 1 ? "" : "s"}
+        {result.total}টি শাড়ি
       </p>
 
       {result.products.length > 0 ? (
         <ProductGrid products={result.products} priorityCount={4} />
       ) : (
         <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed p-8">
-          <p>No sarees match these filters.</p>
+          <p>এই ফিল্টারে কোনো শাড়ি পাওয়া যায়নি।</p>
           <Link href="/shop" className={buttonVariants({ variant: "outline" })}>
-            See all sarees
+            সব শাড়ি দেখুন
           </Link>
         </div>
       )}
 
       {result.pageCount > 1 && (
-        <nav className="flex items-center justify-between gap-2" aria-label="Pagination">
+        <nav className="flex items-center justify-between gap-2" aria-label="পেজিনেশন">
           {filters.page > 1 ? (
             <Link href={href({ page: filters.page - 1 })} className={buttonVariants({ variant: "outline" })}>
-              Previous
+              আগের
             </Link>
           ) : (
             <span />
           )}
           <span className="text-sm text-muted-foreground">
-            Page {Math.min(filters.page, result.pageCount)} of {result.pageCount}
+            পৃষ্ঠা {Math.min(filters.page, result.pageCount)} / {result.pageCount}
           </span>
           {filters.page < result.pageCount ? (
             <Link href={href({ page: filters.page + 1 })} className={buttonVariants({ variant: "outline" })}>
-              Next
+              পরের
             </Link>
           ) : (
             <span />

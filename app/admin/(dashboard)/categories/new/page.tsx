@@ -4,7 +4,7 @@ import { CategoryForm } from "@/features/admin/categories/category-form";
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 
-export const metadata: Metadata = { title: "New category" };
+export const metadata: Metadata = { title: "নতুন ক্যাটাগরি" };
 
 export default async function NewCategoryPage() {
   await requireAdmin();
@@ -15,7 +15,7 @@ export default async function NewCategoryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="New category" back={{ href: "/admin/categories", label: "Categories" }} />
+      <PageHeader title="নতুন ক্যাটাগরি" back={{ href: "/admin/categories", label: "ক্যাটাগরি" }} />
       <CategoryForm
         categoryId={null}
         defaultValues={{

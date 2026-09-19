@@ -3,14 +3,14 @@ import { SLUG_PATTERN } from "@/lib/slug";
 
 // Form values are strings; the schema converts them to database values.
 export const categorySchema = z.object({
-  name: z.string().trim().min(1, "Enter a name.").max(80),
+  name: z.string().trim().min(1, "একটি নাম দিন।").max(80),
   slug: z
     .string()
     .trim()
     .toLowerCase()
-    .min(1, "Enter a URL slug.")
+    .min(1, "একটি URL slug দিন।")
     .max(80)
-    .regex(SLUG_PATTERN, "Use lowercase letters, numbers and hyphens."),
+    .regex(SLUG_PATTERN, "শুধু ছোট হাতের ইংরেজি অক্ষর, সংখ্যা ও হাইফেন ব্যবহার করুন।"),
   description: z
     .string()
     .trim()
@@ -19,7 +19,7 @@ export const categorySchema = z.object({
   sortOrder: z
     .string()
     .trim()
-    .regex(/^\d{0,4}$/, "Enter a whole number.")
+    .regex(/^\d{0,4}$/, "একটি পূর্ণসংখ্যা দিন।")
     .transform((value) => Number(value || 0)),
 });
 

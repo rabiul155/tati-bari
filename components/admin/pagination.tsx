@@ -12,20 +12,20 @@ export function Pagination({
 }) {
   if (pageCount <= 1) return null;
   return (
-    <nav className="flex items-center justify-between gap-2" aria-label="Pagination">
+    <nav className="flex items-center justify-between gap-2" aria-label="পেজিনেশন">
       {page > 1 ? (
         <Link href={href(page - 1)} className={buttonVariants({ variant: "outline" })}>
-          Previous
+          আগের
         </Link>
       ) : (
         <span />
       )}
       <span className="text-sm text-muted-foreground">
-        Page {Math.min(page, pageCount)} of {pageCount}
+        পৃষ্ঠা {Math.min(page, pageCount)} / {pageCount}
       </span>
       {page < pageCount ? (
         <Link href={href(page + 1)} className={buttonVariants({ variant: "outline" })}>
-          Next
+          পরের
         </Link>
       ) : (
         <span />

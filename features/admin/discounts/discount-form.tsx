@@ -50,44 +50,44 @@ export function DiscountForm({
       <FormError message={formError} />
       <FormField
         id="name"
-        label="Name"
-        hint="Shown to customers in the cart and on their order, e.g. “৳200 off orders over ৳5,000”."
+        label="নাম"
+        hint="কার্টে ও গ্রাহকের অর্ডারে দেখানো হবে, যেমন: “৳৫,০০০-এর বেশি অর্ডারে ৳২০০ ছাড়”।"
         error={error("name")}
       >
         <Input {...field("name")} {...register("name")} />
       </FormField>
-      <FormField id="description" label="Internal description (optional)" error={error("description")}>
+      <FormField id="description" label="অভ্যন্তরীণ বিবরণ (ঐচ্ছিক)" error={error("description")}>
         <Textarea {...field("description")} rows={2} {...register("description")} />
       </FormField>
       <div className="grid gap-5 sm:grid-cols-2">
-        <FormField id="amount" label="Discount (৳)" error={error("amount")}>
+        <FormField id="amount" label="ছাড় (৳)" error={error("amount")}>
           <Input {...field("amount")} type="number" min={1} inputMode="numeric" {...register("amount")} />
         </FormField>
         <FormField
           id="minOrderValue"
-          label="Minimum order value (৳)"
-          hint="Subtotal after sale prices, before delivery."
+          label="সর্বনিম্ন অর্ডার মূল্য (৳)"
+          hint="বিশেষ দাম প্রয়োগের পর, ডেলিভারি চার্জের আগের সাবটোটাল।"
           error={error("minOrderValue")}
         >
           <Input {...field("minOrderValue")} type="number" min={1} inputMode="numeric" {...register("minOrderValue")} />
         </FormField>
-        <FormField id="startsAt" label="Starts (optional)" hint="Bangladesh time. Empty = now." error={error("startsAt")}>
+        <FormField id="startsAt" label="শুরু (ঐচ্ছিক)" hint="বাংলাদেশ সময়। খালি রাখলে এখনই শুরু।" error={error("startsAt")}>
           <Input {...field("startsAt")} type="datetime-local" {...register("startsAt")} />
         </FormField>
-        <FormField id="endsAt" label="Ends (optional)" hint="Empty = until you turn it off." error={error("endsAt")}>
+        <FormField id="endsAt" label="শেষ (ঐচ্ছিক)" hint="খালি রাখলে আপনি বন্ধ না করা পর্যন্ত চলবে।" error={error("endsAt")}>
           <Input {...field("endsAt")} type="datetime-local" {...register("endsAt")} />
         </FormField>
       </div>
       <label className="flex items-center gap-2 text-sm font-medium">
         <input type="checkbox" className="size-4 accent-primary" {...register("isActive")} />
-        Turned on
+        চালু আছে
       </label>
       <div className="flex gap-2">
         <Button type="submit" disabled={pending}>
-          {pending ? "Saving…" : "Save discount"}
+          {pending ? "সংরক্ষণ হচ্ছে…" : "ছাড় সংরক্ষণ করুন"}
         </Button>
         <Link href="/admin/discounts" className={buttonVariants({ variant: "outline" })}>
-          Cancel
+          বাতিল
         </Link>
       </div>
     </form>

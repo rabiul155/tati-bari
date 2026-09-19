@@ -21,10 +21,10 @@ import { db } from "@/lib/db";
 import { formatTaka } from "@/lib/format";
 import type { Prisma } from "@/lib/generated/prisma/client";
 
-export const metadata: Metadata = { title: "Products" };
+export const metadata: Metadata = { title: "পণ্য" };
 
-const STATUSES = { active: "Active", archived: "Archived", all: "All" } as const;
-const AVAILABILITY = { AVAILABLE: "Available", UNAVAILABLE: "Unavailable" } as const;
+const STATUSES = { active: "সক্রিয়", archived: "আর্কাইভ করা", all: "সব" } as const;
+const AVAILABILITY = { AVAILABLE: "পাওয়া যাচ্ছে", UNAVAILABLE: "পাওয়া যাচ্ছে না" } as const;
 
 function first(value: string | string[] | undefined) {
   return (Array.isArray(value) ? value[0] : value)?.trim() ?? "";
@@ -89,9 +89,9 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="Products" description={`${total} product${total === 1 ? "" : "s"}`}>
+      <PageHeader title="পণ্য" description={`${total}টি পণ্য`}>
         <Link href="/admin/products/new" className={buttonVariants()}>
-          New product
+          নতুন পণ্য
         </Link>
       </PageHeader>
 
@@ -100,27 +100,27 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
           name="q"
           type="search"
           defaultValue={q}
-          placeholder="Search name or code"
-          aria-label="Search name or code"
+          placeholder="নাম বা কোড খুঁজুন"
+          aria-label="নাম বা কোড খুঁজুন"
           className="w-full sm:w-64"
         />
-        <NativeSelect name="category" defaultValue={categoryId} aria-label="Category">
-          <NativeSelectOption value="">All categories</NativeSelectOption>
+        <NativeSelect name="category" defaultValue={categoryId} aria-label="ক্যাটাগরি">
+          <NativeSelectOption value="">সব ক্যাটাগরি</NativeSelectOption>
           {categories.map((category) => (
             <NativeSelectOption key={category.id} value={category.id}>
               {category.name}
             </NativeSelectOption>
           ))}
         </NativeSelect>
-        <NativeSelect name="availability" defaultValue={availability ?? ""} aria-label="Availability">
-          <NativeSelectOption value="">Any availability</NativeSelectOption>
+        <NativeSelect name="availability" defaultValue={availability ?? ""} aria-label="প্রাপ্যতা">
+          <NativeSelectOption value="">যেকোনো প্রাপ্যতা</NativeSelectOption>
           {Object.entries(AVAILABILITY).map(([value, label]) => (
             <NativeSelectOption key={value} value={value}>
               {label}
             </NativeSelectOption>
           ))}
         </NativeSelect>
-        <NativeSelect name="status" defaultValue={status} aria-label="Status">
+        <NativeSelect name="status" defaultValue={status} aria-label="অবস্থা">
           {Object.entries(STATUSES).map(([value, label]) => (
             <NativeSelectOption key={value} value={value}>
               {label}
@@ -128,28 +128,28 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
           ))}
         </NativeSelect>
         <Button type="submit" variant="secondary">
-          Filter
+          ফিল্টার
         </Button>
         {(q || categoryId || availability || status !== "active") && (
           <Link href="/admin/products" className={buttonVariants({ variant: "ghost" })}>
-            Clear
+            মুছুন
           </Link>
         )}
       </form>
 
       {products.length === 0 ? (
-        <p className="text-muted-foreground">No products match these filters.</p>
+        <p className="text-muted-foreground">এই ফিল্টারে কোনো পণ্য মেলেনি।</p>
       ) : (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead className="w-14">
-                <span className="sr-only">Photo</span>
+                <span className="sr-only">ছবি</span>
               </TableHead>
-              <TableHead>Product</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead className="text-right">Price</TableHead>
-              <TableHead>Status</TableHead>
+              <TableHead>পণ্য</TableHead>
+              <TableHead>ক্যাটাগরি</TableHead>
+              <TableHead className="text-right">দাম</TableHead>
+              <TableHead>অবস্থা</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -189,13 +189,13 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {product.archivedAt && <Badge variant="secondary">Archived</Badge>}
+                      {product.archivedAt && <Badge variant="secondary">আর্কাইভ করা</Badge>}
                       {product.availability === "UNAVAILABLE" && (
-                        <Badge variant="destructive">Unavailable</Badge>
+                        <Badge variant="destructive">পাওয়া যাচ্ছে না</Badge>
                       )}
-                      {onSale && <Badge>On sale</Badge>}
-                      {product.isFeatured && <Badge variant="outline">Featured</Badge>}
-                      {!image && <Badge variant="outline">No photo</Badge>}
+                      {onSale && <Badge>ছাড়ে আছে</Badge>}
+                      {product.isFeatured && <Badge variant="outline">বিশেষ</Badge>}
+                      {!image && <Badge variant="outline">ছবি নেই</Badge>}
                     </div>
                   </TableCell>
                 </TableRow>
@@ -206,20 +206,20 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
       )}
 
       {pageCount > 1 && (
-        <nav className="flex items-center justify-between gap-2" aria-label="Pagination">
+        <nav className="flex items-center justify-between gap-2" aria-label="পেজিনেশন">
           {page > 1 ? (
             <Link href={pageHref(page - 1)} className={buttonVariants({ variant: "outline" })}>
-              Previous
+              আগের
             </Link>
           ) : (
             <span />
           )}
           <span className="text-sm text-muted-foreground">
-            Page {page} of {pageCount}
+            পৃষ্ঠা {page} / {pageCount}
           </span>
           {page < pageCount ? (
             <Link href={pageHref(page + 1)} className={buttonVariants({ variant: "outline" })}>
-              Next
+              পরের
             </Link>
           ) : (
             <span />

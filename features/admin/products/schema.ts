@@ -8,41 +8,41 @@ const optionalText = (max: number) =>
   z
     .string()
     .trim()
-    .max(max, `Use at most ${max} characters.`)
+    .max(max, `সর্বোচ্চ ${max} অক্ষর ব্যবহার করুন।`)
     .transform((value) => value || null);
 
-const wholeNumber = z.string().trim().regex(/^\d*$/, "Enter a whole number, without commas.");
+const wholeNumber = z.string().trim().regex(/^\d*$/, "কমা ছাড়া একটি পূর্ণসংখ্যা দিন।");
 
 const optionalTaka = wholeNumber
   .transform((value) => (value === "" ? null : Number(value)))
-  .refine((value) => value === null || value <= MAX_PRICE, "That price is too high.");
+  .refine((value) => value === null || value <= MAX_PRICE, "এই দামটি অনেক বেশি।");
 
 const optionalDateTime = z
   .string()
   .trim()
-  .refine((value) => value === "" || fromDhakaDateTimeInput(value) !== null, "Enter a valid date and time.")
+  .refine((value) => value === "" || fromDhakaDateTimeInput(value) !== null, "সঠিক তারিখ ও সময় দিন।")
   .transform((value) => fromDhakaDateTimeInput(value));
 
 // Form values are strings (and booleans for checkboxes); the schema
 // converts them to database values. Used on the client and the server.
 export const productSchema = z
   .object({
-    name: z.string().trim().min(1, "Enter a name.").max(150),
+    name: z.string().trim().min(1, "একটি নাম দিন।").max(150),
     slug: z
       .string()
       .trim()
       .toLowerCase()
-      .min(1, "Enter a URL slug.")
+      .min(1, "একটি URL slug দিন।")
       .max(80)
-      .regex(SLUG_PATTERN, "Use lowercase letters, numbers and hyphens."),
+      .regex(SLUG_PATTERN, "শুধু ছোট হাতের ইংরেজি অক্ষর, সংখ্যা ও হাইফেন ব্যবহার করুন।"),
     code: z
       .string()
       .trim()
       .toUpperCase()
-      .min(1, "Enter a product code.")
+      .min(1, "একটি পণ্য কোড দিন।")
       .max(30)
-      .regex(/^[A-Z0-9]+(?:-[A-Z0-9]+)*$/, "Use letters, numbers and hyphens, e.g. HS-003."),
-    categoryId: z.string().min(1, "Choose a category."),
+      .regex(/^[A-Z0-9]+(?:-[A-Z0-9]+)*$/, "ইংরেজি অক্ষর, সংখ্যা ও হাইফেন ব্যবহার করুন, যেমন: HS-003।"),
+    categoryId: z.string().min(1, "একটি ক্যাটাগরি নির্বাচন করুন।"),
     description: optionalText(5000),
 
     fabric: optionalText(100),
@@ -52,10 +52,10 @@ export const productSchema = z
     careInstructions: optionalText(500),
 
     regularPrice: wholeNumber
-      .min(1, "Enter the regular price.")
+      .min(1, "নিয়মিত দাম দিন।")
       .transform(Number)
-      .refine((value) => value > 0, "The price must be more than 0.")
-      .refine((value) => value <= MAX_PRICE, "That price is too high."),
+      .refine((value) => value > 0, "দাম ০-এর বেশি হতে হবে।")
+      .refine((value) => value <= MAX_PRICE, "এই দামটি অনেক বেশি।"),
     salePrice: optionalTaka,
     saleStartsAt: optionalDateTime,
     saleEndsAt: optionalDateTime,
@@ -63,7 +63,7 @@ export const productSchema = z
     availability: z.enum(["AVAILABLE", "UNAVAILABLE"]),
     stockQuantity: wholeNumber
       .transform((value) => (value === "" ? null : Number(value)))
-      .refine((value) => value === null || value <= 100_000, "That number is too high."),
+      .refine((value) => value === null || value <= 100_000, "এই সংখ্যাটি অনেক বেশি।"),
     isFeatured: z.boolean(),
   })
   .superRefine((product, ctx) => {
@@ -71,14 +71,14 @@ export const productSchema = z
       ctx.addIssue({
         code: "custom",
         path: ["salePrice"],
-        message: "The sale price must be lower than the regular price.",
+        message: "বিশেষ দাম নিয়মিত দামের চেয়ে কম হতে হবে।",
       });
     }
     if (product.salePrice === null && (product.saleStartsAt || product.saleEndsAt)) {
       ctx.addIssue({
         code: "custom",
         path: ["salePrice"],
-        message: "Enter a sale price, or clear the sale dates.",
+        message: "একটি বিশেষ দাম দিন, অথবা ছাড়ের তারিখ মুছে দিন।",
       });
     }
     if (
@@ -89,7 +89,7 @@ export const productSchema = z
       ctx.addIssue({
         code: "custom",
         path: ["saleEndsAt"],
-        message: "The sale must end after it starts.",
+        message: "ছাড় শুরুর পরে শেষ হতে হবে।",
       });
     }
   });

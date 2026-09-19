@@ -20,7 +20,7 @@ export function AddToCart({ productId, available }: { productId: string; availab
   if (!available) {
     return (
       <p className="rounded-lg bg-muted px-4 py-3 text-sm">
-        This saree is out of stock right now. Contact us and we will let you know when it is back.
+        এই শাড়িটি এখন স্টকে নেই। যোগাযোগ করুন, আবার পাওয়া গেলে আপনাকে জানিয়ে দেব।
       </p>
     );
   }
@@ -30,7 +30,7 @@ export function AddToCart({ productId, available }: { productId: string; availab
     if (!result.ok) {
       setMessage({
         tone: "error",
-        text: `Your cart can hold up to ${MAX_CART_LINES} different sarees.`,
+        text: `আপনার কার্টে সর্বোচ্চ ${MAX_CART_LINES}টি ভিন্ন শাড়ি রাখা যাবে।`,
       });
       return;
     }
@@ -38,8 +38,8 @@ export function AddToCart({ productId, available }: { productId: string; availab
     setMessage({
       tone: "success",
       text: result.limited
-        ? `You now have the maximum of ${MAX_QUANTITY_PER_ITEM} in your cart.`
-        : `Added to cart. You have ${result.quantity} in your cart.`,
+        ? `আপনার কার্টে এখন সর্বোচ্চ ${MAX_QUANTITY_PER_ITEM}টি রয়েছে।`
+        : `কার্টে যোগ করা হয়েছে। আপনার কার্টে ${result.quantity}টি আছে।`,
     });
   }
 
@@ -61,7 +61,7 @@ export function AddToCart({ productId, available }: { productId: string; availab
           disabled={items === null || atLimit}
           onClick={add}
         >
-          Add to cart
+          কার্টে যোগ করুন
         </Button>
       </div>
       <div role="status" aria-live="polite" className="min-h-5 text-sm">
@@ -77,25 +77,25 @@ export function AddToCart({ productId, available }: { productId: string; availab
             <span>{message.text}</span>
             {message.tone === "success" && (
               <Link href="/cart" className={buttonVariants({ variant: "link", className: "h-auto px-0" })}>
-                View cart →
+                কার্ট দেখুন →
               </Link>
             )}
           </p>
         ) : atLimit ? (
           <p className="text-muted-foreground">
-            You have the maximum of {MAX_QUANTITY_PER_ITEM} in your{" "}
+            আপনার{" "}
             <Link href="/cart" className="underline underline-offset-4">
-              cart
-            </Link>
-            .
+              কার্টে
+            </Link>{" "}
+            সর্বোচ্চ {MAX_QUANTITY_PER_ITEM}টি রয়েছে।
           </p>
         ) : inCart > 0 ? (
           <p className="text-muted-foreground">
-            {inCart} already in your{" "}
+            আপনার{" "}
             <Link href="/cart" className="underline underline-offset-4">
-              cart
-            </Link>
-            .
+              কার্টে
+            </Link>{" "}
+            ইতিমধ্যে {inCart}টি আছে।
           </p>
         ) : null}
       </div>

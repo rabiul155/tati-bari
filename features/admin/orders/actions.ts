@@ -37,7 +37,7 @@ async function adjustStock(tx: Prisma.TransactionClient, orderId: string, direct
         where: { id: item.productId, stockQuantity: { gte: item.quantity } },
         data: { stockQuantity: { decrement: item.quantity } },
       });
-      if (count === 0) throw new OrderUpdateError(`Not enough stock left of ${item.productName} to reopen this order.`);
+      if (count === 0) throw new OrderUpdateError(`এই অর্ডারটি আবার চালু করতে ${item.productName}-এর যথেষ্ট স্টক নেই।`);
       await tx.product.updateMany({
         where: { id: item.productId, stockQuantity: 0 },
         data: { availability: "UNAVAILABLE" },
@@ -64,9 +64,9 @@ export async function updateOrderStatus(input: {
       note: z.string().trim().max(500),
     })
     .safeParse(input);
-  if (!parsed.success) return { ok: false, error: "Invalid status change." };
+  if (!parsed.success) return { ok: false, error: "অবস্থা পরিবর্তন সঠিক নয়।" };
   const { orderId, fromStatus, toStatus, note } = parsed.data;
-  if (fromStatus === toStatus) return { ok: false, error: "The order already has this status." };
+  if (fromStatus === toStatus) return { ok: false, error: "অর্ডারটি ইতিমধ্যে এই অবস্থায় আছে।" };
 
   try {
     const stockChanged = await db.$transaction(async (tx) => {
@@ -74,7 +74,7 @@ export async function updateOrderStatus(input: {
         where: { id: orderId, status: fromStatus },
         data: { status: toStatus },
       });
-      if (count === 0) throw new OrderUpdateError("This order was changed in the meantime. Reload the page.");
+      if (count === 0) throw new OrderUpdateError("ইতিমধ্যে এই অর্ডারটি পরিবর্তন হয়েছে। পেজটি রিলোড করুন।");
 
       let changed = false;
       if (toStatus === "CANCELLED") changed = await adjustStock(tx, orderId, "restore");
@@ -107,10 +107,10 @@ export async function updateOrderShipping(orderId: string, values: ShippingValue
   await requireAdmin();
   const parsed = shippingSchema.safeParse(values);
   if (!parsed.success) {
-    return { ok: false, error: "Please shorten the highlighted fields.", fieldErrors: z.flattenError(parsed.error).fieldErrors };
+    return { ok: false, error: "অনুগ্রহ করে চিহ্নিত ঘরগুলো ছোট করুন।", fieldErrors: z.flattenError(parsed.error).fieldErrors };
   }
   const { count } = await db.order.updateMany({ where: { id: orderId }, data: parsed.data });
-  if (count === 0) return { ok: false, error: "This order no longer exists." };
+  if (count === 0) return { ok: false, error: "এই অর্ডারটি আর নেই।" };
 
   revalidatePath("/admin", "layout");
   return { ok: true };

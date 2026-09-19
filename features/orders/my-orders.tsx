@@ -18,7 +18,7 @@ export function SavedOrderList() {
   if (orders.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed p-6 text-muted-foreground">
-        No orders on this device yet. Orders you place here will show up in this list.
+        এই ডিভাইসে এখনও কোনো অর্ডার নেই। আপনি এখানে যে অর্ডার করবেন তা এই তালিকায় দেখাবে।
       </p>
     );
   }
@@ -31,10 +31,9 @@ export function SavedOrderList() {
             className="flex flex-wrap items-center justify-between gap-2 p-4 transition-colors hover:bg-muted/50"
           >
             <div>
-              <p className="font-medium">Order {order.number}</p>
+              <p className="font-medium">অর্ডার {order.number}</p>
               <p className="text-sm text-muted-foreground">
-                {formatDateTime(new Date(order.placedAt))} · {order.itemCount} item
-                {order.itemCount === 1 ? "" : "s"}
+                {formatDateTime(new Date(order.placedAt))} · {order.itemCount}টি পণ্য
               </p>
             </div>
             <span className="font-medium tabular-nums">{formatTaka(order.total)} →</span>
@@ -53,7 +52,7 @@ export function OrderLookupForm() {
   return (
     <form action={action} className="flex flex-col gap-4 rounded-2xl border bg-card p-5" noValidate>
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField id="lookup-phone" label="Mobile number" error={phoneError}>
+        <FormField id="lookup-phone" label="মোবাইল নম্বর" error={phoneError}>
           <Input
             id="lookup-phone"
             name="phone"
@@ -67,7 +66,7 @@ export function OrderLookupForm() {
             required
           />
         </FormField>
-        <FormField id="lookup-number" label="Order number" hint="e.g. TS-000123" error={numberError}>
+        <FormField id="lookup-number" label="অর্ডার নম্বর" hint="যেমন: TS-000123" error={numberError}>
           <Input
             id="lookup-number"
             name="orderNumber"
@@ -85,7 +84,7 @@ export function OrderLookupForm() {
         </p>
       )}
       <Button type="submit" className="w-fit" disabled={pending}>
-        {pending ? "Finding…" : "Find my order"}
+        {pending ? "খোঁজা হচ্ছে…" : "আমার অর্ডার খুঁজুন"}
       </Button>
     </form>
   );

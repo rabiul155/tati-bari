@@ -15,23 +15,23 @@ export const revalidate = 300;
 const TRUST_POINTS = [
   {
     icon: HandHeart,
-    title: "Handwoven in Tangail",
-    text: "Sourced directly from weavers we know.",
+    title: "টাঙ্গাইলে হাতে বোনা",
+    text: "আমাদের পরিচিত তাঁতিদের কাছ থেকে সরাসরি সংগ্রহ করা।",
   },
   {
     icon: Banknote,
-    title: "Cash on delivery",
-    text: "Pay when your saree arrives.",
+    title: "ক্যাশ অন ডেলিভারি",
+    text: "শাড়ি হাতে পেয়ে দাম পরিশোধ করুন।",
   },
   {
     icon: Truck,
-    title: "Delivery across Bangladesh",
-    text: "Sent by trusted courier to your door.",
+    title: "সারা বাংলাদেশে ডেলিভারি",
+    text: "বিশ্বস্ত কুরিয়ারের মাধ্যমে আপনার দরজায় পৌঁছে যাবে।",
   },
   {
     icon: MessageCircle,
-    title: "We confirm every order",
-    text: "We check every order with you before it ships.",
+    title: "প্রতিটি অর্ডার নিশ্চিত করা হয়",
+    text: "পাঠানোর আগে আপনার সাথে প্রতিটি অর্ডার যাচাই করে নিই।",
   },
 ];
 
@@ -49,15 +49,15 @@ export default async function HomePage() {
           <div className="flex flex-col items-start gap-5">
             <p className="text-sm font-medium tracking-wide text-primary uppercase">{site.tagline}</p>
             <h1 className="font-heading text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
-              Sarees woven by hand, delivered to your door
+              হাতে বোনা শাড়ি, পৌঁছে যাবে আপনার দরজায়
             </h1>
             <p className="max-w-prose text-lg text-muted-foreground">{site.description}</p>
             <div className="flex flex-wrap gap-3">
               <Link href="/shop" className={cn(buttonVariants({ size: "lg" }), "px-5")}>
-                Shop sarees
+                শাড়ি কিনুন
               </Link>
               <Link href="/about" className={cn(buttonVariants({ size: "lg", variant: "outline" }), "px-5")}>
-                Our story
+                আমাদের গল্প
               </Link>
             </div>
           </div>
@@ -78,13 +78,13 @@ export default async function HomePage() {
       </section>
 
       {featured.length > 0 && (
-        <Section title="Featured sarees" link={{ href: "/shop", label: "Shop all" }}>
+        <Section title="বিশেষ শাড়ি" link={{ href: "/shop", label: "সব দেখুন" }}>
           <ProductGrid products={featured} priorityCount={heroImage ? 0 : 4} />
         </Section>
       )}
 
       {categories.length > 0 && (
-        <Section title="Shop by category">
+        <Section title="ক্যাটাগরি অনুযায়ী কিনুন">
           <ul className="grid grid-cols-2 gap-4 md:grid-cols-4">
             {categories.map((category) => (
               <li key={category.id}>
@@ -108,9 +108,7 @@ export default async function HomePage() {
                     )}
                   >
                     <span className="font-heading text-lg font-semibold">{category.name}</span>
-                    <span className="text-sm opacity-90">
-                      {category.productCount} saree{category.productCount === 1 ? "" : "s"}
-                    </span>
+                    <span className="text-sm opacity-90">{category.productCount}টি শাড়ি</span>
                   </div>
                   {category.image && (
                     <div className="absolute inset-x-0 bottom-0 h-2/3 bg-linear-to-t from-black/60 to-transparent" />
@@ -123,19 +121,19 @@ export default async function HomePage() {
       )}
 
       {onSale.length > 0 && (
-        <Section title="On sale" description="Limited-time prices.">
+        <Section title="বিশেষ ছাড়ে" description="সীমিত সময়ের জন্য বিশেষ দাম।">
           <ProductGrid products={onSale} />
         </Section>
       )}
 
       {newArrivals.length > 0 && (
-        <Section title="New arrivals" link={{ href: "/shop", label: "See all" }}>
+        <Section title="নতুন সংগ্রহ" link={{ href: "/shop", label: "সব দেখুন" }}>
           <ProductGrid products={newArrivals} />
         </Section>
       )}
 
       <section className="mx-auto w-full max-w-6xl px-4 py-10">
-        <h2 className="sr-only">Why shop with us</h2>
+        <h2 className="sr-only">কেন আমাদের কাছ থেকে কিনবেন</h2>
         <ul className="grid gap-6 rounded-2xl border bg-card p-6 sm:grid-cols-2 lg:grid-cols-4">
           {TRUST_POINTS.map(({ icon: Icon, title, text }) => (
             <li key={title} className="flex gap-3">

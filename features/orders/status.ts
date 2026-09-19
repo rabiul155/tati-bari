@@ -2,32 +2,32 @@ import type { OrderStatus } from "@/lib/generated/prisma/enums";
 
 export const ORDER_STATUS: Record<OrderStatus, { label: string; customerText: string }> = {
   PENDING: {
-    label: "Pending",
-    customerText: "We have received your order and will contact you to confirm it.",
+    label: "অপেক্ষমান",
+    customerText: "আমরা আপনার অর্ডার পেয়েছি এবং নিশ্চিত করতে আপনার সাথে যোগাযোগ করব।",
   },
   CONFIRMED: {
-    label: "Confirmed",
-    customerText: "Your order is confirmed and we are getting your saree ready.",
+    label: "নিশ্চিত হয়েছে",
+    customerText: "আপনার অর্ডার নিশ্চিত হয়েছে এবং আমরা আপনার শাড়ি প্রস্তুত করছি।",
   },
   PREPARING: {
-    label: "Preparing",
-    customerText: "Your saree is being checked and packed.",
+    label: "প্রস্তুত হচ্ছে",
+    customerText: "আপনার শাড়ি যাচাই ও প্যাক করা হচ্ছে।",
   },
   SHIPPED: {
-    label: "Shipped",
-    customerText: "Your order is on its way. Keep the cash ready for the courier.",
+    label: "পাঠানো হয়েছে",
+    customerText: "আপনার অর্ডার পথে আছে। কুরিয়ারের জন্য ক্যাশ প্রস্তুত রাখুন।",
   },
   DELIVERED: {
-    label: "Delivered",
-    customerText: "Your order has been delivered. Thank you for shopping with us!",
+    label: "ডেলিভারি হয়েছে",
+    customerText: "আপনার অর্ডার পৌঁছে গেছে। আমাদের কাছ থেকে কেনাকাটার জন্য ধন্যবাদ!",
   },
   CANCELLED: {
-    label: "Cancelled",
-    customerText: "This order was cancelled. Contact us if you have any questions.",
+    label: "বাতিল হয়েছে",
+    customerText: "এই অর্ডারটি বাতিল করা হয়েছে। কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন।",
   },
   RETURNED: {
-    label: "Returned",
-    customerText: "This order was returned. Contact us if you have any questions.",
+    label: "ফেরত দেওয়া হয়েছে",
+    customerText: "এই অর্ডারটি ফেরত দেওয়া হয়েছে। কোনো প্রশ্ন থাকলে আমাদের সাথে যোগাযোগ করুন।",
   },
 };
 

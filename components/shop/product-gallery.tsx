@@ -13,7 +13,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
   if (!current) {
     return (
       <div className="flex aspect-3/4 items-center justify-center rounded-xl bg-muted text-muted-foreground">
-        Photo coming soon
+        ছবি শীঘ্রই আসছে
       </div>
     );
   }
@@ -24,7 +24,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
         <Image
           key={current.id}
           src={current.url}
-          alt={images.length > 1 ? `${name}, photo ${selected + 1} of ${images.length}` : name}
+          alt={images.length > 1 ? `${name}, ছবি ${selected + 1}/${images.length}` : name}
           fill
           loading="eager"
           fetchPriority="high"
@@ -39,7 +39,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
               <button
                 type="button"
                 onClick={() => setSelected(index)}
-                aria-label={`Show photo ${index + 1}`}
+                aria-label={`ছবি ${index + 1} দেখুন`}
                 aria-current={index === selected}
                 className={cn(
                   "relative block aspect-3/4 w-full overflow-hidden rounded-md bg-muted outline-none focus-visible:ring-3 focus-visible:ring-ring/50",

@@ -6,7 +6,7 @@ import { ProductForm } from "@/features/admin/products/product-form";
 import { requireAdmin } from "@/lib/auth/session";
 import { db } from "@/lib/db";
 
-export const metadata: Metadata = { title: "New product" };
+export const metadata: Metadata = { title: "নতুন পণ্য" };
 
 export default async function NewProductPage() {
   await requireAdmin();
@@ -18,17 +18,17 @@ export default async function NewProductPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="New product"
-        description="You can add photos after creating the product."
-        back={{ href: "/admin/products", label: "Products" }}
+        title="নতুন পণ্য"
+        description="পণ্য তৈরির পরে ছবি যোগ করতে পারবেন।"
+        back={{ href: "/admin/products", label: "পণ্য" }}
       />
       {categories.length === 0 ? (
         <p>
-          Create a{" "}
+          আগে একটি{" "}
           <Link href="/admin/categories/new" className="underline underline-offset-4">
-            category
+            ক্যাটাগরি
           </Link>{" "}
-          first.
+          তৈরি করুন।
         </p>
       ) : (
         <ProductForm

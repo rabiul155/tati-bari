@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export function QuantityStepper({
   value,
   onChange,
-  label = "Quantity",
+  label = "পরিমাণ",
   size = "default",
   disabled,
 }: {
@@ -25,7 +25,7 @@ export function QuantityStepper({
         type="button"
         variant="ghost"
         size={buttonSize}
-        aria-label="Decrease quantity"
+        aria-label="পরিমাণ কমান"
         disabled={disabled || value <= 1}
         onClick={() => onChange(value - 1)}
       >
@@ -41,7 +41,7 @@ export function QuantityStepper({
         type="button"
         variant="ghost"
         size={buttonSize}
-        aria-label="Increase quantity"
+        aria-label="পরিমাণ বাড়ান"
         disabled={disabled || value >= MAX_QUANTITY_PER_ITEM}
         onClick={() => onChange(value + 1)}
       >
