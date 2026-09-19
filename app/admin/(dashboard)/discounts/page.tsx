@@ -59,11 +59,11 @@ export default async function DiscountsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>ছাড়</TableHead>
-              <TableHead className="text-right">পরিমাণ</TableHead>
-              <TableHead className="text-right">সর্বনিম্ন অর্ডার</TableHead>
-              <TableHead>তারিখ</TableHead>
-              <TableHead>অবস্থা</TableHead>
-              <TableHead className="text-right">ব্যবহৃত</TableHead>
+              <TableHead className="hidden text-right md:table-cell">পরিমাণ</TableHead>
+              <TableHead className="hidden text-right md:table-cell">সর্বনিম্ন অর্ডার</TableHead>
+              <TableHead className="hidden md:table-cell">তারিখ</TableHead>
+              <TableHead className="hidden md:table-cell">অবস্থা</TableHead>
+              <TableHead className="hidden text-right md:table-cell">ব্যবহৃত</TableHead>
               <TableHead className="text-right">অ্যাকশন</TableHead>
             </TableRow>
           </TableHeader>
@@ -73,7 +73,7 @@ export default async function DiscountsPage() {
               const used = usageById.get(discount.id);
               return (
                 <TableRow key={discount.id}>
-                  <TableCell>
+                  <TableCell className="whitespace-normal">
                     <Link
                       href={`/admin/discounts/${discount.id}/edit`}
                       className="font-medium underline-offset-4 hover:underline"
@@ -83,10 +83,21 @@ export default async function DiscountsPage() {
                     {discount.description && (
                       <div className="max-w-xs truncate text-xs text-muted-foreground">{discount.description}</div>
                     )}
+                    <div className="mt-1 flex flex-col gap-1 text-xs md:hidden">
+                      <span>
+                        {formatTaka(discount.amount)} ছাড় · সর্বনিম্ন অর্ডার {formatTaka(discount.minOrderValue)}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {used ? `${used._count._all}টি অর্ডারে ব্যবহৃত` : "এখনও ব্যবহৃত হয়নি"}
+                      </span>
+                      <Badge variant={state.variant} className="w-fit">
+                        {state.label}
+                      </Badge>
+                    </div>
                   </TableCell>
-                  <TableCell className="text-right tabular-nums">{formatTaka(discount.amount)}</TableCell>
-                  <TableCell className="text-right tabular-nums">{formatTaka(discount.minOrderValue)}</TableCell>
-                  <TableCell className="text-xs whitespace-nowrap">
+                  <TableCell className="hidden text-right tabular-nums md:table-cell">{formatTaka(discount.amount)}</TableCell>
+                  <TableCell className="hidden text-right tabular-nums md:table-cell">{formatTaka(discount.minOrderValue)}</TableCell>
+                  <TableCell className="hidden text-xs whitespace-nowrap md:table-cell">
                     {discount.startsAt || discount.endsAt ? (
                       <>
                         <div>শুরু: {discount.startsAt ? formatDateTime(discount.startsAt) : "এখনই"}</div>
@@ -96,10 +107,10 @@ export default async function DiscountsPage() {
                       <span className="text-muted-foreground">শেষের তারিখ নেই</span>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="hidden md:table-cell">
                     <Badge variant={state.variant}>{state.label}</Badge>
                   </TableCell>
-                  <TableCell className="text-right text-xs whitespace-nowrap">
+                  <TableCell className="hidden text-right text-xs whitespace-nowrap md:table-cell">
                     {used ? (
                       <>
                         <div>{used._count._all}টি অর্ডার</div>
@@ -110,7 +121,7 @@ export default async function DiscountsPage() {
                     )}
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-start justify-end gap-2">
+                    <div className="flex flex-col items-stretch gap-2 md:flex-row md:items-start md:justify-end">
                       <ConfirmActionButton
                         variant="outline"
                         size="sm"

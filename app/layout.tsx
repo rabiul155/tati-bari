@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Geist, Geist_Mono, Noto_Sans_Bengali, Noto_Serif_Bengali } from "next/font/google";
 import { site, siteUrl } from "@/lib/site";
 import "./globals.css";
@@ -43,6 +43,13 @@ export const metadata: Metadata = {
     siteName: site.name,
     locale: "bn_BD",
   },
+};
+
+// viewport-fit=cover lets the bottom navigation pad for the home indicator.
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

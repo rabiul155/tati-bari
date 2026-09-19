@@ -37,7 +37,6 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
       <PageHeader
         title={`অর্ডার ${displayNumber}`}
         description={`অর্ডার করা হয়েছে ${formatDateTime(order.createdAt)} · ক্যাশ অন ডেলিভারি`}
-        back={{ href: "/admin/orders", label: "অর্ডার" }}
       >
         <OrderStatusBadge status={order.status} />
       </PageHeader>
@@ -221,7 +220,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex h-7 items-center rounded-lg border px-2.5 text-[0.8rem] font-medium hover:bg-muted"
+                    className="inline-flex h-9 items-center rounded-lg border px-3 md:h-7 md:px-2.5 text-[0.8rem] font-medium hover:bg-muted"
                   >
                     WhatsApp-এ পাঠান
                   </a>

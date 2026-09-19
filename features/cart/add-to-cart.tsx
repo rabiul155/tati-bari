@@ -57,7 +57,7 @@ export function AddToCart({ productId, available }: { productId: string; availab
         <Button
           type="button"
           size="lg"
-          className="min-w-40 px-5"
+          className="min-w-0 flex-1 px-5 sm:min-w-40 sm:flex-none"
           disabled={items === null || atLimit}
           onClick={add}
         >

@@ -19,7 +19,6 @@ export default async function EditCategoryPage({
     <div className="flex flex-col gap-6">
       <PageHeader
         title={`${category.name} সম্পাদনা`}
-        back={{ href: "/admin/categories", label: "ক্যাটাগরি" }}
       />
       <CategoryForm
         categoryId={category.id}

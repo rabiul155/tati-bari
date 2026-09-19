@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { Price } from "@/components/shop/price";
 import { ProductGallery } from "@/components/shop/product-gallery";
 import { ProductGrid } from "@/components/shop/product-card";
@@ -96,21 +96,14 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
       />
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6">
-        <nav aria-label="ব্রেডক্রাম্ব" className="text-sm text-muted-foreground">
-          <ol className="flex flex-wrap gap-1.5">
-            <li>
-              <Link href="/shop" className="underline-offset-4 hover:underline">
-                শপ
-              </Link>
-            </li>
-            <li aria-hidden>/</li>
-            <li>
-              <Link href={`/shop?category=${product.category.slug}`} className="underline-offset-4 hover:underline">
-                {product.category.name}
-              </Link>
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { label: "হোম", href: "/" },
+            { label: "শপ", href: "/shop" },
+            { label: product.category.name, href: `/shop?category=${product.category.slug}` },
+            { label: product.name },
+          ]}
+        />
 
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <ProductGallery images={product.images} name={product.name} />

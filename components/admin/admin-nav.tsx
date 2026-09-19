@@ -13,11 +13,12 @@ const LINKS = [
   { href: "/admin/discounts", label: "ছাড়" },
 ];
 
+// Desktop only; on mobile the bottom navigation is used instead.
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
-    <nav aria-label="অ্যাডমিন মেনু" className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+    <nav aria-label="অ্যাডমিন মেনু" className="hidden flex-wrap gap-x-4 gap-y-1 text-sm md:flex">
       {LINKS.map(({ href, label, exact }) => {
         const active = exact ? pathname === href : pathname.startsWith(href);
         return (

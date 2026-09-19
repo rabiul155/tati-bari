@@ -9,7 +9,7 @@ export default async function NewDiscountPage() {
   await requireAdmin();
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="নতুন ছাড়" back={{ href: "/admin/discounts", label: "ছাড়" }} />
+      <PageHeader title="নতুন ছাড়" />
       <DiscountForm
         discountId={null}
         defaultValues={{

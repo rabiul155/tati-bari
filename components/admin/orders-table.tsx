@@ -18,9 +18,9 @@ export function OrdersTable({ orders, showCustomer = true }: { orders: OrderRow[
       <TableHeader>
         <TableRow>
           <TableHead>অর্ডার</TableHead>
-          <TableHead>অর্ডার করা হয়েছে</TableHead>
-          {showCustomer && <TableHead>গ্রাহক</TableHead>}
-          <TableHead>জেলা</TableHead>
+          <TableHead className="hidden md:table-cell">অর্ডার করা হয়েছে</TableHead>
+          {showCustomer && <TableHead className="hidden md:table-cell">গ্রাহক</TableHead>}
+          <TableHead className="hidden md:table-cell">জেলা</TableHead>
           <TableHead className="text-right">সর্বমোট</TableHead>
           <TableHead>অবস্থা</TableHead>
         </TableRow>
@@ -35,15 +35,25 @@ export function OrdersTable({ orders, showCustomer = true }: { orders: OrderRow[
                   {number}
                 </Link>
                 <div className="text-xs text-muted-foreground">{order._count.items}টি পণ্য</div>
+                <div className="mt-1 text-xs whitespace-normal text-muted-foreground md:hidden">
+                  {showCustomer && (
+                    <div className="text-sm text-foreground">
+                      {order.customerName} · {order.customerPhone}
+                    </div>
+                  )}
+                  <div>
+                    {formatDateTime(order.createdAt)} · {order.deliveryDistrict}
+                  </div>
+                </div>
               </TableCell>
-              <TableCell className="whitespace-nowrap">{formatDateTime(order.createdAt)}</TableCell>
+              <TableCell className="hidden whitespace-nowrap md:table-cell">{formatDateTime(order.createdAt)}</TableCell>
               {showCustomer && (
-                <TableCell>
+                <TableCell className="hidden md:table-cell">
                   <div>{order.customerName}</div>
                   <div className="text-xs text-muted-foreground">{order.customerPhone}</div>
                 </TableCell>
               )}
-              <TableCell>{order.deliveryDistrict}</TableCell>
+              <TableCell className="hidden md:table-cell">{order.deliveryDistrict}</TableCell>
               <TableCell className="text-right font-medium tabular-nums">{formatTaka(order.total)}</TableCell>
               <TableCell>
                 <OrderStatusBadge status={order.status} />

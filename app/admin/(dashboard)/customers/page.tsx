@@ -63,10 +63,10 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
           <TableHeader>
             <TableRow>
               <TableHead>গ্রাহক</TableHead>
-              <TableHead>এলাকা</TableHead>
+              <TableHead className="hidden md:table-cell">এলাকা</TableHead>
               <TableHead className="text-right">অর্ডার</TableHead>
               <TableHead className="text-right">মোট ব্যয়</TableHead>
-              <TableHead>সর্বশেষ অর্ডার</TableHead>
+              <TableHead className="hidden md:table-cell">সর্বশেষ অর্ডার</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -82,11 +82,15 @@ export default async function CustomersPage({ searchParams }: PageProps<"/admin/
                       {customer.name}
                     </Link>
                     <div className="text-xs text-muted-foreground">{customer.phone}</div>
+                    <div className="mt-1 text-xs whitespace-normal text-muted-foreground md:hidden">
+                      {address ? `${address.area}, ${address.district}` : "—"}
+                      {customer.lastOrderAt && <> · {formatDateTime(customer.lastOrderAt)}</>}
+                    </div>
                   </TableCell>
-                  <TableCell>{address ? `${address.area}, ${address.district}` : "—"}</TableCell>
+                  <TableCell className="hidden md:table-cell">{address ? `${address.area}, ${address.district}` : "—"}</TableCell>
                   <TableCell className="text-right tabular-nums">{customer._count.orders}</TableCell>
                   <TableCell className="text-right tabular-nums">{formatTaka(customer.totalSpent)}</TableCell>
-                  <TableCell className="whitespace-nowrap">
+                  <TableCell className="hidden whitespace-nowrap md:table-cell">
                     {customer.lastOrderAt ? formatDateTime(customer.lastOrderAt) : "—"}
                   </TableCell>
                 </TableRow>

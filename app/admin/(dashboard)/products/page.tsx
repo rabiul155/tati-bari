@@ -147,15 +147,26 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
                 <span className="sr-only">ছবি</span>
               </TableHead>
               <TableHead>পণ্য</TableHead>
-              <TableHead>ক্যাটাগরি</TableHead>
+              <TableHead className="hidden md:table-cell">ক্যাটাগরি</TableHead>
               <TableHead className="text-right">দাম</TableHead>
-              <TableHead>অবস্থা</TableHead>
+              <TableHead className="hidden md:table-cell">অবস্থা</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {products.map((product) => {
               const image = product.images[0];
               const onSale = isSaleActive(product, now);
+              const badges = (
+                <div className="flex flex-wrap gap-1">
+                  {product.archivedAt && <Badge variant="secondary">আর্কাইভ করা</Badge>}
+                  {product.availability === "UNAVAILABLE" && (
+                    <Badge variant="destructive">পাওয়া যাচ্ছে না</Badge>
+                  )}
+                  {onSale && <Badge>ছাড়ে আছে</Badge>}
+                  {product.isFeatured && <Badge variant="outline">বিশেষ</Badge>}
+                  {!image && <Badge variant="outline">ছবি নেই</Badge>}
+                </div>
+              );
               return (
                 <TableRow key={product.id}>
                   <TableCell>
@@ -165,16 +176,20 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="whitespace-normal">
                     <Link
                       href={`/admin/products/${product.id}/edit`}
                       className="font-medium underline-offset-4 hover:underline"
                     >
                       {product.name}
                     </Link>
-                    <div className="text-xs text-muted-foreground">{product.code}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {product.code}
+                      <span className="md:hidden"> · {product.category.name}</span>
+                    </div>
+                    <div className="mt-1 md:hidden">{badges}</div>
                   </TableCell>
-                  <TableCell>{product.category.name}</TableCell>
+                  <TableCell className="hidden md:table-cell">{product.category.name}</TableCell>
                   <TableCell className="text-right whitespace-nowrap">
                     {onSale ? (
                       <>
@@ -187,17 +202,7 @@ export default async function ProductsPage({ searchParams }: PageProps<"/admin/p
                       formatTaka(product.regularPrice)
                     )}
                   </TableCell>
-                  <TableCell>
-                    <div className="flex flex-wrap gap-1">
-                      {product.archivedAt && <Badge variant="secondary">আর্কাইভ করা</Badge>}
-                      {product.availability === "UNAVAILABLE" && (
-                        <Badge variant="destructive">পাওয়া যাচ্ছে না</Badge>
-                      )}
-                      {onSale && <Badge>ছাড়ে আছে</Badge>}
-                      {product.isFeatured && <Badge variant="outline">বিশেষ</Badge>}
-                      {!image && <Badge variant="outline">ছবি নেই</Badge>}
-                    </div>
-                  </TableCell>
+                  <TableCell className="hidden md:table-cell">{badges}</TableCell>
                 </TableRow>
               );
             })}

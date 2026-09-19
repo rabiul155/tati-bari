@@ -50,7 +50,6 @@ export default async function EditProductPage({
       <PageHeader
         title={product.name}
         description={`কোড ${product.code}`}
-        back={{ href: "/admin/products", label: "পণ্য" }}
       >
         {archived ? (
           <Badge variant="secondary">আর্কাইভ করা</Badge>

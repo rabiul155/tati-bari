@@ -57,7 +57,7 @@ export default async function OrdersPage({ searchParams }: PageProps<"/admin/ord
                   href={href({ status: tab.value, page: 1 })}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-sm transition-colors",
+                    "inline-flex h-9 items-center gap-1.5 rounded-full md:h-8 border px-3 text-sm transition-colors",
                     active ? "border-primary bg-primary text-primary-foreground" : "hover:bg-muted",
                   )}
                 >

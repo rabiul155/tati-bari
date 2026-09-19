@@ -20,7 +20,6 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
       <PageHeader
         title={customer.name}
         description={`গ্রাহক হয়েছেন ${formatDateTime(customer.createdAt)}`}
-        back={{ href: "/admin/customers", label: "গ্রাহক" }}
       />
 
       <div className="grid gap-6 md:grid-cols-3">

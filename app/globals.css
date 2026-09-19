@@ -119,6 +119,17 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Height of the fixed bottom navigation, so pages can leave room for it.
+   The bar is mobile-only, so it is 0 from the md breakpoint up. */
+:root {
+  --bottom-nav-h: calc(4rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 48rem) {
+  :root {
+    --bottom-nav-h: 0px;
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

@@ -15,7 +15,7 @@ export default async function NewCategoryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title="নতুন ক্যাটাগরি" back={{ href: "/admin/categories", label: "ক্যাটাগরি" }} />
+      <PageHeader title="নতুন ক্যাটাগরি" />
       <CategoryForm
         categoryId={null}
         defaultValues={{

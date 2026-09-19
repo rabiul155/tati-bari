@@ -39,17 +39,22 @@ export default async function CategoriesPage() {
           <TableHeader>
             <TableRow>
               <TableHead>নাম</TableHead>
-              <TableHead>Slug</TableHead>
+              <TableHead className="hidden md:table-cell">Slug</TableHead>
               <TableHead className="text-right">পণ্য</TableHead>
-              <TableHead className="text-right">ক্রম</TableHead>
+              <TableHead className="hidden text-right md:table-cell">ক্রম</TableHead>
               <TableHead className="text-right">অ্যাকশন</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.map((category) => (
               <TableRow key={category.id}>
-                <TableCell className="font-medium">{category.name}</TableCell>
-                <TableCell className="text-muted-foreground">{category.slug}</TableCell>
+                <TableCell className="font-medium whitespace-normal">
+                  {category.name}
+                  <div className="text-xs font-normal text-muted-foreground md:hidden">
+                    {category.slug} · ক্রম {category.sortOrder}
+                  </div>
+                </TableCell>
+                <TableCell className="hidden text-muted-foreground md:table-cell">{category.slug}</TableCell>
                 <TableCell className="text-right">
                   <Link
                     href={`/admin/products?category=${category.id}&status=all`}
@@ -58,9 +63,9 @@ export default async function CategoriesPage() {
                     {category._count.products}
                   </Link>
                 </TableCell>
-                <TableCell className="text-right">{category.sortOrder}</TableCell>
+                <TableCell className="hidden text-right md:table-cell">{category.sortOrder}</TableCell>
                 <TableCell>
-                  <div className="flex items-start justify-end gap-2">
+                  <div className="flex flex-col items-stretch gap-2 md:flex-row md:items-start md:justify-end">
                     <Link
                       href={`/admin/categories/${category.id}/edit`}
                       className={buttonVariants({ variant: "outline", size: "sm" })}

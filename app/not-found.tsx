@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ShopBottomNav } from "@/components/shop/shop-bottom-nav";
 import { SiteFooter } from "@/components/shop/site-footer";
 import { SiteHeader } from "@/components/shop/site-header";
 import { buttonVariants } from "@/components/ui/button";
@@ -20,6 +21,7 @@ export default function NotFound() {
         </Link>
       </main>
       <SiteFooter />
+      <ShopBottomNav />
     </>
   );
 }

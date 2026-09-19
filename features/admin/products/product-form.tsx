@@ -175,7 +175,7 @@ export function ProductForm({
         </CheckboxField>
       </Section>
 
-      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center gap-3 border-t bg-background/95 px-4 py-3 backdrop-blur">
+      <div className="sticky bottom-(--bottom-nav-h) -mx-4 flex flex-wrap items-center gap-3 border-t bg-background/95 px-4 py-3 backdrop-blur">
         <Button type="submit" disabled={pending}>
           {pending ? "সংরক্ষণ হচ্ছে…" : productId ? "পরিবর্তন সংরক্ষণ করুন" : "পণ্য তৈরি করুন"}
         </Button>

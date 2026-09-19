@@ -9,9 +9,17 @@ const nextConfig: NextConfig = {
     },
   },
   images: {
-    // Only product photos may be optimized (local uploads or Cloudinary).
+    // Only product photos may be optimized (local uploads, Cloudinary, or the
+    // Wikimedia Commons photos used by the seed data).
     localPatterns: [{ pathname: "/uploads/**", search: "" }],
-    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "/wikipedia/commons/**",
+      },
+    ],
   },
 };
 

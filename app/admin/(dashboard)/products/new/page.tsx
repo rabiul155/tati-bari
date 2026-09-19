@@ -20,7 +20,6 @@ export default async function NewProductPage() {
       <PageHeader
         title="নতুন পণ্য"
         description="পণ্য তৈরির পরে ছবি যোগ করতে পারবেন।"
-        back={{ href: "/admin/products", label: "পণ্য" }}
       />
       {categories.length === 0 ? (
         <p>

@@ -18,7 +18,6 @@ export default async function EditDiscountPage({ params }: PageProps<"/admin/dis
       <PageHeader
         title={`${discount.name} সম্পাদনা`}
         description="পরিবর্তন শুধু নতুন অর্ডারে প্রযোজ্য হবে।"
-        back={{ href: "/admin/discounts", label: "ছাড়" }}
       />
       <DiscountForm
         discountId={discount.id}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { CheckCircle2 } from "lucide-react";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { ContactLinks } from "@/components/shop/contact-links";
 import { buttonVariants } from "@/components/ui/button";
 import { getOrderForCustomer, orderUrl } from "@/features/orders/order-access";
@@ -44,6 +45,10 @@ export default async function OrderPage(props: Props) {
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8">
+      <Breadcrumb
+        items={[{ label: "হোম", href: "/" }, { label: "আমার অর্ডার", href: "/orders" }, { label: `অর্ডার ${number}` }]}
+      />
+
       <RememberOrder
         order={{
           number,
