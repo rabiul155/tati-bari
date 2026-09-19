@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { AdminDrawer } from "@/components/admin/admin-drawer";
 import { AdminBottomNav } from "@/components/admin/admin-bottom-nav";
 import { AdminBreadcrumb } from "@/components/admin/admin-breadcrumb";
 import { AdminNav } from "@/components/admin/admin-nav";
@@ -8,7 +9,9 @@ import { requireAdmin } from "@/lib/auth/session";
 
 // Shell for signed-in admin pages. Layouts don't re-run on client
 // navigation, so each page and action must still call requireAdmin().
-export default async function AdminDashboardLayout({ children }: LayoutProps<"/admin">) {
+export default async function AdminDashboardLayout({
+  children,
+}: LayoutProps<"/admin">) {
   const admin = await requireAdmin();
 
   return (
@@ -22,12 +25,16 @@ export default async function AdminDashboardLayout({ children }: LayoutProps<"/a
             <AdminNav />
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden text-sm text-muted-foreground sm:inline">{admin.name}</span>
-            <form action={logout}>
+            <span className="hidden text-sm text-muted-foreground md:inline">
+              {admin.name}
+            </span>
+            {/* Below md, sign out lives in the drawer. */}
+            <form action={logout} className="hidden md:block">
               <Button type="submit" variant="outline" size="sm">
                 সাইন আউট
               </Button>
             </form>
+            <AdminDrawer adminName={admin.name} logoutAction={logout} />
           </div>
         </div>
       </header>

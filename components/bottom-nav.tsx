@@ -5,7 +5,7 @@ import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-// Mobile-only tab bar fixed to the bottom of the screen (max 5 items). It
+// Mobile-only tab bar fixed to the bottom of the screen. It
 // also renders a spacer so page content and footers are never covered.
 export function BottomNav({ label, children }: { label: string; children: ReactNode }) {
   return (
@@ -84,33 +84,6 @@ export function BottomNavLink({
       >
         <ItemBody icon={icon} label={label} active={active} badge={badge} />
       </Link>
-    </li>
-  );
-}
-
-export function BottomNavButton({
-  icon,
-  label,
-  active,
-  expanded,
-  onClick,
-}: {
-  icon: LucideIcon;
-  label: string;
-  active: boolean;
-  expanded: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <li className="flex-1">
-      <button
-        type="button"
-        aria-expanded={expanded}
-        onClick={onClick}
-        className={cn(itemClass, active || expanded ? "font-semibold text-primary" : "text-muted-foreground")}
-      >
-        <ItemBody icon={icon} label={label} active={active || expanded} />
-      </button>
     </li>
   );
 }

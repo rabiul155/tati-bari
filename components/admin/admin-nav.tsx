@@ -2,25 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ADMIN_LINKS, isAdminLinkActive } from "@/components/admin/admin-links";
 import { cn } from "@/lib/utils";
 
-const LINKS = [
-  { href: "/admin", label: "ড্যাশবোর্ড", exact: true },
-  { href: "/admin/orders", label: "অর্ডার" },
-  { href: "/admin/customers", label: "গ্রাহক" },
-  { href: "/admin/products", label: "পণ্য" },
-  { href: "/admin/categories", label: "ক্যাটাগরি" },
-  { href: "/admin/discounts", label: "ছাড়" },
-];
-
-// Desktop only; on mobile the bottom navigation is used instead.
+// Desktop only; on mobile the bottom navigation and the drawer are used.
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
     <nav aria-label="অ্যাডমিন মেনু" className="hidden flex-wrap gap-x-4 gap-y-1 text-sm md:flex">
-      {LINKS.map(({ href, label, exact }) => {
-        const active = exact ? pathname === href : pathname.startsWith(href);
+      {ADMIN_LINKS.map((link) => {
+        const { href, label } = link;
+        const active = isAdminLinkActive(pathname, link);
         return (
           <Link
             key={href}
