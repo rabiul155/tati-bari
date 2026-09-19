@@ -18,7 +18,7 @@ export default function MyOrdersPage() {
           <h2 className="font-heading text-2xl font-semibold">অর্ডার খুঁজুন</h2>
           <p className="text-muted-foreground">
             অন্য ডিভাইসে অর্ডার করেছেন, বা অর্ডারটি উপরে দেখাচ্ছে না? আপনি যে মোবাইল নম্বর দিয়ে অর্ডার
-            করেছেন এবং আপনার অর্ডার নম্বর দিন।
+            করেছেন সেটি দিন।
           </p>
         </div>
         <OrderLookupForm />

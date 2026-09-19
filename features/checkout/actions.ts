@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
@@ -15,7 +14,8 @@ import {
   type OrderLookupValues,
 } from "@/features/checkout/schema";
 import { createAccessKey, orderUrl } from "@/features/orders/order-access";
-import { formatOrderNumber, parseOrderNumber } from "@/features/orders/order-number";
+import { formatOrderNumber } from "@/features/orders/order-number";
+import type { OrderStatus } from "@/lib/generated/prisma/enums";
 
 export type PlaceOrderResult =
   | {
@@ -207,23 +207,36 @@ export async function placeOrder(input: {
   }
 }
 
+export type LookupOrder = {
+  number: string;
+  url: string;
+  total: number;
+  placedAt: string;
+  itemCount: number;
+  status: OrderStatus;
+};
+
 export type LookupState =
-  | { error?: string; fieldErrors?: Record<string, string[] | undefined>; values?: OrderLookupValues }
+  | {
+      error?: string;
+      fieldErrors?: Record<string, string[] | undefined>;
+      values?: OrderLookupValues;
+      orders?: LookupOrder[];
+    }
   | undefined;
 
-// "Find my order": phone number + order number -> the order page.
-export async function lookupOrder(_state: LookupState, formData: FormData): Promise<LookupState> {
-  const values = {
-    phone: String(formData.get("phone") ?? ""),
-    orderNumber: String(formData.get("orderNumber") ?? ""),
-  };
+const LOOKUP_MAX_ORDERS = 20;
+
+// "Find my orders": phone number -> the customer's recent orders.
+export async function lookupOrders(_state: LookupState, formData: FormData): Promise<LookupState> {
+  const values = { phone: String(formData.get("phone") ?? "") };
   const parsed = orderLookupSchema.safeParse(values);
   if (!parsed.success) {
     return { fieldErrors: z.flattenError(parsed.error).fieldErrors, values };
   }
 
-  // Order numbers are sequential, so guessing is throttled per IP and per
-  // phone number.
+  // A phone number is the only thing needed here, so lookups are throttled
+  // per IP and per phone number.
   const ip = await getClientIp();
   const allowed =
     (await rateLimit(`lookup:ip:${ip}`, 10, 15 * 60)) &&
@@ -232,19 +245,31 @@ export async function lookupOrder(_state: LookupState, formData: FormData): Prom
     return { error: "অনেকবার চেষ্টা করা হয়েছে। অনুগ্রহ করে ১৫ মিনিট অপেক্ষা করে আবার চেষ্টা করুন।", values };
   }
 
-  const number = parseOrderNumber(parsed.data.orderNumber);
-  const order =
-    number === null
-      ? null
-      : await db.order.findFirst({
-          where: { number, customerPhone: parsed.data.phone },
-          select: { number: true, accessKey: true },
-        });
-  if (!order) {
-    return {
-      error: "এই ফোন নম্বর ও অর্ডার নম্বর দিয়ে কোনো অর্ডার খুঁজে পাওয়া যায়নি।",
-      values,
-    };
+  const orders = await db.order.findMany({
+    where: { customerPhone: parsed.data.phone },
+    orderBy: { createdAt: "desc" },
+    take: LOOKUP_MAX_ORDERS,
+    select: {
+      number: true,
+      accessKey: true,
+      status: true,
+      total: true,
+      createdAt: true,
+      items: { select: { quantity: true } },
+    },
+  });
+  if (orders.length === 0) {
+    return { error: "এই মোবাইল নম্বর দিয়ে কোনো অর্ডার খুঁজে পাওয়া যায়নি।", values };
   }
-  redirect(orderUrl(order));
+  return {
+    values,
+    orders: orders.map((order) => ({
+      number: formatOrderNumber(order.number),
+      url: orderUrl(order),
+      total: order.total,
+      placedAt: order.createdAt.toISOString(),
+      itemCount: order.items.reduce((sum, item) => sum + item.quantity, 0),
+      status: order.status,
+    })),
+  };
 }

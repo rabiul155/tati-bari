@@ -1,6 +1,6 @@
 // Customer access to an order: the order page URL carries the order's
 // random access key, so only people with the link (or with the phone
-// number + order number, see lookupOrder) can see it.
+// number, see lookupOrders) can see it.
 import "server-only";
 import { randomBytes, timingSafeEqual } from "node:crypto";
 import { db } from "@/lib/db";

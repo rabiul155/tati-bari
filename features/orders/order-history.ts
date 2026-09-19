@@ -2,8 +2,7 @@
 
 // Orders placed from this browser, kept in localStorage so customers can
 // return to them without an account. Each entry holds the private order
-// link. If this is lost, customers can look an order up by phone number +
-// order number.
+// link. If this is lost, customers can look their orders up by phone number.
 import { useSyncExternalStore } from "react";
 import { z } from "zod";
 

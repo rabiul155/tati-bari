@@ -47,7 +47,6 @@ export type CheckoutFormValues = z.input<typeof checkoutDetailsSchema>;
 
 export const orderLookupSchema = z.object({
   phone: phoneSchema,
-  orderNumber: z.string().trim().min(1, "আপনার অর্ডার নম্বর দিন।").max(20),
 });
 
 export type OrderLookupValues = z.input<typeof orderLookupSchema>;

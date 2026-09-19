@@ -91,7 +91,7 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] `Order` + `OrderItem`s + initial `OrderStatusHistory` in one transaction
 - [x] Order page (`/orders/TS-000123?key=…`): order number, status progress, items, totals, delivery info, next steps; private link with a random key, not indexed, no referrer
 - [x] Cart cleared after a successful order; details remembered on the device (opt-out checkbox)
-- [x] "My orders" (`/orders`): orders saved on this device + lookup by **phone + order number** (decided 2026-09-17)
+- [x] "My orders" (`/orders`): orders saved on this device + lookup by **phone number only**, lists all orders for that phone (changed 2026-09-19; was phone + order number)
 - [x] Abuse protection: rate limits (checkout 10/10 min per IP, 5/hour per phone; lookup 10/15 min per IP, 10/hour per phone) and a honeypot field
 - [ ] (Optional) new-order email to admin (waiting on decision 7)
 
