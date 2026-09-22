@@ -26,6 +26,27 @@ Product photos go to Cloudinary when the `CLOUDINARY_*` variables are set. Witho
 
 `npm run db:local` prints a `postgres://…` TCP URL. Put that in `.env` as `DATABASE_URL`. To stop it later, run `npx prisma dev stop tati-bari`.
 
+## Deploying to Vercel
+
+`vercel.json` holds the build settings: `npm ci` (whose `postinstall` generates the Prisma client), then on production builds only `prisma migrate deploy` before `next build`. Preview builds skip migrations so a branch can't change the live database. Functions run in `cle1` (Cleveland), next to the Neon database in `us-east-2`.
+
+1. Import the GitHub repo in Vercel (Add New → Project). The framework is detected as Next.js; leave the build settings as they are.
+2. Under Settings → Environment Variables, add these for **Production** (and Preview, if you use preview deploys):
+
+   | Variable | Value |
+   |---|---|
+   | `DATABASE_URL` | Neon pooled URL (host contains `-pooler`) |
+   | `DIRECT_URL` | Neon direct URL (same, without `-pooler`). Used by migrations during the build. |
+   | `SESSION_SECRET` | A new random string (`openssl rand -base64 32`), not the local one |
+   | `NEXT_PUBLIC_SITE_URL` | The public site URL, e.g. `https://your-domain.com` (no trailing slash) |
+   | `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET` | Cloudinary credentials. Required: Vercel has no disk for uploads. |
+
+   Leave `ALLOW_LOCAL_UPLOADS` unset. `NEXT_PUBLIC_SITE_URL` is built into the client bundle, so redeploy after changing it.
+3. Deploy. Pushes to `main` then deploy to production automatically.
+4. After adding a custom domain, update `NEXT_PUBLIC_SITE_URL` and redeploy.
+
+Product photos saved to `.uploads/` during local development are not deployed. Re-upload those in the admin (with Cloudinary configured) before going live.
+
 ## Scripts
 
 | Script | What it does |
