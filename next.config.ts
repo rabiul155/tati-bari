@@ -14,8 +14,8 @@ const nextConfig: NextConfig = {
     // data).
     localPatterns: [
       { pathname: "/uploads/**", search: "" },
-      { pathname: "/logo.png", search: "" },
-      { pathname: "/logo-wordmark.png", search: "" },
+      { pathname: "/brand.png", search: "" },
+      { pathname: "/header-logo.png", search: "" },
     ],
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },

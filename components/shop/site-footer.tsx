@@ -8,7 +8,13 @@ export function SiteFooter() {
     <footer className="mt-16 border-t bg-muted/50">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-10 text-sm sm:grid-cols-3">
         <div className="flex flex-col gap-2">
-          <Image src="/logo.png" alt={site.name} width={960} height={698} className="h-auto w-44" />
+          <Image
+            src="/brand.png"
+            alt={site.name}
+            width={1536}
+            height={1024}
+            className="h-auto w-44 rounded-md"
+          />
           <p className="text-muted-foreground">{site.description}</p>
         </div>
         <div className="flex flex-col gap-2">

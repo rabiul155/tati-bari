@@ -10,12 +10,12 @@ export function SiteHeader() {
       <div className="mx-auto flex h-14 w-full max-w-6xl md:h-16 items-center justify-between gap-4 px-4">
         <Link href="/" className="shrink-0">
           <Image
-            src="/logo-wordmark.png"
+            src="/header-logo.png"
             alt={site.name}
-            width={520}
-            height={167}
+            width={1774}
+            height={887}
             preload
-            className="h-9 w-auto md:h-10"
+            className="h-10 w-auto md:h-16"
           />
         </Link>
         <div className="flex items-center gap-4">
