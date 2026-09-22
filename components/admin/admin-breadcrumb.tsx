@@ -9,6 +9,7 @@ const SECTIONS: Record<string, string> = {
   products: "পণ্য",
   categories: "ক্যাটাগরি",
   discounts: "ছাড়",
+  "home-videos": "হোম পেজ ভিডিও",
 };
 
 const ACTIONS: Record<string, string> = { new: "নতুন", edit: "সম্পাদনা" };

@@ -182,7 +182,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
           variant="secondary"
           className="col-span-2 sm:col-span-1"
         >
-          প্রয়োগ করুন
+          সার্চ করুন
         </Button>
         {(hasFilters || filters.sort !== "newest") && (
           <Link

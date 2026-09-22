@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Banknote, HandHeart, MessageCircle, Truck } from "lucide-react";
 import { ProductGrid } from "@/components/shop/product-card";
 import { Section } from "@/components/shop/section";
+import { YouTubeVideo } from "@/components/shop/youtube-video";
 import { buttonVariants } from "@/components/ui/button";
 import { getHomeProducts, getShopCategories } from "@/features/catalog/queries";
+import { getHomeVideos } from "@/features/home-videos/queries";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -36,10 +38,8 @@ const TRUST_POINTS = [
 ];
 
 export default async function HomePage() {
-  const [{ featured, newArrivals, onSale }, categories] = await Promise.all([
-    getHomeProducts(),
-    getShopCategories(),
-  ]);
+  const [{ featured, newArrivals, onSale }, categories, [topVideo, bottomVideo]] =
+    await Promise.all([getHomeProducts(), getShopCategories(), getHomeVideos()]);
   const heroImage = (featured[0] ?? newArrivals[0])?.images[0];
 
   return (
@@ -76,6 +76,8 @@ export default async function HomePage() {
           )}
         </div>
       </section>
+
+      <YouTubeVideo {...topVideo} />
 
       {featured.length > 0 && (
         <Section title="বিশেষ শাড়ি" link={{ href: "/shop", label: "সব দেখুন" }}>
@@ -146,6 +148,8 @@ export default async function HomePage() {
           ))}
         </ul>
       </section>
+
+      <YouTubeVideo {...bottomVideo} />
     </>
   );
 }

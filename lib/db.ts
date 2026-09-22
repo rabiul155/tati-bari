@@ -9,11 +9,21 @@ function createPrismaClient() {
 }
 
 // Reuse one client across hot reloads in development to avoid
-// exhausting database connections.
+// exhausting database connections. After `prisma generate` the client
+// class is reloaded, so a client built from the old class (which lacks any
+// new models) is replaced instead of reused.
 const globalForPrisma = globalThis as unknown as {
   prisma?: ReturnType<typeof createPrismaClient>;
+  prismaClass?: typeof PrismaClient;
 };
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
+const cached =
+  globalForPrisma.prismaClass === PrismaClient ? globalForPrisma.prisma : undefined;
+if (!cached) void globalForPrisma.prisma?.$disconnect();
 
-if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+export const db = cached ?? createPrismaClient();
+
+if (env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = db;
+  globalForPrisma.prismaClass = PrismaClient;
+}

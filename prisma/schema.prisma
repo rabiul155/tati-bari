@@ -272,6 +272,24 @@ model Discount {
   @@index([isActive])
 }
 
+// ─── Storefront content ─────────────────────────────────────────────────────
+
+// Where a YouTube video appears on the home page.
+enum HomeVideoSlot {
+  AFTER_HERO
+  BEFORE_FOOTER
+}
+
+// One row per slot, created on the first admin save. Until then the
+// defaults in features/home-videos/slots.ts are shown.
+model HomeVideo {
+  slot      HomeVideoSlot @id
+  title     String?
+  url       String
+  isVisible Boolean       @default(true)
+  updatedAt DateTime      @updatedAt
+}
+
 // ─── Abuse protection ───────────────────────────────────────────────────────
 
 // Fixed-window request counters for public actions (checkout, order
