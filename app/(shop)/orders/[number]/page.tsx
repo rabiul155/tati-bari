@@ -27,7 +27,9 @@ async function load({ params, searchParams }: Props) {
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { order } = await load(props);
   return {
-    title: order ? `অর্ডার ${formatOrderNumber(order.number)}` : "অর্ডার পাওয়া যায়নি",
+    title: order
+      ? `অর্ডার ${formatOrderNumber(order.number)}`
+      : "অর্ডার পাওয়া যায়নি",
     robots: { index: false, follow: false },
     // The URL contains the order's private key; don't pass it to other sites.
     referrer: "no-referrer",
@@ -41,12 +43,18 @@ export default async function OrderPage(props: Props) {
   const number = formatOrderNumber(order.number);
   const status = ORDER_STATUS[order.status];
   const progressIndex = ORDER_PROGRESS.indexOf(order.status);
-  const reachedAt = new Map(order.statusHistory.map((entry) => [entry.toStatus, entry.createdAt]));
+  const reachedAt = new Map(
+    order.statusHistory.map((entry) => [entry.toStatus, entry.createdAt]),
+  );
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8">
       <Breadcrumb
-        items={[{ label: "হোম", href: "/" }, { label: "আমার অর্ডার", href: "/orders" }, { label: `অর্ডার ${number}` }]}
+        items={[
+          { label: "হোম", href: "/" },
+          { label: "আমার অর্ডার", href: "/orders" },
+          { label: `অর্ডার ${number}` },
+        ]}
       />
 
       <RememberOrder
@@ -60,18 +68,26 @@ export default async function OrderPage(props: Props) {
       />
 
       {placed && (
-        <div role="status" className="flex flex-col items-center gap-3 rounded-2xl bg-secondary px-4 py-8 text-center">
+        <div
+          role="status"
+          className="flex flex-col items-center gap-3 rounded-2xl bg-secondary px-4 py-8 text-center"
+        >
           <CheckCircle2 className="size-12 text-green-700" aria-hidden />
-          <h1 className="font-heading text-3xl font-semibold">ধন্যবাদ, {order.customerName.split(" ")[0]}!</h1>
+          <h1 className="font-heading text-3xl font-semibold">
+            ধন্যবাদ, {order.customerName.split(" ")[0]}!
+          </h1>
           <p className="max-w-md text-muted-foreground">
-            আপনার অর্ডার <strong className="text-foreground">{number}</strong> সম্পন্ন হয়েছে। শাড়ি
-            পাঠানোর আগে নিশ্চিত করতে আমরা{" "}
-            <strong className="text-foreground">{order.customerPhone}</strong> নম্বরে কল করব।
+            আপনার অর্ডার <strong className="text-foreground">{number}</strong>{" "}
+            সম্পন্ন হয়েছে। শাড়ি পাঠানোর আগে নিশ্চিত করতে আমরা{" "}
+            <strong className="text-foreground">{order.customerPhone}</strong>{" "}
+            নম্বরে কল করব।
           </p>
           <p className="max-w-md text-sm text-muted-foreground">
             এই পেজটি এই ডিভাইসে{" "}
-            <Link href="/orders" className="underline underline-offset-4">আমার অর্ডার</Link> এ সংরক্ষিত
-            আছে। আপনার ফোন নম্বর ও অর্ডার নম্বর দিয়েও পরে এটি খুঁজে পেতে পারবেন।
+            <Link href="/orders" className="underline underline-offset-4">
+              আমার অর্ডার
+            </Link>{" "}
+            এ সংরক্ষিত আছে। আপনার ফোন নম্বর দিয়ে পরে এটি খুঁজে পেতে পারবেন।
           </p>
         </div>
       )}
@@ -79,11 +95,17 @@ export default async function OrderPage(props: Props) {
       <section className="flex flex-col gap-4">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           {placed ? (
-            <h2 className="font-heading text-2xl font-semibold">অর্ডার {number}</h2>
+            <h2 className="font-heading text-2xl font-semibold">
+              অর্ডার {number}
+            </h2>
           ) : (
-            <h1 className="font-heading text-3xl font-semibold">অর্ডার {number}</h1>
+            <h1 className="font-heading text-3xl font-semibold">
+              অর্ডার {number}
+            </h1>
           )}
-          <p className="text-sm text-muted-foreground">অর্ডার করা হয়েছে {formatDateTime(order.createdAt)}</p>
+          <p className="text-sm text-muted-foreground">
+            অর্ডার করা হয়েছে {formatDateTime(order.createdAt)}
+          </p>
         </div>
 
         <div className="flex flex-col gap-3 rounded-2xl border bg-card p-5">
@@ -93,8 +115,19 @@ export default async function OrderPage(props: Props) {
             <ol className="mt-2 grid grid-cols-5 gap-1 text-center text-xs">
               {ORDER_PROGRESS.map((step, index) => (
                 <li key={step} className="flex flex-col gap-1.5">
-                  <span className={cn("h-1.5 rounded-full", index <= progressIndex ? "bg-primary" : "bg-muted")} />
-                  <span className={index <= progressIndex ? "font-medium" : "text-muted-foreground"}>
+                  <span
+                    className={cn(
+                      "h-1.5 rounded-full",
+                      index <= progressIndex ? "bg-primary" : "bg-muted",
+                    )}
+                  />
+                  <span
+                    className={
+                      index <= progressIndex
+                        ? "font-medium"
+                        : "text-muted-foreground"
+                    }
+                  >
                     {ORDER_STATUS[step].label}
                   </span>
                   {reachedAt.get(step) && index <= progressIndex && (
@@ -109,7 +142,12 @@ export default async function OrderPage(props: Props) {
           {(order.courierName || order.trackingNumber) && (
             <p className="text-sm">
               কুরিয়ার: {order.courierName ?? "—"}
-              {order.trackingNumber && <> · ট্র্যাকিং নম্বর: <strong>{order.trackingNumber}</strong></>}
+              {order.trackingNumber && (
+                <>
+                  {" "}
+                  · ট্র্যাকিং নম্বর: <strong>{order.trackingNumber}</strong>
+                </>
+              )}
             </p>
           )}
         </div>
@@ -124,26 +162,41 @@ export default async function OrderPage(props: Props) {
               <li key={item.id} className="flex gap-4 p-4">
                 <div className="relative aspect-3/4 w-16 shrink-0 overflow-hidden rounded-md bg-muted">
                   {item.productImageUrl && (
-                    <Image src={item.productImageUrl} alt="" fill sizes="64px" className="object-cover" />
+                    <Image
+                      src={item.productImageUrl}
+                      alt=""
+                      fill
+                      sizes="64px"
+                      className="object-cover"
+                    />
                   )}
                 </div>
                 <div className="min-w-0 flex-1 text-sm">
                   {linkable ? (
-                    <Link href={`/products/${item.product.slug}`} className="font-medium underline-offset-4 hover:underline">
+                    <Link
+                      href={`/products/${item.product.slug}`}
+                      className="font-medium underline-offset-4 hover:underline"
+                    >
                       {item.productName}
                     </Link>
                   ) : (
                     <p className="font-medium">{item.productName}</p>
                   )}
-                  <p className="text-muted-foreground">কোড: {item.productCode}</p>
+                  <p className="text-muted-foreground">
+                    কোড: {item.productCode}
+                  </p>
                   <p className="text-muted-foreground">
                     {item.quantity} × {formatTaka(item.finalUnitPrice)}
                     {item.unitDiscount > 0 && (
-                      <span className="ml-1 line-through">{formatTaka(item.unitPrice)}</span>
+                      <span className="ml-1 line-through">
+                        {formatTaka(item.unitPrice)}
+                      </span>
                     )}
                   </p>
                 </div>
-                <p className="font-medium tabular-nums">{formatTaka(item.lineTotal)}</p>
+                <p className="font-medium tabular-nums">
+                  {formatTaka(item.lineTotal)}
+                </p>
               </li>
             );
           })}
@@ -156,7 +209,9 @@ export default async function OrderPage(props: Props) {
           {order.discountAmount > 0 && (
             <div className="flex justify-between gap-4 text-primary">
               <dt>{order.discountName ?? "ছাড়"}</dt>
-              <dd className="tabular-nums">−{formatTaka(order.discountAmount)}</dd>
+              <dd className="tabular-nums">
+                −{formatTaka(order.discountAmount)}
+              </dd>
             </div>
           )}
           <div className="flex justify-between gap-4">
@@ -172,7 +227,9 @@ export default async function OrderPage(props: Props) {
 
       <section className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1 rounded-2xl border bg-card p-5 text-sm">
-          <h2 className="mb-1 font-heading text-lg font-semibold">ডেলিভারি ঠিকানা</h2>
+          <h2 className="mb-1 font-heading text-lg font-semibold">
+            ডেলিভারি ঠিকানা
+          </h2>
           <p className="font-medium">{order.customerName}</p>
           <p>{order.customerPhone}</p>
           <p className="whitespace-pre-line">{order.deliveryAddress}</p>
@@ -180,10 +237,16 @@ export default async function OrderPage(props: Props) {
             {order.deliveryArea}, {order.deliveryDistrict}
             {order.deliveryPostalCode && ` ${order.deliveryPostalCode}`}
           </p>
-          {order.customerNote && <p className="mt-2 text-muted-foreground">নোট: {order.customerNote}</p>}
+          {order.customerNote && (
+            <p className="mt-2 text-muted-foreground">
+              নোট: {order.customerNote}
+            </p>
+          )}
         </div>
         <div className="flex flex-col gap-2 rounded-2xl border bg-card p-5 text-sm">
-          <h2 className="mb-1 font-heading text-lg font-semibold">এরপর কী হবে</h2>
+          <h2 className="mb-1 font-heading text-lg font-semibold">
+            এরপর কী হবে
+          </h2>
           <ol className="list-decimal space-y-1 pl-4 text-muted-foreground">
             <li>আমরা অর্ডার নিশ্চিত করতে আপনাকে কল করব।</li>
             <li>আপনার শাড়ি প্যাক করে কুরিয়ারে পাঠানো হবে।</li>
@@ -194,7 +257,10 @@ export default async function OrderPage(props: Props) {
         </div>
       </section>
 
-      <Link href="/shop" className={buttonVariants({ variant: "outline", className: "w-fit" })}>
+      <Link
+        href="/shop"
+        className={buttonVariants({ variant: "outline", className: "w-fit" })}
+      >
         কেনাকাটা চালিয়ে যান
       </Link>
     </div>

@@ -1,13 +1,13 @@
-// Store details shown across the site. Brand name and logo are final; the
-// contact details are still placeholders (docs/PLAN.md, decision 6). Empty
-// contact fields are hidden.
+// Store details shown across the site. Brand name, logo and phone are
+// final; the other contact details are still placeholders (docs/PLAN.md,
+// decision 6). Empty contact fields are hidden.
 export const site = {
   name: "তাঁতীবাড়ি",
   tagline: "টাঙ্গাইলের হ্যান্ডলুম শাড়ি",
   description:
     "তাঁতিদের কাছ থেকে সরাসরি সংগ্রহ করা হাতে বোনা টাঙ্গাইল শাড়ি, ক্যাশ অন ডেলিভারিতে সারা বাংলাদেশে পৌঁছে দেওয়া হয়।",
   // Mobile number shown to customers, e.g. "01712345678".
-  phone: "",
+  phone: "01883727155",
   // WhatsApp number in international format without "+", e.g. "8801712345678".
   whatsapp: "",
   email: "",

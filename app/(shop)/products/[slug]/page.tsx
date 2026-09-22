@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { cache } from "react";
+import { Phone } from "lucide-react";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Price } from "@/components/shop/price";
 import { ProductGallery } from "@/components/shop/product-gallery";
@@ -128,6 +129,19 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
             <p className="text-sm text-muted-foreground">
               সারা বাংলাদেশে ক্যাশ অন ডেলিভারি। ডেলিভারি চার্জ চেকআউটে দেখানো হবে।
             </p>
+
+            {site.phone && (
+              <a
+                href={`tel:${site.phone}`}
+                className="flex items-center gap-3 rounded-lg border bg-card px-4 py-3 text-sm transition-colors hover:bg-muted"
+              >
+                <Phone className="size-5 shrink-0 text-primary" aria-hidden />
+                <span>
+                  বিস্তারিত জানতে কল করুন{" "}
+                  <span className="font-semibold whitespace-nowrap">{site.phone}</span>
+                </span>
+              </a>
+            )}
 
             {product.description && (
               <section className="flex flex-col gap-2">
