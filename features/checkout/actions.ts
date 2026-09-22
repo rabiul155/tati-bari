@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { db } from "@/lib/db";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { getClientIp, rateLimit } from "@/lib/rate-limit";
 import { cartItemsSchema, type CartItem } from "@/features/cart/cart-schema";
 import { quoteCart } from "@/features/cart/quote";
@@ -32,6 +33,16 @@ export type PlaceOrderResult =
     };
 
 class CartChangedError extends Error {}
+
+const TRX_USED_MESSAGE = "এই ট্রানজেকশন আইডি দিয়ে আগেই একটি অর্ডার করা হয়েছে। নতুন অর্ডারের জন্য আলাদা পেমেন্টের আইডি দিন।";
+
+function isTrxIdTaken(error: unknown) {
+  return (
+    error instanceof Prisma.PrismaClientKnownRequestError &&
+    error.code === "P2002" &&
+    JSON.stringify(error.meta ?? {}).includes("deliveryPaymentTrxId")
+  );
+}
 
 export async function placeOrder(input: {
   details: CheckoutFormValues;
@@ -76,6 +87,14 @@ export async function placeOrder(input: {
       reason: "rate-limited",
       message: "অল্প সময়ে অনেক বেশি অর্ডার হয়েছে। কিছুক্ষণ অপেক্ষা করুন, অথবা অর্ডার করতে আমাদের সাথে যোগাযোগ করুন।",
     };
+  }
+
+  const trxTaken = await db.order.findUnique({
+    where: { deliveryPaymentTrxId: details.trxId },
+    select: { id: true },
+  });
+  if (trxTaken) {
+    return { ok: false, reason: "invalid", message: TRX_USED_MESSAGE, fieldErrors: { trxId: [TRX_USED_MESSAGE] } };
   }
 
   try {
@@ -163,6 +182,7 @@ export async function placeOrder(input: {
           discountAmount,
           deliveryCharge,
           total,
+          deliveryPaymentTrxId: details.trxId,
           items: {
             create: quote.lines.map((line) => ({
               productId: line.productId,
@@ -197,6 +217,10 @@ export async function placeOrder(input: {
   } catch (error) {
     if (error instanceof CartChangedError) {
       return { ok: false, reason: "cart", message: error.message };
+    }
+    // Two orders sent at once with the same ID.
+    if (isTrxIdTaken(error)) {
+      return { ok: false, reason: "invalid", message: TRX_USED_MESSAGE, fieldErrors: { trxId: [TRX_USED_MESSAGE] } };
     }
     console.error("placeOrder failed", error);
     return {

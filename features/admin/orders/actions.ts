@@ -95,6 +95,20 @@ export async function updateOrderStatus(input: {
   return { ok: true };
 }
 
+// Marks the advance delivery charge as received (after checking the
+// transaction ID in the wallet), or undoes that.
+export async function setDeliveryPaymentVerified(orderId: string, verified: boolean): Promise<ActionResult> {
+  await requireAdmin();
+  const { count } = await db.order.updateMany({
+    where: { id: orderId },
+    data: { deliveryPaymentVerifiedAt: verified ? new Date() : null },
+  });
+  if (count === 0) return { ok: false, error: "এই অর্ডারটি আর নেই।" };
+
+  revalidatePath("/admin", "layout");
+  return { ok: true };
+}
+
 const shippingSchema = z.object({
   courierName: z.string().trim().max(80).transform((value) => value || null),
   trackingNumber: z.string().trim().max(80).transform((value) => value || null),

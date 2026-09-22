@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { CopyButton } from "@/components/admin/copy-button";
 import { FormError, FormField } from "@/components/form-field";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +17,11 @@ import { useCartQuote } from "@/features/cart/use-cart-quote";
 import { placeOrder } from "@/features/checkout/actions";
 import { getDeliveryCharge } from "@/features/checkout/delivery";
 import { DISTRICTS } from "@/features/checkout/districts";
-import { forgetDetails, loadSavedDetails, saveDetails } from "@/features/checkout/saved-details";
+import { loadSavedDetails, saveDetails } from "@/features/checkout/saved-details";
 import { checkoutDetailsSchema, type CheckoutFormValues } from "@/features/checkout/schema";
 import { saveOrder } from "@/features/orders/order-history";
 import { formatTaka } from "@/lib/format";
+import { site } from "@/lib/site";
 
 const EMPTY_VALUES: CheckoutFormValues = {
   name: "",
@@ -29,6 +31,7 @@ const EMPTY_VALUES: CheckoutFormValues = {
   address: "",
   postalCode: "",
   note: "",
+  trxId: "",
   website: "",
 };
 
@@ -39,7 +42,6 @@ export function CheckoutView() {
   const [pending, startTransition] = useTransition();
   const [formError, setFormError] = useState<string>();
   const [redirecting, setRedirecting] = useState(false);
-  const [remember, setRemember] = useState(true);
 
   const form = useForm<CheckoutFormValues, unknown, unknown>({
     resolver: zodResolver(checkoutDetailsSchema),
@@ -103,8 +105,7 @@ export function CheckoutView() {
       const result = await placeOrder({ details, items: orderItems, expectedTotal: total });
       if (result.ok) {
         saveOrder(result.order);
-        if (remember) saveDetails(details);
-        else forgetDetails();
+        saveDetails(details);
         setRedirecting(true);
         cart.clear();
         router.replace(`${result.order.url}&placed=1`);
@@ -166,25 +167,52 @@ export function CheckoutView() {
             <label htmlFor="website">Website</label>
             <input id="website" tabIndex={-1} autoComplete="off" {...register("website")} />
           </div>
-          <label className="flex items-center gap-2 text-sm">
-            <input
-              type="checkbox"
-              checked={remember}
-              onChange={(event) => setRemember(event.target.checked)}
-              className="size-4 accent-primary"
-            />
-            পরবর্তী সময়ের জন্য এই ডিভাইসে আমার তথ্য মনে রাখুন
-          </label>
         </fieldset>
 
-        <section className="flex flex-col gap-1 rounded-2xl border bg-card p-5">
-          <h2 className="font-heading text-xl font-semibold">পেমেন্ট</h2>
-          <p className="font-medium">ক্যাশ অন ডেলিভারি</p>
-          <p className="text-sm text-muted-foreground">
-            অর্ডার হাতে পেয়ে কুরিয়ারকে দাম পরিশোধ করুন। পাঠানোর আগে আমরা আপনাকে কল করে অর্ডার
-            নিশ্চিত করব।
+        <fieldset className="flex flex-col gap-4 rounded-2xl border bg-card p-5">
+          <legend className="px-1 font-heading text-xl font-semibold">পেমেন্ট</legend>
+          <div className="flex flex-col gap-3 rounded-lg bg-secondary p-4 text-sm">
+            <p>
+              অর্ডার করার আগে ডেলিভারি চার্জ{" "}
+              <strong>{deliveryCharge === null ? "(জেলা নির্বাচন করুন)" : formatTaka(deliveryCharge)}</strong>{" "}
+              অগ্রিম পাঠান। {site.deliveryPayment.wallets} থেকে নিচের নম্বরে <strong>সেন্ড মানি</strong> করুন:
+            </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="font-heading text-2xl font-semibold tracking-wide tabular-nums">
+                {site.deliveryPayment.number}
+              </span>
+              <CopyButton value={site.deliveryPayment.number} label="নম্বর কপি করুন" />
+            </div>
+            <p className="text-muted-foreground">
+              শাড়ির বাকি দাম{total !== null && deliveryCharge !== null && ` (${formatTaka(total - deliveryCharge)})`} অর্ডার
+              হাতে পেয়ে কুরিয়ারকে ক্যাশে দেবেন।
+            </p>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <FormField
+              id="trxId"
+              label="ট্রানজেকশন আইডি"
+              hint="টাকা পাঠানোর পর SMS বা অ্যাপে পাওয়া TrxID লিখুন।"
+              error={error("trxId")}
+            >
+              <Input
+                {...field("trxId")}
+                autoComplete="off"
+                autoCapitalize="characters"
+                spellCheck={false}
+                placeholder="যেমন: 9ABC1DEF2G"
+                {...register("trxId")}
+              />
+            </FormField>
+            {/* Screenshot upload: the transaction ID will be read from the image. Not built yet. */}
+            <FormField id="trxScreenshot" label="অথবা স্ক্রিনশট আপলোড করুন" hint="শীঘ্রই আসছে। আপাতত ট্রানজেকশন আইডি লিখুন।">
+              <Input id="trxScreenshot" type="file" accept="image/*" disabled aria-describedby="trxScreenshot-message" />
+            </FormField>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            আমরা পেমেন্ট মিলিয়ে দেখে ও আপনাকে কল করে অর্ডার নিশ্চিত করব।
           </p>
-        </section>
+        </fieldset>
       </div>
 
       <aside aria-label="অর্ডার সারাংশ" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
@@ -244,6 +272,18 @@ export function CheckoutView() {
             <dt>সর্বমোট</dt>
             <dd className="tabular-nums">{total === null ? "—" : formatTaka(total)}</dd>
           </div>
+          {total !== null && deliveryCharge !== null && (
+            <>
+              <div className="flex justify-between gap-4 text-muted-foreground">
+                <dt>এখন অগ্রিম (ডেলিভারি চার্জ)</dt>
+                <dd className="tabular-nums">{formatTaka(deliveryCharge)}</dd>
+              </div>
+              <div className="flex justify-between gap-4 text-muted-foreground">
+                <dt>ডেলিভারিতে ক্যাশে</dt>
+                <dd className="tabular-nums">{formatTaka(total - deliveryCharge)}</dd>
+              </div>
+            </>
+          )}
         </dl>
 
         {quoteIsCurrent && quote.nextDiscount && (

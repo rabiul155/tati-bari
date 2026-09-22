@@ -127,7 +127,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
             <AddToCart productId={product.id} available={available} />
 
             <p className="text-sm text-muted-foreground">
-              সারা বাংলাদেশে ক্যাশ অন ডেলিভারি। ডেলিভারি চার্জ চেকআউটে দেখানো হবে।
+              সারা বাংলাদেশে ক্যাশ অন ডেলিভারি। শুধু ডেলিভারি চার্জ অর্ডারের সময় অগ্রিম দিতে হবে।
             </p>
 
             {site.phone && (

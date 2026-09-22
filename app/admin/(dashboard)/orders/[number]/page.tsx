@@ -7,6 +7,7 @@ import { OrderStatusBadge } from "@/components/admin/order-status-badge";
 import { PageHeader } from "@/components/admin/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DeliveryPaymentPanel } from "@/features/admin/orders/delivery-payment-panel";
 import { getAdminOrder } from "@/features/admin/orders/queries";
 import { ShippingForm } from "@/features/admin/orders/shipping-form";
 import { StatusPanel } from "@/features/admin/orders/status-panel";
@@ -36,7 +37,7 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
     <div className="flex flex-col gap-6">
       <PageHeader
         title={`অর্ডার ${displayNumber}`}
-        description={`অর্ডার করা হয়েছে ${formatDateTime(order.createdAt)} · ক্যাশ অন ডেলিভারি`}
+        description={`অর্ডার করা হয়েছে ${formatDateTime(order.createdAt)} · ডেলিভারি চার্জ অগ্রিম, বাকি ক্যাশ অন ডেলিভারি`}
       >
         <OrderStatusBadge status={order.status} />
       </PageHeader>
@@ -99,9 +100,17 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                   <dt>ডেলিভারি ({order.deliveryDistrict})</dt>
                   <dd className="tabular-nums">{formatTaka(order.deliveryCharge)}</dd>
                 </div>
+                <div className="flex justify-between gap-4 border-t pt-2">
+                  <dt>সর্বমোট</dt>
+                  <dd className="tabular-nums">{formatTaka(order.total)}</dd>
+                </div>
+                <div className="flex justify-between gap-4 text-muted-foreground">
+                  <dt>অগ্রিম (ডেলিভারি চার্জ)</dt>
+                  <dd className="tabular-nums">−{formatTaka(order.deliveryCharge)}</dd>
+                </div>
                 <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
                   <dt>ডেলিভারিতে আদায় করতে হবে</dt>
-                  <dd className="tabular-nums">{formatTaka(order.total)}</dd>
+                  <dd className="tabular-nums">{formatTaka(order.total - order.deliveryCharge)}</dd>
                 </div>
               </dl>
             </CardContent>
@@ -152,6 +161,20 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
         </div>
 
         <div className="flex flex-col gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>ডেলিভারি চার্জ পেমেন্ট</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <DeliveryPaymentPanel
+                orderId={order.id}
+                trxId={order.deliveryPaymentTrxId}
+                amount={order.deliveryCharge}
+                verifiedAt={order.deliveryPaymentVerifiedAt}
+              />
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle>অবস্থা আপডেট করুন</CardTitle>

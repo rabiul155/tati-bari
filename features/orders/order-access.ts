@@ -44,6 +44,8 @@ export async function getOrderForCustomer(orderNumber: string, key: string | und
       discountAmount: true,
       deliveryCharge: true,
       total: true,
+      deliveryPaymentTrxId: true,
+      deliveryPaymentVerifiedAt: true,
       courierName: true,
       trackingNumber: true,
       items: {

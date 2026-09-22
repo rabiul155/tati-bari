@@ -31,11 +31,3 @@ export function saveDetails(values: CheckoutFormValues) {
     // Storage unavailable; nothing to remember.
   }
 }
-
-export function forgetDetails() {
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // Ignore.
-  }
-}

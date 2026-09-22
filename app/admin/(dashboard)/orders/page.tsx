@@ -104,7 +104,7 @@ export default async function OrdersPage({
           name="q"
           type="search"
           defaultValue={query}
-          placeholder="অর্ডার নম্বর, ফোন নম্বর বা নাম"
+          placeholder="অর্ডার নম্বর, ফোন, TrxID বা নাম"
           aria-label="অর্ডার খুঁজুন"
           className="w-full sm:w-72"
         />

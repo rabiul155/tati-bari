@@ -218,9 +218,23 @@ export default async function OrderPage(props: Props) {
             <dt>ডেলিভারি</dt>
             <dd className="tabular-nums">{formatTaka(order.deliveryCharge)}</dd>
           </div>
-          <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
-            <dt>সর্বমোট (ক্যাশ অন ডেলিভারি)</dt>
+          <div className="flex justify-between gap-4 border-t pt-2">
+            <dt>সর্বমোট</dt>
             <dd className="tabular-nums">{formatTaka(order.total)}</dd>
+          </div>
+          <div className="flex justify-between gap-4 text-muted-foreground">
+            <dt>
+              অগ্রিম পরিশোধিত (ডেলিভারি চার্জ)
+              <span className="block text-xs">
+                TrxID {order.deliveryPaymentTrxId} ·{" "}
+                {order.deliveryPaymentVerifiedAt ? "যাচাই করা হয়েছে" : "যাচাই করা হচ্ছে"}
+              </span>
+            </dt>
+            <dd className="tabular-nums">−{formatTaka(order.deliveryCharge)}</dd>
+          </div>
+          <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
+            <dt>ডেলিভারিতে ক্যাশে</dt>
+            <dd className="tabular-nums">{formatTaka(order.total - order.deliveryCharge)}</dd>
           </div>
         </dl>
       </section>
@@ -248,9 +262,9 @@ export default async function OrderPage(props: Props) {
             এরপর কী হবে
           </h2>
           <ol className="list-decimal space-y-1 pl-4 text-muted-foreground">
-            <li>আমরা অর্ডার নিশ্চিত করতে আপনাকে কল করব।</li>
+            <li>আমরা আপনার ডেলিভারি চার্জের পেমেন্ট মিলিয়ে দেখে অর্ডার নিশ্চিত করতে কল করব।</li>
             <li>আপনার শাড়ি প্যাক করে কুরিয়ারে পাঠানো হবে।</li>
-            <li>ডেলিভারিতে ক্যাশে {formatTaka(order.total)} পরিশোধ করবেন।</li>
+            <li>ডেলিভারিতে ক্যাশে {formatTaka(order.total - order.deliveryCharge)} পরিশোধ করবেন।</li>
           </ol>
           <p className="mt-2 font-medium">প্রশ্ন আছে? যোগাযোগ করুন:</p>
           <ContactLinks className="flex flex-col gap-1" />

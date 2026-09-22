@@ -10,6 +10,7 @@ import { QuantityStepper } from "@/features/cart/quantity-stepper";
 import { useCartQuote } from "@/features/cart/use-cart-quote";
 import { DELIVERY_CHARGES } from "@/features/checkout/delivery";
 import { formatTaka } from "@/lib/format";
+import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function CartView() {
@@ -139,8 +140,8 @@ export function CartView() {
           </p>
         )}
         <p className="text-xs text-muted-foreground">
-          অর্ডার হাতে পেয়ে ক্যাশে দাম পরিশোধ করুন। ডেলিভারি চার্জ চেকআউটে আপনার জেলা অনুযায়ী নির্ধারিত
-          হবে।
+          ডেলিভারি চার্জ অর্ডারের সময় {site.deliveryPayment.wallets}-এ অগ্রিম দিতে হবে (জেলা অনুযায়ী)। শাড়ির দাম অর্ডার হাতে পেয়ে
+          ক্যাশে পরিশোধ করুন।
         </p>
         {unavailable.length > 0 || loading ? (
           <Button type="button" size="lg" disabled>

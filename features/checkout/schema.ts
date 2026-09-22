@@ -39,6 +39,17 @@ export const checkoutDetailsSchema = z.object({
     .regex(/^(\d{4})?$/, "পোস্টাল কোড ৪ সংখ্যার হয়।")
     .transform((value) => value || null),
   note: optionalText(500),
+  // Transaction ID of the delivery charge payment, e.g. bKash "9ABC1DEF2G".
+  // Spaces and dashes people copy along with it are dropped.
+  trxId: z
+    .string()
+    .transform((value) => value.replace(/[\s-]/g, "").toUpperCase())
+    .pipe(
+      z
+        .string()
+        .min(1, "ডেলিভারি চার্জ পাঠানোর ট্রানজেকশন আইডি দিন।")
+        .regex(/^[A-Z0-9]{6,20}$/, "সঠিক ট্রানজেকশন আইডি দিন, যেমন 9ABC1DEF2G।"),
+    ),
   // Honeypot: hidden from people, filled in by some bots.
   website: z.string().max(200).optional(),
 });

@@ -16,6 +16,12 @@ export const site = {
   address: "টাঙ্গাইল, বাংলাদেশ",
   // Prefix for order numbers, e.g. "TS-000123".
   orderPrefix: "TS",
+  // Where customers send the delivery charge before ordering
+  // (features/checkout). Personal mobile banking number, "Send Money".
+  deliveryPayment: {
+    number: "01883727155",
+    wallets: "বিকাশ / নগদ",
+  },
 } as const;
 
 export function siteUrl(): string {

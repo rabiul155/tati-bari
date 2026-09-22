@@ -57,6 +57,9 @@ export function OrdersTable({ orders, showCustomer = true }: { orders: OrderRow[
               <TableCell className="text-right font-medium tabular-nums">{formatTaka(order.total)}</TableCell>
               <TableCell>
                 <OrderStatusBadge status={order.status} />
+                {!order.deliveryPaymentVerifiedAt && (
+                  <div className="mt-1 text-xs text-destructive">পেমেন্ট যাচাই বাকি</div>
+                )}
               </TableCell>
             </TableRow>
           );

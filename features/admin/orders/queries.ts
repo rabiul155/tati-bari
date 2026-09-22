@@ -20,16 +20,18 @@ const orderRowSelect = {
   customerPhone: true,
   deliveryDistrict: true,
   total: true,
+  deliveryPaymentVerifiedAt: true,
   _count: { select: { items: true } },
 } satisfies Prisma.OrderSelect;
 
 export type OrderRow = Prisma.OrderGetPayload<{ select: typeof orderRowSelect }>;
 
 // Matches an order number ("TS-000012", "12"), a phone number (full or
-// partial digits) or a customer name.
+// partial digits), a payment transaction ID or a customer name.
 function orderSearchWhere(query: string): Prisma.OrderWhereInput {
   const or: Prisma.OrderWhereInput[] = [
     { customerName: { contains: query, mode: "insensitive" } },
+    { deliveryPaymentTrxId: query.replace(/[s-]/g, "").toUpperCase() },
   ];
   const number = parseOrderNumber(query);
   if (number !== null) or.push({ number });
