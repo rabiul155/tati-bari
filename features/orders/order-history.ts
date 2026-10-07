@@ -55,7 +55,22 @@ export function useSavedOrders(): SavedOrder[] | null {
 }
 
 export function saveOrder(order: SavedOrder) {
-  const next = [order, ...read().filter((entry) => entry.number !== order.number)].slice(0, MAX_ENTRIES);
+  saveOrders([order]);
+}
+
+// Adds or refreshes orders (e.g. from a phone number lookup), newest first.
+export function saveOrders(orders: SavedOrder[]) {
+  const incoming = orders.map(({ number, url, total, itemCount, placedAt }) => ({
+    number,
+    url,
+    total,
+    itemCount,
+    placedAt,
+  }));
+  const numbers = new Set(incoming.map((order) => order.number));
+  const next = [...incoming, ...read().filter((entry) => !numbers.has(entry.number))]
+    .sort((a, b) => b.placedAt.localeCompare(a.placedAt))
+    .slice(0, MAX_ENTRIES);
   snapshot = next;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next));

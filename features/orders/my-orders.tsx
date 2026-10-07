@@ -5,9 +5,8 @@ import { useActionState } from "react";
 import { FormField } from "@/components/form-field";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { lookupOrders, type LookupOrder } from "@/features/checkout/actions";
-import { useSavedOrders } from "@/features/orders/order-history";
-import { ORDER_STATUS } from "@/features/orders/status";
+import { lookupOrders, type LookupState } from "@/features/checkout/actions";
+import { saveOrders, useSavedOrders } from "@/features/orders/order-history";
 import { formatDateTime, formatTaka } from "@/lib/format";
 
 export function SavedOrderList() {
@@ -55,73 +54,55 @@ export function SavedOrderList() {
 }
 
 export function OrderLookupForm() {
-  const [state, action, pending] = useActionState(lookupOrders, undefined);
+  // Found orders join this browser's list under "আমার অর্ডার".
+  const [state, action, pending] = useActionState(
+    async (previous: LookupState, formData: FormData) => {
+      const result = await lookupOrders(previous, formData);
+      if (result?.orders) saveOrders(result.orders);
+      return result;
+    },
+    undefined,
+  );
   const phoneError = state?.fieldErrors?.phone?.[0];
 
   return (
     <div className="flex flex-col gap-6">
       <form
         action={action}
-        className="flex  items-end gap-4 rounded-2xl border bg-card p-5"
+        className="flex flex-col gap-3 rounded-2xl border bg-card p-5"
         noValidate
       >
-        <FormField
-          className="flex-1"
-          id="lookup-phone"
-          label="মোবাইল নম্বর"
-          error={phoneError}
-        >
-          <Input
-            id="lookup-phone"
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            placeholder="01XXXXXXXXX"
-            defaultValue={state?.values?.phone}
-            aria-invalid={!!phoneError}
-            aria-describedby="lookup-phone-message"
-            required
-          />
+        <FormField id="lookup-phone" label="মোবাইল নম্বর" error={phoneError}>
+          <div className="flex gap-3">
+            <Input
+              id="lookup-phone"
+              name="phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              placeholder="01XXXXXXXXX"
+              defaultValue={state?.values?.phone}
+              aria-invalid={!!phoneError}
+              aria-describedby="lookup-phone-message"
+              required
+              className="h-8 flex-1"
+            />
+            <Button type="submit" className="h-8 px-4" disabled={pending}>
+              {pending ? "খোঁজা হচ্ছে…" : "অর্ডার খুঁজুন"}
+            </Button>
+          </div>
         </FormField>
         {state?.error && (
           <p role="alert" className="text-sm text-destructive">
             {state.error}
           </p>
         )}
-        <Button type="submit" className="w-fit" disabled={pending}>
-          {pending ? "খোঁজা হচ্ছে…" : "অর্ডার খুঁজুন"}
-        </Button>
+        {state?.orders && (
+          <p role="status" className="text-sm text-primary">
+            {state.orders.length}টি অর্ডার পাওয়া গেছে, উপরে &ldquo;আমার অর্ডার&rdquo; তালিকায় যোগ করা হয়েছে।
+          </p>
+        )}
       </form>
-      {state?.orders && <OrderResults orders={state.orders} />}
     </div>
-  );
-}
-
-function OrderResults({ orders }: { orders: LookupOrder[] }) {
-  return (
-    <ul className="divide-y rounded-2xl border bg-card">
-      {orders.map((order) => (
-        <li key={order.number}>
-          <Link
-            href={order.url}
-            className="flex flex-wrap items-center justify-between gap-2 p-4 transition-colors hover:bg-muted/50"
-          >
-            <div>
-              <p className="font-medium">
-                অর্ডার {order.number} · {ORDER_STATUS[order.status].label}
-              </p>
-              <p className="text-sm text-muted-foreground">
-                {formatDateTime(new Date(order.placedAt))} · {order.itemCount}টি
-                পণ্য
-              </p>
-            </div>
-            <span className="font-medium tabular-nums">
-              {formatTaka(order.total)} →
-            </span>
-          </Link>
-        </li>
-      ))}
-    </ul>
   );
 }
