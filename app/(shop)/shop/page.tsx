@@ -128,7 +128,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
 
       <form
         method="get"
-        className="grid grid-cols-2 gap-3 rounded-lg border bg-card p-3 sm:flex sm:flex-wrap sm:items-end"
+        className="grid grid-cols-2 gap-2 rounded-lg border bg-card p-3 sm:flex sm:flex-wrap sm:items-end"
       >
         {filters.categorySlug && (
           <input type="hidden" name="category" value={filters.categorySlug} />
@@ -157,7 +157,7 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
             className="sm:w-28"
           />
         </div>
-        <div className="col-span-2 flex flex-col gap-1.5 sm:col-span-1">
+        <div className=" flex flex-col gap-1.5">
           <Label htmlFor="sort">সাজান</Label>
           <NativeSelect id="sort" name="sort" defaultValue={filters.sort}>
             {Object.entries(SHOP_SORTS).map(([value, label]) => (
@@ -167,16 +167,18 @@ export default async function ShopPage({ searchParams }: PageProps<"/shop">) {
             ))}
           </NativeSelect>
         </div>
-        <label className="col-span-2 flex h-10 items-center gap-2 text-sm sm:col-span-1 md:h-8">
-          <input
-            type="checkbox"
-            name="instock"
-            value="1"
-            defaultChecked={filters.inStockOnly}
-            className="size-4 accent-primary"
-          />
-          শুধু স্টকে আছে
-        </label>
+        <div className="flex h-8 items-center gap-2 self-end text-sm">
+          <label className="flex h-8 items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="instock"
+              value="1"
+              defaultChecked={filters.inStockOnly}
+              className="size-4 accent-primary"
+            />
+            শুধু স্টকে আছে
+          </label>
+        </div>
         <Button
           type="submit"
           variant="secondary"

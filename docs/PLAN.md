@@ -17,7 +17,7 @@ Stack: Next.js 16.3 (App Router) + React 19 + TypeScript, Tailwind CSS 4, shadcn
 |---|---|---|---|
 | 1 | Database host | Neon (free Postgres) | |
 | 2 | Image storage | Cloudinary (automatic resizing) | Cloudinary assumed; code supports it, account still needed |
-| 3 | Delivery charge | Flat, or inside/outside Dhaka (e.g. ৳70 / ৳130) | ৳70 / ৳130 assumed (`features/checkout/delivery.ts`), please confirm |
+| 3 | Delivery charge | Flat, or inside/outside a district | ৳70 inside Tangail / ৳120 outside (`features/checkout/delivery.ts`), confirmed |
 | 4 | Payment | Cash on delivery only for V1 | |
 | 5 | Site language | English, Bangla, or both (+1–2 h) | |
 | 6 | Brand | Name, logo, colors, Facebook URL, phone/WhatsApp | |
@@ -77,10 +77,10 @@ Single admin account and no customer login. The safeguards are kept small but co
 ### Phase 6 — Cart (~1 h) ✅
 - [x] Client cart in localStorage (`cart:v1`, product id + quantity only), synced across tabs; max 10 per saree, 30 different sarees
 - [x] Add / update quantity / remove, cart badge in header, "added to cart" feedback on the product page
-- [x] Cart page (`/cart`): items, unit prices, sale savings, subtotal, delivery charge (inside / outside Dhaka), total
+- [x] Cart page (`/cart`): items, unit prices, sale savings, subtotal, delivery charge (inside / outside Tangail), total
 - [x] Prices come from `POST /api/cart/quote` (`features/cart/quote.ts`, reused by checkout); client totals are display-only
 - [x] Out-of-stock / archived items are flagged and must be removed; deleted products drop out automatically
-- [x] Delivery charges in `features/checkout/delivery.ts` (placeholder ৳70 / ৳130 until decision 3)
+- [x] Delivery charges in `features/checkout/delivery.ts` (৳70 inside Tangail / ৳120 outside)
 
 ### Phase 7 — Guest checkout & order creation (~1.5–2 h) ✅
 - [x] Checkout form (`/checkout`): name, phone (Bangladesh format, +880 and Bangla digits accepted), district (64), area, address, optional note

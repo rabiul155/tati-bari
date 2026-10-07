@@ -1,7 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Price } from "@/components/shop/price";
-import { getPercentOff, getUnitPrice, isSaleActive } from "@/features/catalog/pricing";
+import {
+  getPercentOff,
+  getUnitPrice,
+  isSaleActive,
+} from "@/features/catalog/pricing";
 import type { ProductCardData } from "@/features/catalog/queries";
 
 export const PRODUCT_CARD_SIZES =
@@ -70,7 +74,7 @@ export function ProductGrid({
   priorityCount?: number;
 }) {
   return (
-    <ul className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
       {products.map((product, index) => (
         <li key={product.id}>
           <ProductCard product={product} priority={index < priorityCount} />

@@ -142,9 +142,9 @@ const products: SampleProduct[] = [
 
 // Order-level discount, matched by name so re-seeding does not duplicate it.
 const sampleDiscount = {
-  name: "৳200 off orders over ৳5,000",
+  name: "৳3,000 বা তার বেশি অর্ডারে ৳200 ছাড়",
   amount: 200,
-  minOrderValue: 5000,
+  minOrderValue: 3000,
 };
 
 async function main() {

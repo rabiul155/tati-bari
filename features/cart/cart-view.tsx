@@ -118,17 +118,17 @@ export function CartView() {
           <div className="flex justify-between gap-4">
             <dt>ডেলিভারি</dt>
             <dd className="text-right tabular-nums">
-              {formatTaka(DELIVERY_CHARGES.insideDhaka)} ঢাকার ভিতরে
+              {formatTaka(DELIVERY_CHARGES.insideTangail)} টাঙ্গাইলের ভিতরে
               <br />
-              {formatTaka(DELIVERY_CHARGES.outsideDhaka)} ঢাকার বাইরে
+              {formatTaka(DELIVERY_CHARGES.outsideTangail)} টাঙ্গাইলের বাইরে
             </dd>
           </div>
           <div className="mt-2 flex justify-between gap-4 border-t pt-3 text-base">
             <dt className="font-semibold">সর্বমোট</dt>
             <dd className="text-right font-semibold tabular-nums">
-              {formatTaka(subtotal - discount + DELIVERY_CHARGES.insideDhaka)}
+              {formatTaka(subtotal - discount + DELIVERY_CHARGES.insideTangail)}
               <span className="block text-xs font-normal text-muted-foreground">
-                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideDhaka)} ঢাকার বাইরে
+                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideTangail)} টাঙ্গাইলের বাইরে
               </span>
             </dd>
           </div>
