@@ -33,7 +33,7 @@ export async function findNextDiscount(
   subtotal: number,
   currentAmount: number,
   now: Date = new Date(),
-): Promise<{ name: string; amount: number; remaining: number } | null> {
+): Promise<{ name: string; amount: number; minOrderValue: number } | null> {
   if (subtotal <= 0) return null;
   const discount = await db.discount.findFirst({
     where: {
@@ -48,5 +48,5 @@ export async function findNextDiscount(
     orderBy: [{ minOrderValue: "asc" }, { amount: "desc" }],
     select: { name: true, amount: true, minOrderValue: true },
   });
-  return discount && { name: discount.name, amount: discount.amount, remaining: discount.minOrderValue - subtotal };
+  return discount;
 }

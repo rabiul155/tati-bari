@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { cache } from "react";
-import { CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ContactLinks } from "@/components/shop/contact-links";
 import { buttonVariants } from "@/components/ui/button";
@@ -48,7 +48,7 @@ export default async function OrderPage(props: Props) {
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-8">
+    <div className="mx-auto flex w-full max-w-3xl flex-col gap-4 p-4">
       <Breadcrumb
         items={[
           { label: "হোম", href: "/" },
@@ -227,14 +227,20 @@ export default async function OrderPage(props: Props) {
               অগ্রিম পরিশোধিত (ডেলিভারি চার্জ)
               <span className="block text-xs">
                 TrxID {order.deliveryPaymentTrxId} ·{" "}
-                {order.deliveryPaymentVerifiedAt ? "যাচাই করা হয়েছে" : "যাচাই করা হচ্ছে"}
+                {order.deliveryPaymentVerifiedAt
+                  ? "যাচাই করা হয়েছে"
+                  : "যাচাই করা হচ্ছে"}
               </span>
             </dt>
-            <dd className="tabular-nums">−{formatTaka(order.deliveryCharge)}</dd>
+            <dd className="tabular-nums">
+              −{formatTaka(order.deliveryCharge)}
+            </dd>
           </div>
           <div className="flex justify-between gap-4 border-t pt-2 text-base font-semibold">
             <dt>ডেলিভারিতে ক্যাশে</dt>
-            <dd className="tabular-nums">{formatTaka(order.total - order.deliveryCharge)}</dd>
+            <dd className="tabular-nums">
+              {formatTaka(order.total - order.deliveryCharge)}
+            </dd>
           </div>
         </dl>
       </section>
@@ -261,9 +267,15 @@ export default async function OrderPage(props: Props) {
             এরপর কী হবে
           </h2>
           <ol className="list-decimal space-y-1 pl-4 text-muted-foreground">
-            <li>আমরা আপনার ডেলিভারি চার্জের পেমেন্ট মিলিয়ে দেখে অর্ডার নিশ্চিত করতে কল করব।</li>
+            <li>
+              আমরা আপনার ডেলিভারি চার্জের পেমেন্ট মিলিয়ে দেখে অর্ডার নিশ্চিত
+              করতে কল করব।
+            </li>
             <li>আপনার শাড়ি প্যাক করে কুরিয়ারে পাঠানো হবে।</li>
-            <li>ডেলিভারিতে ক্যাশে {formatTaka(order.total - order.deliveryCharge)} পরিশোধ করবেন।</li>
+            <li>
+              ডেলিভারিতে ক্যাশে {formatTaka(order.total - order.deliveryCharge)}{" "}
+              পরিশোধ করবেন।
+            </li>
           </ol>
           <p className="mt-2 font-medium">প্রশ্ন আছে? যোগাযোগ করুন:</p>
           <ContactLinks className="flex flex-col gap-1" />
@@ -272,9 +284,16 @@ export default async function OrderPage(props: Props) {
 
       <Link
         href="/shop"
-        className={buttonVariants({ variant: "outline", className: "w-fit" })}
+        className={buttonVariants({
+          size: "default",
+          className: "w-full px-5 text-base sm:w-fit active:scale-[0.98]",
+        })}
       >
         কেনাকাটা চালিয়ে যান
+        <ArrowRight
+          data-icon="inline-end"
+          className="transition-transform group-hover/button:translate-x-0.5"
+        />
       </Link>
     </div>
   );

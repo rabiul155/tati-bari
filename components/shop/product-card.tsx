@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Price } from "@/components/shop/price";
+import { QuickAddButton } from "@/features/cart/quick-add-button";
 import {
   getPercentOff,
   getUnitPrice,
@@ -22,12 +23,14 @@ export function ProductCard({
   const unavailable = product.availability === "UNAVAILABLE";
   const percentOff = getPercentOff(getUnitPrice(product));
 
+  const href = `/products/${product.slug}`;
+
   return (
-    <Link
-      href={`/products/${product.slug}`}
-      className="group flex flex-col gap-3"
-    >
-      <div className="relative aspect-3/4 overflow-hidden rounded-lg bg-muted">
+    <div className="group flex h-full flex-col overflow-hidden rounded-xl bg-card shadow-sm ring-1 ring-border transition-shadow hover:shadow-md">
+      <Link
+        href={href}
+        className="relative block aspect-4/5 overflow-hidden bg-muted"
+      >
         {image ? (
           <Image
             src={image.url}
@@ -42,27 +45,30 @@ export function ProductCard({
             ছবি শীঘ্রই আসছে
           </div>
         )}
-        <div className="absolute top-2 right-1 flex flex-col items-start gap-1">
-          {unavailable ? (
-            <span className="rounded-full bg-background/90 px-2 py-0.5 text-xs font-medium">
-              স্টকে নেই
+        {unavailable ? (
+          <span className="absolute top-2 right-0 rounded-l-md bg-foreground/80 px-2 py-1 text-xs font-medium text-background">
+            স্টকে নেই
+          </span>
+        ) : (
+          isSaleActive(product) && (
+            <span className="absolute top-2 right-0 rounded-l-md bg-primary px-2 py-1 text-xs font-semibold text-primary-foreground">
+              {percentOff > 0 ? `${percentOff}% ছাড়` : "ছাড়"}
             </span>
-          ) : (
-            isSaleActive(product) && (
-              <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-medium text-primary-foreground">
-                {percentOff > 0 ? `${percentOff}% ছাড়` : "ছাড়"}
-              </span>
-            )
-          )}
-        </div>
-      </div>
-      <div className="flex flex-col gap-1">
-        <h3 className="leading-snug font-medium underline-offset-4 group-hover:underline">
-          {product.name}
+          )
+        )}
+      </Link>
+      <div className="flex flex-1 flex-col gap-1 p-2 sm:p-3">
+        <h3 className="line-clamp-2 text-sm leading-snug font-medium sm:text-base">
+          <Link href={href} className="underline-offset-4 hover:underline">
+            {product.name}
+          </Link>
         </h3>
         <Price product={product} />
+        <div className="mt-auto pt-1.5">
+          <QuickAddButton productId={product.id} available={!unavailable} />
+        </div>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -74,7 +80,7 @@ export function ProductGrid({
   priorityCount?: number;
 }) {
   return (
-    <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+    <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       {products.map((product, index) => (
         <li key={product.id}>
           <ProductCard product={product} priority={index < priorityCount} />

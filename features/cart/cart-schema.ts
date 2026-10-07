@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const MAX_QUANTITY_PER_ITEM = 10;
-export const MAX_CART_LINES = 30;
+export const MAX_CART_LINES = 10;
 
 export const cartItemSchema = z.object({
   productId: z.string().min(1).max(40),
@@ -43,6 +43,6 @@ export type CartQuote = {
   hasUnavailable: boolean;
   // Order-level discount the subtotal currently qualifies for.
   discount: { name: string; amount: number } | null;
-  // A bigger discount the customer could reach by adding `remaining` taka.
-  nextDiscount: { name: string; amount: number; remaining: number } | null;
+  // A bigger discount the customer could reach by ordering at least `minOrderValue` taka.
+  nextDiscount: { name: string; amount: number; minOrderValue: number } | null;
 };

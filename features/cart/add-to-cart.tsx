@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Loader2, ShoppingCart, Zap } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cart, useCartItems } from "@/features/cart/cart-store";
 import { MAX_CART_LINES, MAX_QUANTITY_PER_ITEM } from "@/features/cart/cart-schema";
@@ -13,6 +14,8 @@ type Message = { tone: "success" | "error"; text: string };
 export function AddToCart({ productId, available }: { productId: string; available: boolean }) {
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState<Message>();
+  const [ordering, setOrdering] = useState(false);
+  const router = useRouter();
   const items = useCartItems();
   const inCart = items?.find((item) => item.productId === productId)?.quantity ?? 0;
   const atLimit = inCart >= MAX_QUANTITY_PER_ITEM;
@@ -25,13 +28,29 @@ export function AddToCart({ productId, available }: { productId: string; availab
     );
   }
 
+  function showCartFull() {
+    setMessage({
+      tone: "error",
+      text: `আপনার কার্টে সর্বোচ্চ ${MAX_CART_LINES}টি ভিন্ন শাড়ি রাখা যাবে।`,
+    });
+  }
+
+  // Buy now: put the chosen quantity in the cart and go straight to
+  // checkout, which orders the whole cart as usual. At the per-item
+  // limit the product is already in the cart, so just go.
+  function orderNow() {
+    if (!atLimit && !cart.add(productId, quantity).ok) {
+      showCartFull();
+      return;
+    }
+    setOrdering(true);
+    router.push("/checkout");
+  }
+
   function add() {
     const result = cart.add(productId, quantity);
     if (!result.ok) {
-      setMessage({
-        tone: "error",
-        text: `আপনার কার্টে সর্বোচ্চ ${MAX_CART_LINES}টি ভিন্ন শাড়ি রাখা যাবে।`,
-      });
+      showCartFull();
       return;
     }
     setQuantity(1);
@@ -45,7 +64,8 @@ export function AddToCart({ productId, available }: { productId: string; availab
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-3">
+      <div className="flex flex-col items-start gap-2">
+        <span className="text-sm font-medium">পরিমাণ</span>
         <QuantityStepper
           value={quantity}
           onChange={(value) => {
@@ -54,14 +74,32 @@ export function AddToCart({ productId, available }: { productId: string; availab
           }}
           disabled={atLimit}
         />
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          size="lg"
+          className="h-10 border-primary px-3 text-primary hover:bg-primary/5 hover:text-primary"
+          disabled={items === null || atLimit || ordering}
+          onClick={add}
+        >
+          <ShoppingCart aria-hidden />
+          কার্টে যোগ করুন
+        </Button>
         <Button
           type="button"
           size="lg"
-          className="min-w-0 flex-1 px-5 sm:min-w-40 sm:flex-none"
-          disabled={items === null || atLimit}
-          onClick={add}
+          className="h-10 px-3 shadow-sm hover:bg-primary/90"
+          disabled={items === null || ordering}
+          onClick={orderNow}
         >
-          কার্টে যোগ করুন
+          {ordering ? (
+            <Loader2 className="animate-spin" aria-hidden />
+          ) : (
+            <Zap className="fill-current" aria-hidden />
+          )}
+          এখনই অর্ডার করুন
         </Button>
       </div>
       <div role="status" aria-live="polite" className="min-h-5 text-sm">

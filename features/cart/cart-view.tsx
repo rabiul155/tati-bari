@@ -135,7 +135,7 @@ export function CartView() {
         </dl>
         {!loading && quote.nextDiscount && (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
-            আরও {formatTaka(quote.nextDiscount.remaining)} যোগ করে পান{" "}
+            {formatTaka(quote.nextDiscount.minOrderValue)}-এর বেশি অর্ডার করলেই পান{" "}
             <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
           </p>
         )}
