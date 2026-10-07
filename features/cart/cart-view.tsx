@@ -26,7 +26,10 @@ export function CartView() {
       <div className="flex flex-col items-center gap-4 rounded-2xl border border-dashed px-4 py-16 text-center">
         <ShoppingBag className="size-10 text-muted-foreground" aria-hidden />
         <p className="text-lg font-medium">আপনার কার্ট খালি</p>
-        <Link href="/shop" className={buttonVariants({ size: "lg", className: "px-5" })}>
+        <Link
+          href="/shop"
+          className={buttonVariants({ size: "lg", className: "px-5" })}
+        >
           শাড়ি দেখুন
         </Link>
       </div>
@@ -35,8 +38,14 @@ export function CartView() {
 
   if (!quote) {
     return (
-      <div role="alert" className="flex flex-col items-start gap-3 rounded-lg border p-6">
-        <p>সর্বশেষ দাম লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</p>
+      <div
+        role="alert"
+        className="flex flex-col items-start gap-3 rounded-lg border p-6"
+      >
+        <p>
+          সর্বশেষ দাম লোড করা যায়নি। আপনার ইন্টারনেট সংযোগ পরীক্ষা করে আবার
+          চেষ্টা করুন।
+        </p>
         <Button type="button" variant="outline" onClick={retry}>
           <RefreshCw /> আবার চেষ্টা করুন
         </Button>
@@ -49,11 +58,18 @@ export function CartView() {
   const linesById = new Map(quote.lines.map((line) => [line.productId, line]));
   const rows = items.flatMap((item) => {
     const line = linesById.get(item.productId);
-    return line ? [{ ...line, quantity: item.quantity, lineTotal: line.finalUnitPrice * item.quantity }] : [];
+    return line
+      ? [
+          {
+            ...line,
+            quantity: item.quantity,
+            lineTotal: line.finalUnitPrice * item.quantity,
+          },
+        ]
+      : [];
   });
   const counted = rows.filter((row) => row.available);
   const subtotal = counted.reduce((sum, row) => sum + row.lineTotal, 0);
-  const savings = counted.reduce((sum, row) => sum + row.unitDiscount * row.quantity, 0);
   const itemCount = counted.reduce((sum, row) => sum + row.quantity, 0);
   const unavailable = rows.filter((row) => !row.available);
   // The discount is only shown once the server quote matches the cart.
@@ -61,18 +77,29 @@ export function CartView() {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
-      <section aria-label="কার্টের পণ্য" className={cn("flex flex-col gap-4", loading && "opacity-70")}>
+      <section
+        aria-label="কার্টের পণ্য"
+        className={cn("flex flex-col gap-4", loading && "opacity-70")}
+      >
         {unavailable.length > 0 && (
-          <div role="alert" className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
+          <div
+            role="alert"
+            className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive"
+          >
             <span>
-              {unavailable.length === 1 ? "একটি শাড়ি" : `${unavailable.length}টি শাড়ি`} আপনার
-              নির্বাচিত পরিমাণে পাওয়া যাচ্ছে না। চালিয়ে যেতে পরিমাণ পরিবর্তন করুন বা সরিয়ে দিন।
+              {unavailable.length === 1
+                ? "একটি শাড়ি"
+                : `${unavailable.length}টি শাড়ি`}{" "}
+              আপনার নির্বাচিত পরিমাণে পাওয়া যাচ্ছে না। চালিয়ে যেতে পরিমাণ
+              পরিবর্তন করুন বা সরিয়ে দিন।
             </span>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => cart.removeMany(unavailable.map((row) => row.productId))}
+              onClick={() =>
+                cart.removeMany(unavailable.map((row) => row.productId))
+              }
             >
               অনুপলব্ধ পণ্য সরান
             </Button>
@@ -84,31 +111,42 @@ export function CartView() {
           ))}
         </ul>
         {failed && (
-          <p role="alert" className="flex items-center gap-2 text-sm text-destructive">
+          <p
+            role="alert"
+            className="flex items-center gap-2 text-sm text-destructive"
+          >
             দাম পুরনো হতে পারে।
-            <Button type="button" variant="link" size="sm" className="h-auto px-0" onClick={retry}>
+            <Button
+              type="button"
+              variant="link"
+              size="sm"
+              className="h-auto px-0"
+              onClick={retry}
+            >
               রিফ্রেশ করুন
             </Button>
           </p>
         )}
-        <Link href="/shop" className="w-fit text-sm text-primary underline-offset-4 hover:underline">
+        <Link
+          href="/shop"
+          className="w-fit text-sm text-primary underline-offset-4 hover:underline"
+        >
           ← কেনাকাটা চালিয়ে যান
         </Link>
       </section>
 
-      <aside aria-label="অর্ডার সারাংশ" className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24">
+      <aside
+        aria-label="অর্ডার সারাংশ"
+        className="flex h-fit flex-col gap-4 rounded-2xl border bg-card p-5 lg:sticky lg:top-24"
+      >
         <h2 className="font-heading text-xl font-semibold">অর্ডার সারাংশ</h2>
         <dl className="flex flex-col gap-2 text-sm">
-          <div className="flex justify-between gap-4">
+          <div className="flex justify-between gap-4 ">
             <dt>সাবটোটাল ({itemCount}টি পণ্য)</dt>
-            <dd className="font-medium tabular-nums">{formatTaka(subtotal)}</dd>
+            <dd className="font-semibold text-lg  tabular-nums">
+              {formatTaka(subtotal)}
+            </dd>
           </div>
-          {savings > 0 && (
-            <div className="flex justify-between gap-4 text-primary">
-              <dt>ছাড়ে সাশ্রয়</dt>
-              <dd className="tabular-nums">−{formatTaka(savings)}</dd>
-            </div>
-          )}
           {discount > 0 && quote.discount && (
             <div className="flex justify-between gap-4 text-primary">
               <dt>{quote.discount.name}</dt>
@@ -125,23 +163,27 @@ export function CartView() {
           </div>
           <div className="mt-2 flex justify-between gap-4 border-t pt-3 text-base">
             <dt className="font-semibold">সর্বমোট</dt>
-            <dd className="text-right font-semibold tabular-nums">
+            <dd className="text-right font-semibold text-lg tabular-nums">
               {formatTaka(subtotal - discount + DELIVERY_CHARGES.insideTangail)}
               <span className="block text-xs font-normal text-muted-foreground">
-                {formatTaka(subtotal - discount + DELIVERY_CHARGES.outsideTangail)} টাঙ্গাইলের বাইরে
+                {formatTaka(
+                  subtotal - discount + DELIVERY_CHARGES.outsideTangail,
+                )}{" "}
+                টাঙ্গাইলের বাইরে
               </span>
             </dd>
           </div>
         </dl>
         {!loading && quote.nextDiscount && (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
-            {formatTaka(quote.nextDiscount.minOrderValue)}-এর বেশি অর্ডার করলেই পান{" "}
-            <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
+            {formatTaka(quote.nextDiscount.minOrderValue)}-এর বেশি অর্ডার করলেই
+            পান <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
           </p>
         )}
         <p className="text-xs text-muted-foreground">
-          ডেলিভারি চার্জ অর্ডারের সময় {site.deliveryPayment.wallets}-এ অগ্রিম দিতে হবে (জেলা অনুযায়ী)। শাড়ির দাম অর্ডার হাতে পেয়ে
-          ক্যাশে পরিশোধ করুন।
+          ডেলিভারি চার্জ অর্ডারের সময় {site.deliveryPayment.wallets}-এ অগ্রিম
+          দিতে হবে (জেলা অনুযায়ী)। শাড়ির দাম অর্ডার হাতে পেয়ে ক্যাশে পরিশোধ
+          করুন।
         </p>
         {unavailable.length > 0 || loading ? (
           <Button type="button" size="lg" disabled>
@@ -165,13 +207,22 @@ function CartRow({ line }: { line: QuotedLine }) {
         className="relative aspect-3/4 w-20 shrink-0 overflow-hidden rounded-md bg-muted sm:w-24"
       >
         {line.imageUrl && (
-          <Image src={line.imageUrl} alt="" fill sizes="96px" className={cn("object-cover", !line.available && "opacity-50")} />
+          <Image
+            src={line.imageUrl}
+            alt=""
+            fill
+            sizes="96px"
+            className={cn("object-cover", !line.available && "opacity-50")}
+          />
         )}
       </Link>
       <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <Link href={`/products/${line.slug}`} className="font-medium underline-offset-4 hover:underline">
+            <Link
+              href={`/products/${line.slug}`}
+              className="font-medium underline-offset-4 hover:underline"
+            >
               {line.name}
             </Link>
             <p className="text-xs text-muted-foreground">কোড: {line.code}</p>
@@ -206,12 +257,17 @@ function CartRow({ line }: { line: QuotedLine }) {
                 onChange={(value) => cart.setQuantity(line.productId, value)}
               />
             </div>
-            <p className="font-semibold tabular-nums">{formatTaka(line.lineTotal)}</p>
+            <p className="font-semibold tabular-nums">
+              {formatTaka(line.lineTotal)}
+            </p>
           </div>
-        ) : line.stockLeft !== null && line.stockLeft > 0 && line.stockLeft < line.quantity ? (
+        ) : line.stockLeft !== null &&
+          line.stockLeft > 0 &&
+          line.stockLeft < line.quantity ? (
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <p className="font-medium text-destructive">
-              মাত্র {line.stockLeft}টি বাকি আছে (আপনার কাছে {line.quantity}টি আছে)
+              মাত্র {line.stockLeft}টি বাকি আছে (আপনার কাছে {line.quantity}টি
+              আছে)
             </p>
             <Button
               type="button"
@@ -223,7 +279,9 @@ function CartRow({ line }: { line: QuotedLine }) {
             </Button>
           </div>
         ) : (
-          <p className="text-sm font-medium text-destructive">আর পাওয়া যাচ্ছে না</p>
+          <p className="text-sm font-medium text-destructive">
+            আর পাওয়া যাচ্ছে না
+          </p>
         )}
       </div>
     </li>
@@ -232,7 +290,11 @@ function CartRow({ line }: { line: QuotedLine }) {
 
 function CartSkeleton() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_22rem]" aria-busy="true" aria-label="কার্ট লোড হচ্ছে">
+    <div
+      className="grid gap-8 lg:grid-cols-[1fr_22rem]"
+      aria-busy="true"
+      aria-label="কার্ট লোড হচ্ছে"
+    >
       <div className="flex flex-col gap-4 rounded-2xl border p-4">
         {[0, 1].map((i) => (
           <div key={i} className="flex gap-4">

@@ -412,7 +412,7 @@ export function CheckoutView() {
                   জেলা নির্বাচন করুন
                 </span>
               ) : (
-                formatTaka(deliveryCharge)
+                `+${formatTaka(deliveryCharge)}`
               )}
             </dd>
           </div>
@@ -426,9 +426,9 @@ export function CheckoutView() {
             <>
               <div className="flex justify-between gap-4 text-muted-foreground">
                 <dt>এখন অগ্রিম (ডেলিভারি চার্জ)</dt>
-                <dd className="tabular-nums">{formatTaka(deliveryCharge)}</dd>
+                <dd className="tabular-nums">−{formatTaka(deliveryCharge)}</dd>
               </div>
-              <div className="flex justify-between gap-4 text-muted-foreground">
+              <div className="mt-1 flex justify-between gap-4 border-t pt-3 text-base font-semibold">
                 <dt>ডেলিভারিতে ক্যাশে</dt>
                 <dd className="tabular-nums">
                   {formatTaka(total - deliveryCharge)}
@@ -440,16 +440,12 @@ export function CheckoutView() {
 
         {quoteIsCurrent && quote.nextDiscount && (
           <p className="rounded-lg bg-secondary px-3 py-2 text-sm">
-            {formatTaka(quote.nextDiscount.minOrderValue)}-এর বেশি অর্ডার করলেই পান{" "}
-            <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
+            {formatTaka(quote.nextDiscount.minOrderValue)}-এর বেশি অর্ডার করলেই
+            পান <strong>{formatTaka(quote.nextDiscount.amount)} ছাড়</strong>।
           </p>
         )}
         <Button type="submit" size="lg" disabled={pending || !canOrder}>
-          {pending
-            ? "অর্ডার করা হচ্ছে…"
-            : total === null
-              ? "অর্ডার করুন"
-              : `অর্ডার করুন · ${formatTaka(total)}`}
+          {pending ? "অর্ডার করা হচ্ছে…" : "অর্ডার করুন"}
         </Button>
         <p className="text-xs text-muted-foreground">
           অর্ডার করার মাধ্যমে আপনি আপনার মোবাইল নম্বরে একটি নিশ্চিতকরণ কল পেতে

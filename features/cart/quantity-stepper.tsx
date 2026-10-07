@@ -19,12 +19,15 @@ export function QuantityStepper({
   disabled?: boolean;
 }) {
   const buttonSize = size === "sm" ? "icon-sm" : "icon-lg";
+  // Shorter than the variants' mobile touch sizes, which made the stepper bulky on phones.
+  const buttonClass = size === "sm" ? "size-8 md:size-7" : "size-9";
   return (
-    <div className="inline-flex items-center rounded-lg border" role="group" aria-label={label}>
+    <div className="inline-flex w-fit items-center rounded-lg border" role="group" aria-label={label}>
       <Button
         type="button"
         variant="ghost"
         size={buttonSize}
+        className={buttonClass}
         aria-label="পরিমাণ কমান"
         disabled={disabled || value <= 1}
         onClick={() => onChange(value - 1)}
@@ -41,6 +44,7 @@ export function QuantityStepper({
         type="button"
         variant="ghost"
         size={buttonSize}
+        className={buttonClass}
         aria-label="পরিমাণ বাড়ান"
         disabled={disabled || value >= MAX_QUANTITY_PER_ITEM}
         onClick={() => onChange(value + 1)}
