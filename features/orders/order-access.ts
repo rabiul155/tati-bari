@@ -37,7 +37,6 @@ export async function getOrderForCustomer(orderNumber: string, key: string | und
       deliveryAddress: true,
       deliveryArea: true,
       deliveryDistrict: true,
-      deliveryPostalCode: true,
       customerNote: true,
       subtotal: true,
       discountName: true,

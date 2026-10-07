@@ -39,7 +39,7 @@ Each phase ends with something working you can review before moving on.
 - [x] Models: `Category` (done in Phase 1), `Product`, `ProductImage`, `Customer`, `CustomerAddress`, `Order`, `OrderItem`, `OrderStatusHistory`, `AdminUser`, `Discount`
 - [x] Money stored as integer taka
 - [x] `OrderItem` stores price snapshot (product name, code, unit price, discount, final unit price, line total)
-- [x] `Order` stores customer/delivery snapshot (name, phone, address, district, area, postal code), subtotal, discount, delivery charge, total
+- [x] `Order` stores customer/delivery snapshot (name, phone, address, district, area), subtotal, discount, delivery charge, total
 - [x] `OrderStatus` enum: Pending, Confirmed, Preparing, Shipped, Delivered, Cancelled, Returned
 - [x] Optional courier name + tracking number on `Order`
 - [x] Human-friendly order number (e.g. `TS-000123`): sequential `Order.number`, formatted in `features/orders/order-number.ts`
@@ -83,7 +83,7 @@ Single admin account and no customer login. The safeguards are kept small but co
 - [x] Delivery charges in `features/checkout/delivery.ts` (placeholder ৳70 / ৳130 until decision 3)
 
 ### Phase 7 — Guest checkout & order creation (~1.5–2 h) ✅
-- [x] Checkout form (`/checkout`): name, phone (Bangladesh format, +880 and Bangla digits accepted), district (64), area, address, optional postal code, optional note
+- [x] Checkout form (`/checkout`): name, phone (Bangladesh format, +880 and Bangla digits accepted), district (64), area, address, optional note
 - [x] Zod validation on client and server (`features/checkout/schema.ts`)
 - [x] Server recalculates prices, sale windows, order discount and delivery charge; if the total differs from what the customer saw, the order is not placed and the new total is shown
 - [x] Reject unavailable / archived / deleted products and quantities above stock; stock counts are decremented, products at 0 become unavailable

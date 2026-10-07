@@ -224,7 +224,6 @@ export default async function AdminOrderPage({ params }: PageProps<"/admin/order
                 <p className="whitespace-pre-line">{order.deliveryAddress}</p>
                 <p>
                   {order.deliveryArea}, {order.deliveryDistrict}
-                  {order.deliveryPostalCode && ` ${order.deliveryPostalCode}`}
                 </p>
               </div>
               {order.customerNote && (

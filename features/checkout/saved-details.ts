@@ -5,7 +5,7 @@
 import type { CheckoutFormValues } from "@/features/checkout/schema";
 
 const STORAGE_KEY = "checkout-details:v1";
-const FIELDS = ["name", "phone", "district", "area", "address", "postalCode"] as const;
+const FIELDS = ["name", "phone", "district", "area", "address"] as const;
 
 type SavedDetails = Partial<Pick<CheckoutFormValues, (typeof FIELDS)[number]>>;
 

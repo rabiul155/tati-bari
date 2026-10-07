@@ -149,7 +149,6 @@ export async function placeOrder(input: {
         address: details.address,
         district: details.district,
         area: details.area,
-        postalCode: details.postalCode,
       };
       const existingAddress = await tx.customerAddress.findFirst({
         where: { customerId: customer.id, ...address },
@@ -174,7 +173,6 @@ export async function placeOrder(input: {
           deliveryAddress: details.address,
           deliveryDistrict: details.district,
           deliveryArea: details.area,
-          deliveryPostalCode: details.postalCode,
           customerNote: details.note,
           subtotal: quote.subtotal,
           discountId: quote.discount?.id,

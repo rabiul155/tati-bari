@@ -68,7 +68,6 @@ export default async function CustomerPage({ params }: PageProps<"/admin/custome
                   <p className="whitespace-pre-line">{address.address}</p>
                   <p className="text-muted-foreground">
                     {address.area}, {address.district}
-                    {address.postalCode && ` ${address.postalCode}`}
                   </p>
                 </li>
               ))}

@@ -115,7 +115,6 @@ model CustomerAddress {
   address    String
   district   String
   area       String
-  postalCode String?
   isDefault  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
@@ -158,7 +157,6 @@ model Order {
   deliveryAddress    String
   deliveryDistrict   String
   deliveryArea       String
-  deliveryPostalCode String?
   customerNote       String?
 
   // Totals (taka): total = subtotal - discountAmount + deliveryCharge.

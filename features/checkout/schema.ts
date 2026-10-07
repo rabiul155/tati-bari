@@ -33,11 +33,6 @@ export const checkoutDetailsSchema = z.object({
     .trim()
     .min(8, "পূর্ণ ঠিকানা দিন: বাড়ি, রোড, গ্রাম বা ল্যান্ডমার্ক।")
     .max(300),
-  postalCode: z
-    .string()
-    .trim()
-    .regex(/^(\d{4})?$/, "পোস্টাল কোড ৪ সংখ্যার হয়।")
-    .transform((value) => value || null),
   note: optionalText(500),
   // Transaction ID of the delivery charge payment, e.g. bKash "9ABC1DEF2G".
   // Spaces and dashes people copy along with it are dropped.

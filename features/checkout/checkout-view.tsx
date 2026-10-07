@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { PhoneCall } from "lucide-react";
 import { CopyButton } from "@/components/admin/copy-button";
 import { FormError, FormField } from "@/components/form-field";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -29,7 +30,6 @@ const EMPTY_VALUES: CheckoutFormValues = {
   district: "" as CheckoutFormValues["district"],
   area: "",
   address: "",
-  postalCode: "",
   note: "",
   trxId: "",
   website: "",
@@ -155,9 +155,6 @@ export function CheckoutView() {
             <FormField id="address" label="পূর্ণ ঠিকানা" hint="বাড়ি, রোড, গ্রাম বা কুরিয়ার খুঁজে পাবে এমন কোনো ল্যান্ডমার্ক।" error={error("address")} className="sm:col-span-2">
               <Textarea {...field("address")} rows={3} autoComplete="street-address" {...register("address")} />
             </FormField>
-            <FormField id="postalCode" label="পোস্টাল কোড (ঐচ্ছিক)" error={error("postalCode")}>
-              <Input {...field("postalCode")} inputMode="numeric" autoComplete="postal-code" maxLength={4} {...register("postalCode")} />
-            </FormField>
             <FormField id="note" label="আমাদের জন্য নোট (ঐচ্ছিক)" hint="যেমন: কল করার সবচেয়ে ভালো সময়" error={error("note")} className="sm:col-span-2">
               <Textarea {...field("note")} rows={2} {...register("note")} />
             </FormField>
@@ -185,7 +182,7 @@ export function CheckoutView() {
             </div>
             <p className="text-muted-foreground">
               শাড়ির বাকি দাম{total !== null && deliveryCharge !== null && ` (${formatTaka(total - deliveryCharge)})`} অর্ডার
-              হাতে পেয়ে কুরিয়ারকে ক্যাশে দেবেন।
+              হাতে পেয়ে ডেলিভারি ম্যানকে ক্যাশে দেবেন।
             </p>
           </div>
           <div className="grid gap-5 sm:grid-cols-2">
@@ -209,7 +206,8 @@ export function CheckoutView() {
               <Input id="trxScreenshot" type="file" accept="image/*" disabled aria-describedby="trxScreenshot-message" />
             </FormField>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="flex items-start gap-3 rounded-lg border border-primary/30 bg-primary/10 p-4 text-sm font-medium text-primary">
+            <PhoneCall className="mt-0.5 size-5 shrink-0" aria-hidden />
             আমরা পেমেন্ট মিলিয়ে দেখে ও আপনাকে কল করে অর্ডার নিশ্চিত করব।
           </p>
         </fieldset>

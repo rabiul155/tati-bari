@@ -249,7 +249,6 @@ export default async function OrderPage(props: Props) {
           <p className="whitespace-pre-line">{order.deliveryAddress}</p>
           <p>
             {order.deliveryArea}, {order.deliveryDistrict}
-            {order.deliveryPostalCode && ` ${order.deliveryPostalCode}`}
           </p>
           {order.customerNote && (
             <p className="mt-2 text-muted-foreground">
